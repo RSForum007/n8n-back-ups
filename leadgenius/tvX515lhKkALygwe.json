@@ -167,7 +167,9 @@
       "parameters": {
         "rule": {
           "interval": [
-            {}
+            {
+              "triggerAtHour": 21
+            }
           ]
         }
       },
@@ -1035,6 +1037,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-20T11:13:46.000Z",
-  "versionId": "7f386be1-20af-4a3d-b81b-d5354a4ac888"
+  "updatedAt": "2025-06-20T11:16:07.000Z",
+  "versionId": "48860186-b822-410a-9d1c-b4db0907bbe3"
 }
