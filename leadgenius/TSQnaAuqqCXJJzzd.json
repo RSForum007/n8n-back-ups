@@ -1,0 +1,2655 @@
+{
+  "active": false,
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get existing budget",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Get existing budget2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "get all transactions1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get all transactions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "add transaction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get by id",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update transaction",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Existing Budget",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Existing Budget1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Existing Budget2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Existing Budget3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get By ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get by id": {
+      "main": [
+        [
+          {
+            "node": "remove transaction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Budget": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Budget": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Budget": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Transaction": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add transaction": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "budget not found?": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Monthly Expenses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Transaction": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Budget Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Transaction": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update transaction": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "budget not found?1": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Monthly Expenses1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "budget not found?2": {
+      "main": [
+        [
+          {
+            "node": "Add budget",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "budget not found?3": {
+      "main": [
+        [
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Budget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "budget not found?4": {
+      "main": [
+        [
+          {
+            "node": "Code8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Remove budget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Budget": {
+      "main": [
+        [
+          {
+            "node": "budget not found?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get existing budget": {
+      "main": [
+        [
+          {
+            "node": "budget not found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Budget1": {
+      "main": [
+        [
+          {
+            "node": "budget not found?3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Budget2": {
+      "main": [
+        [
+          {
+            "node": "budget not found?4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Monthly Expenses": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get existing budget2": {
+      "main": [
+        [
+          {
+            "node": "budget not found?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all transactions": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Monthly Expenses1": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get list transactions": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all transactions1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Filter Workflow": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-16T16:36:18.449Z",
+  "id": "TSQnaAuqqCXJJzzd",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Expense Tracker",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "personal-expense"
+      },
+      "id": "c76c16d4-0290-415a-9a2c-98b498f69a01",
+      "name": "MCP Server Trigger",
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "position": [
+        -3180,
+        780
+      ],
+      "webhookId": "676afb85-ff6d-45ad-ab36-e6cc590ba080",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": false,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c804feba-d6da-43d9-88a9-24dfa0f7a2ed",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              },
+              "leftValue": "={{ $json.date }}",
+              "rightValue": "={{ $('Switch').item.json.payload.dateStart }}"
+            },
+            {
+              "id": "512eb3ab-f42d-4a35-bc0e-7ff67ab0d6a5",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              },
+              "leftValue": "={{ $json.date }}",
+              "rightValue": "={{ $('Switch').item.json.payload.dateEnd }}"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "cd2fb9e3-02e8-4f0b-8a9b-2d73ea93fa6e",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        -260,
+        80
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "function"
+            },
+            {
+              "name": "payload",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "id": "a14adaf1-eb5b-43b4-90a2-d3eaf38f7a75",
+      "name": "Google Sheets Filter Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -1660,
+        840
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "description": "Get Transactions",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={\n  \"dateStart\": \"{{ $fromAI(\"dateStart\", \"Date Start. Format: YYYY-MM-DD\", \"string\") }}\",\n  \"dateEnd\": \"{{ $fromAI(\"dateEnd\", \"Date End. Format: YYYY-MM-Dd\", \"string\") }}\"\n}",
+            "function": "list_transaction"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "9c901178-7919-4f37-90a5-1b1ac33eb13b",
+      "name": "Get list transactions",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -3500,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get Data by ID",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "907f01d4-661e-483f-a930-19aa3c8aba0f",
+      "name": "Get By ID",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "position": [
+        -3360,
+        980
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "3e9f8105-2bd7-4571-8909-86cddbf4e3eb",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "list_transaction"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "list_transaction"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "8bba675d-4f2f-411d-858e-cd0573f2a0d7",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "remove_transaction"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "remove_transaction"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "1cf7fe89-f22e-4656-9e16-570f4b7088f0",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "add_transaction"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "add_transaction"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "f63ece2b-a821-4e79-8797-365fe6b6ce2b",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "update_transaction"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "update_transaction"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "411a0ece-ac3a-49fe-b357-c7dc56f21042",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "add_budget"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "add_budget"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "8bac74de-c55c-4248-a2a7-728d8acae09a",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "update_budget"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "update_budget"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "818c0b7b-c1b0-4150-b683-76287f0fd1f8",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "remove_budget"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "remove_budget"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "579f8f4d-7ce0-46cf-aee5-290d5025f071",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.function }}",
+                    "rightValue": "get_budget"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "get_budget"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a6375c6a-5bde-4826-bd8b-9a9def9344c0",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -1240,
+        740
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id",
+              "lookupValue": "={{ $json.payload.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e94259c2-0773-4770-8713-969aa7072146",
+      "name": "get by id",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -740,
+        520
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "startIndex": "={{ $json.row_number }}"
+      },
+      "id": "3d827526-97db-4bef-9663-9cdcaf4aadde",
+      "name": "remove transaction",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -460,
+        520
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "options": {}
+      },
+      "id": "9d7f0a9d-3f22-4831-a3c2-daa51159bf75",
+      "name": "get all transactions",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -500,
+        220
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "description": "Remove Transaction",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={\n  \"id\": \"{{ $fromAI(\"id\", \"ID\", \"string\") }}\"\n}",
+            "function": "remove_transaction"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "f4a5503e-82c2-4c06-8991-8232418f4a1d",
+      "name": "Remove Transaction",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -3220,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "id"
+      },
+      "id": "a5a29a49-a954-4931-9f51-28f656e0a627",
+      "name": "Crypto",
+      "type": "n8n-nodes-base.crypto",
+      "position": [
+        -740,
+        940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "4e34ce93-3976-4f74-8933-32bc34bc459c",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "expense"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f252aa21-7faf-4d9d-b174-c1f8ee37df6c",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -340,
+        940
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.date.substring(0, 7) }}"
+            },
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dba07f32-b37a-45df-8667-4165022de22c",
+      "name": "Get existing budget",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -140,
+        920
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {\n  \"id\": $(\"add transaction\").first().json.id,\n  \"budget\": {},\n  \"task\": \"Ask user to add monthly budget\"\n}"
+      },
+      "id": "79b8dc27-b2fc-4317-8f80-c616f62ac367",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        280,
+        740
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "columns": {
+          "value": {
+            "id": "={{ $json.id }}",
+            "date": "={{ $json.payload.date }}",
+            "type": "={{ $json.payload.type }}",
+            "month": "={{ $json.payload.date.substring(0,7) }}",
+            "amount": "={{ $json.payload.amount }}",
+            "purpose": "={{ $json.payload.purpose }}",
+            "category": "={{ $json.payload.category }}"
+          },
+          "schema": [
+            {
+              "id": "id",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "id",
+              "defaultMatch": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "date",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "purpose",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "purpose",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "category",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "amount",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "amount",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "type",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "month",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "month",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "59fc806f-1972-489b-b614-5c0c4c53c39e",
+      "name": "add transaction",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -540,
+        940
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d062f954-0a17-4870-b632-aebea115dad9",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6342b013-9dc2-415a-9f2a-f456f452be9f",
+      "name": "budget not found?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        40,
+        920
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "let totalExpenses = 0;\n\nfor (const item of $('Get Monthly Expenses').all()) {\n  totalExpenses += item.json.amount  \n}\n\nlet result = {\n  \"id\": $('add transaction').first().json.id,\n  \"budget\": {\n    \"monthlyLimit\": $('Get existing budget').first().json.budget,\n    \"remainingLimit\": $('Get existing budget').first().json.budget - totalExpenses\n  },\n  \"task\": \"\"\n}\n\nif (totalExpenses > $('Get existing budget').first().json.budget) {\n  result.task = \"Give warning to user or suggest to adjust the budget\"\n}\n\nreturn result;"
+      },
+      "id": "a90f7a4b-f889-4b6d-a6e5-1457e102bc6d",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        520,
+        940
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.month }}"
+            },
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "35fcde40-fe66-487b-b818-99825a2bcc1f",
+      "name": "Get Monthly Expenses",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        280,
+        940
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "description": "Add Transaction",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={   \n  \"date\": \"{{ $fromAI(\"date\", \"Transaction date. Format: YYYY-MM-DD\", \"string\") }}\",   \n  \"purpose\": \"{{ $fromAI(\"purpose\", \"Purpose of the transaction\", \"string\") }}\", \n  \"category\": \"{{ $fromAI(\"category\", \"Transaction category\", \"string\") }}\",\n  \"amount\": {{ $fromAI(\"amount\", \"Transaction amount\", \"number\") }}, \n  \"type\": \"{{ $fromAI(\"type\", \"Transaction type. Can be expense or income\", \"string\") }}\"\n}",
+            "function": "add_transaction"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "a8b43f4c-bb16-49cc-b1d1-6a2624391da4",
+      "name": "Add Transaction",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -3060,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn {\n  \"id\": $('add transaction').first().json.id,\n  \"budget\": {},\n  \"task\": \"Congratulate user for new income.\"\n}"
+      },
+      "id": "16e8e1c6-9502-4054-b826-b69cfc7efca6",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -120,
+        1120
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "columns": {
+          "value": {
+            "id": "={{ $json.payload.id }}",
+            "date": "={{ $json.payload.date }}",
+            "type": "={{ $json.payload.type }}",
+            "month": "={{ $json.payload.date.substring(0,7) }}",
+            "amount": "={{ $json.payload.amount }}",
+            "purpose": "={{ $json.payload.purpose }}",
+            "category": "={{ $json.payload.category }}"
+          },
+          "schema": [
+            {
+              "id": "id",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "id",
+              "defaultMatch": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "date",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "purpose",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "purpose",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "category",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "amount",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "amount",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "type",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "month",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "month",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "string",
+              "display": true,
+              "removed": true,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "3e0f2f8b-f145-4712-b8cc-05da2f6db3ba",
+      "name": "Update transaction",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -720,
+        1440
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "4e34ce93-3976-4f74-8933-32bc34bc459c",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $('Update transaction').item.json.type }}",
+              "rightValue": "expense"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "059d7ad3-232a-4ba1-89fb-0f7b10a589e2",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -500,
+        1460
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {\n  \"id\": $(\"Update transaction\").first().json.id,\n  \"budget\": {},\n  \"task\": \"Ask user to add monthly budget\"\n}"
+      },
+      "id": "96cabe1a-a3df-4e7a-86ea-274871faa0e1",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        220,
+        1300
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d062f954-0a17-4870-b632-aebea115dad9",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9804635d-0d80-4243-84e3-1d4ced5bcebd",
+      "name": "budget not found?1",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -20,
+        1460
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "let totalExpenses = 0;\n\nfor (const item of $('Get Monthly Expenses1').all()) {\n  totalExpenses += item.json.amount  \n}\n\nlet result = {\n  \"id\": $('Update transaction').first().json.id,\n  \"budget\": {\n    \"monthlyLimit\": $('Get existing budget2').first().json.budget,\n    \"remainingLimit\": $('Get existing budget2').first().json.budget - totalExpenses\n  },\n  \"task\": \"\"\n}\n\nif (totalExpenses > $('Get existing budget2').first().json.budget) {\n  result.task = \"Give warning to user or suggest to adjust the budget\"\n}\n\nreturn result;"
+      },
+      "id": "3bbebc6e-9e13-422e-95c9-24211edf73bb",
+      "name": "Code4",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        460,
+        1480
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.month }}"
+            },
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "37727d28-84af-493a-93ad-441b2c5b4dfe",
+      "name": "Get Monthly Expenses1",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        220,
+        1480
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn {\n  \"id\": $('add transaction').first().json.id,\n  \"budget\": {},\n  \"task\": \"Congratulate user for new income.\"\n}"
+      },
+      "id": "746aab4c-31c0-4316-880a-5af3bf818660",
+      "name": "Code5",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -180,
+        1660
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.payload.category }}"
+            },
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.payload.month }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c6bafcd4-adce-4187-8f2a-1a7b6b8b0cfa",
+      "name": "Get Existing Budget",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -700,
+        1920
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.date.substring(0, 7) }}"
+            },
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eaac6589-bd3c-45a1-a4ad-684de4719710",
+      "name": "Get existing budget2",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -200,
+        1460
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "columns": {
+          "value": {
+            "month": "={{ $('Switch').item.json.payload.month }}",
+            "budget": "={{ $('Switch').item.json.payload.amount }}",
+            "category": "={{ $('Switch').item.json.payload.category }}"
+          },
+          "schema": [
+            {
+              "id": "month",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "month",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "category",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "budget",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "0d42c444-2ba0-4d43-ab6d-0948da0eeaa1",
+      "name": "Add budget",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -180,
+        1900
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {\n  \"task\": \"Budget already exists. Ask user to update it instead.\"\n}"
+      },
+      "id": "a07b2add-61e0-405f-a3fe-4bc521e66699",
+      "name": "Code6",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -180,
+        2100
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.payload.month }}"
+            },
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.payload.category }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7f977265-dd70-46f7-ad4d-0003093ed04d",
+      "name": "Get Existing Budget1",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -680,
+        2380
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {\n  \"task\": \"Budget not found. Ask user to add budget instead.\"\n}"
+      },
+      "id": "4665d7da-f860-4c66-963f-d78e7c44fec0",
+      "name": "Code7",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -260,
+        2360
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "columns": {
+          "value": {
+            "month": "={{ $('Switch').item.json.payload.month }}",
+            "budget": "={{ $('Switch').item.json.payload.amount }}",
+            "category": "={{ $('Switch').item.json.payload.category }}",
+            "row_number": "={{ $json.row_number }}"
+          },
+          "schema": [
+            {
+              "id": "month",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "month",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "category",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "budget",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "row_number"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "839072b2-5134-4994-a162-3f2e708be736",
+      "name": "Update Budget",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -260,
+        2540
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.payload.category }}"
+            },
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.payload.month }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7096c7bf-7cdd-4b74-8c84-33ab23def1ff",
+      "name": "Get Existing Budget2",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -680,
+        2840
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d062f954-0a17-4870-b632-aebea115dad9",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "10d81485-8ff9-4236-a7bf-46da6cba35e5",
+      "name": "budget not found?4",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -500,
+        2840
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "jsCode": "\n\nreturn {\n  \"task\": \"Budget not found, nothing to remove.\"\n}"
+      },
+      "id": "943c8c10-bd49-4f11-bb58-31d26b38afdc",
+      "name": "Code8",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -260,
+        2820
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "content": "## MCP Main tools\n\nThis is an MCP main entry point. \nIt has several tools that are available to use by AI client.\n\nMost of the tools will execute another workflow\n\n\n### How to use\n\n* You need to be able to sign in via google in order to use google sheets node. \n  Refer to this [documentation](https://docs.n8n.io/integrations/builtin/credentials/google/) on how to sign in with google.\n* Copy this [google sheet template](https://docs.google.com/spreadsheets/d/1XzoYEZflj1Rdo2MVKosRqXHSjkazE5vuwYWHLybX4b0/edit?usp=sharing)\n* after you copy the sheet, make sure you enable sharing with everyone who has the link\n* In each google sheet nodes, change `document` source to `By URL`, paste the link in the URL field\n* For the nodes that related to transaction, change the `sheet` target to `transactions`\n* For the nodes that related to budget, change the `sheet` target to `budgets`",
+        "height": 540,
+        "width": 2040
+      },
+      "id": "4baec593-638a-4410-b413-90561f281a7f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4200,
+        680
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "description": "Update Transaction",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={   \n  \"id\": \"{{ $fromAI(\"id\", \"UUID of the transaction.\", \"string\") }}\",\n  \"date\": \"{{ $fromAI(\"date\", \"Transaction date. Format: YYYY-MM-DD\", \"string\") }}\",   \n  \"purpose\": \"{{ $fromAI(\"purpose\", \"Purpose of the transaction\", \"string\") }}\", \n  \"category\": \"{{ $fromAI(\"category\", \"Transaction category\", \"string\") }}\",\n  \"amount\": {{ $fromAI(\"amount\", \"Transaction amount\", \"number\") }}, \n  \"type\": \"{{ $fromAI(\"type\", \"Transaction type. Can be expense or income\", \"string\") }}\"\n}",
+            "function": "update_transaction"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "512f9680-bba7-4287-ad85-f7d8e01748e4",
+      "name": "Update Transaction",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -2900,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "description": "Add monthly budget",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={   \n  \"month\": \"{{ $fromAI(\"month\", \"Budget month. Format : YYYY-MM\", \"string\") }}\",\n  \"category\": \"{{ $fromAI(\"category\", \"Budget category\", \"string\") }}\",   \n  \"amount\": {{ $fromAI(\"amount\", \"Budget amount\", \"number\") }}\n}",
+            "function": "add_budget"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "34ea5fb0-d1af-4744-acf3-5bf12f0f859b",
+      "name": "Add Budget",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -2740,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "description": "Update monthly budget",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={   \n  \"month\": \"{{ $fromAI(\"month\", \"Budget month. Format : YYYY-MM\", \"string\") }}\",\n  \"category\": \"{{ $fromAI(\"category\", \"Budget category\", \"string\") }}\",   \n  \"amount\": {{ $fromAI(\"amount\", \"Budget amount\", \"number\") }}\n}",
+            "function": "update_budget"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "acd7182b-e310-4141-a811-94af8357c4ab",
+      "name": "Update Budget Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -2600,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "description": "Remove Budget",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={   \n  \"month\": \"{{ $fromAI(\"month\", \"Budget month. Format : YYYY-MM\", \"string\") }}\",\n  \"category\": \"{{ $fromAI(\"category\", \"Budget category\", \"string\") }}\"\n}",
+            "function": "remove_budget"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "5b95bcc1-30e8-4271-896f-a45007d6667a",
+      "name": "Remove Budget",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -2440,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "function",
+              "value": "={{ $('Google Sheets Filter Workflow').item.json.function }}"
+            },
+            {
+              "key": "payload",
+              "value": "={{ JSON.stringify($('Google Sheets Filter Workflow').item.json.payload) }}"
+            }
+          ]
+        }
+      },
+      "id": "9bbe6f9c-8e44-4f3e-88d3-11c36936b34b",
+      "name": "Execution Data",
+      "type": "n8n-nodes-base.executionData",
+      "position": [
+        -1440,
+        840
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Get all transaction\n\nIt will get list of transactions. \n\nSince currently google sheets integration doesn't support date range filter, so if the start date and end date criterial fall into same month it will get data by filtering helper column `month`. But if they're different month, then it get all transactions",
+        "height": 180,
+        "width": 580,
+        "color": 6
+      },
+      "id": "2a967759-c197-48f9-b4a8-1792f2df371b",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "7fc9f6b2-f43e-41da-b3cb-969c70ac3b46",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.payload.dateStart.substring(0,7) }}",
+              "rightValue": "={{ $json.payload.dateEnd.substring(0,7) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e3521945-e9ee-4bc5-96d3-3645d1a0f875",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -780,
+        60
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "",
+          "cachedResultName": "transactions"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.payload.dateStart.substring(0,7) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd78a59d-93be-4af9-9012-4f90c214c472",
+      "name": "get all transactions1",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -500,
+        -60
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "content": "### Remove transaction\n\nIt will remove transaction by ID. However we need to get the transaction first before removing to get row number. Because removing transaction needs a row number, can't be filtered by anything",
+        "height": 180,
+        "width": 320,
+        "color": 6
+      },
+      "id": "cf175125-7b8a-4cf9-b7ab-b07a4f409566",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -220,
+        460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Add transaction\n\nIt will add transaction to a new row. In this workflow it will also check for the existing budget.\n\nIn the response, it has `task` field that will tell AI client what to do next. Either it will suggest user to add budget, or give warning if the budget already reached or surpassed.",
+        "height": 200,
+        "width": 500,
+        "color": 6
+      },
+      "id": "4dad1d8b-e5c7-4478-b13d-8ca214fe42ff",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        760,
+        900
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Update transaction\n\nIt will update transaction by ID. In this workflow it will also check for the existing budget.\n\nIt has the same checking budget workflow with the add transaction. I have to duplicate it since in the end it needs to ID from the different previous node. Currently n8n doesn't allow check return value from the node that has not been executed.",
+        "height": 200,
+        "width": 540,
+        "color": 6
+      },
+      "id": "364929c5-b640-45fe-87dc-c6a470075624",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        760,
+        1440
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Add monthly budget\n\nIt will add monthly budget.\n\n#### pro tip :\nYou can ask AI client to add budget for several months by prompting such \n\n```\nAdd budget for fashion for this month until the end of the year, $500 per month\n```",
+        "height": 280,
+        "width": 340,
+        "color": 6
+      },
+      "id": "731305ce-044d-4b22-9d75-35b86c8cf0bb",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        1880
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### update monthly budget\n\nIt will update budget",
+        "height": 120,
+        "width": 260,
+        "color": 6
+      },
+      "id": "e599646e-0e0c-4ee8-bc19-0f66227500ab",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        2440
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d062f954-0a17-4870-b632-aebea115dad9",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27e3674a-5b00-4e20-96fc-2ec42bd7c984",
+      "name": "budget not found?2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -480,
+        1920
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "d062f954-0a17-4870-b632-aebea115dad9",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "322f5d48-b3b3-4255-9ddc-7bb3ad8acad7",
+      "name": "budget not found?3",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -480,
+        2380
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "### Remove budget\n\nIt will remove existing budget",
+        "height": 120,
+        "width": 260,
+        "color": 6
+      },
+      "id": "c003ddf6-aa8e-4be5-b23f-1a0e5624ebcd",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        2880
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "startIndex": "={{ $json.row_number }}"
+      },
+      "id": "639e8701-b510-4740-8fc8-945278e402a3",
+      "name": "Remove budget",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -260,
+        3000
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1146268703,
+          "cachedResultUrl": "",
+          "cachedResultName": "budgets"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "category",
+              "lookupValue": "={{ $json.payload.category }}"
+            },
+            {
+              "lookupColumn": "month",
+              "lookupValue": "={{ $json.payload.month }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "07e09f3e-65d2-4d15-ae86-7792e6d531f3",
+      "name": "Get Existing Budget3",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -660,
+        3260
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "### Get existing budget\n\nIt will get existing budget",
+        "height": 120,
+        "width": 260,
+        "color": 6
+      },
+      "id": "f33c1ecd-4b6a-43bf-b05e-9c18aa0cfadb",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -420,
+        3260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "description": "Get Budget",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "VjYVuVxMuX9MbtGy",
+          "cachedResultName": "MCP Personal Expense"
+        },
+        "workflowInputs": {
+          "value": {
+            "payload": "={      \"month\": \"{{ $fromAI(\"month\", \"Budget month. Format : YYYY-MM\", \"string\") }}\",   \"category\": \"{{ $fromAI(\"category\", \"Budget category\", \"string\") }}\" }",
+            "function": "get_budget"
+          },
+          "schema": [
+            {
+              "id": "function",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "function",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payload",
+              "type": "object",
+              "display": true,
+              "required": false,
+              "displayName": "payload",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "58155f74-f4cd-4d7f-9deb-39d82705aaee",
+      "name": "Get Budget",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -2300,
+        980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "# MCP Personal Expense\n\nThis is a template for MCP that has tools to manage personal expenses and budget",
+        "width": 420,
+        "color": 4
+      },
+      "id": "8f5a5634-d665-4362-86bc-07ae2c0e1a6a",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4200,
+        480
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {
+    "MCP Server Trigger": [
+      {
+        "json": {
+          "payload": {
+            "dateEnd": "2025-05-30",
+            "dateStart": "2025-05-01"
+          }
+        }
+      }
+    ],
+    "Update transaction": [
+      {
+        "json": {
+          "id": "117efdb5-f849-47f4-8b3f-906d3c79178a",
+          "date": "2025-06-05",
+          "type": "expense",
+          "month": "2025-06",
+          "amount": 35000,
+          "purpose": "Beli bensin",
+          "category": "transportation"
+        }
+      }
+    ],
+    "Google Sheets Filter Workflow": [
+      {
+        "json": {
+          "payload": {
+            "dateEnd": "2025-05-31",
+            "dateStart": "2025-05-01"
+          },
+          "function": "list_transaction"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-17T09:07:38.000Z",
+  "versionId": "d81acb9e-6252-4861-99dd-aa647136dc23"
+}
