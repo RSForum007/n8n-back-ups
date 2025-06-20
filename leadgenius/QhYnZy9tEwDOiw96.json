@@ -1,0 +1,376 @@
+{
+  "active": false,
+  "connections": {
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ardept Project": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-17T14:25:28.431Z",
+  "id": "QhYnZy9tEwDOiw96",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "telegram chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1180,
+        -80
+      ],
+      "id": "328c42e0-70f6-476b-9be6-483de6a8d50c",
+      "name": "Telegram",
+      "webhookId": "54fe4795-211a-447b-ac37-73f505cfb28f",
+      "credentials": {
+        "telegramApi": {
+          "id": "0W0PD8N032LWNJSd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -940,
+        -60
+      ],
+      "id": "8db96afb-efde-4c4c-8918-375d3e1a19b6",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "FofTTdYsIQSnkVfr",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60eb824f-a780-4be4-a03d-2f4aecc0fcb5",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1000,
+        -300
+      ],
+      "id": "c93a8adc-bf4d-4796-b3d7-9c5a4dbd6bc9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=user's prompt: {{ $json.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -740,
+        -260
+      ],
+      "id": "8f329a3a-0a80-406b-b526-a9945b8bee93",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -740,
+        100
+      ],
+      "id": "c6487984-a05e-4d1b-8975-19a5701b874a",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "tacowdwt0JhCG1EA",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -20,
+        -240
+      ],
+      "id": "0fd3bf06-8109-4b4a-ab66-a891be4ec399",
+      "name": "Telegram1",
+      "webhookId": "7bdc8382-be44-4b63-b6f8-b5f518f04f39",
+      "credentials": {
+        "telegramApi": {
+          "id": "0W0PD8N032LWNJSd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "aac3a399-3b58-4e82-882d-d45ea285fc9d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3a53fa3f-d76b-41c1-b244-b94fde43c943",
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1380,
+        -220
+      ],
+      "id": "1b318a7c-8fa3-4eac-a8a9-ad3532b03b73",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1640,
+        -260
+      ],
+      "id": "ab1f8ccd-0c52-446d-b07c-60f662fff6a6",
+      "name": "Telegram Trigger",
+      "webhookId": "34b7cfe2-b1ff-48b8-ba83-0b763c0d8726",
+      "credentials": {
+        "telegramApi": {
+          "id": "0W0PD8N032LWNJSd",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 48757204,
+          "mode": "list",
+          "cachedResultName": "Construction Budget Totals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=48757204"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Project Name",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', ``, 'string') }}"
+            },
+            {
+              "lookupColumn": "Projected \nTotal",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        -500,
+        0
+      ],
+      "id": "86c22387-0983-4607-ae7d-01407df51f21",
+      "name": "Ardept Project",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xVnYdoyfe0Q6c1k4",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-06-18T12:43:40.000Z",
+  "versionId": "d7223b55-73d2-49c4-94a6-55e27b0e8ef5"
+}
