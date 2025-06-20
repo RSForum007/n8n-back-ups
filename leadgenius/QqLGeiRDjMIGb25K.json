@@ -1,0 +1,162 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-18T15:12:09.913Z",
+  "id": "QqLGeiRDjMIGb25K",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Deepseek Generated",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1100,
+        -120
+      ],
+      "id": "9a15eade-33cb-46e9-8df2-771488f3e69e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 48757204,
+          "mode": "list",
+          "cachedResultName": "Construction Budget Totals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=48757204"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -880,
+        -120
+      ],
+      "id": "ed0e93f0-7460-4179-9011-65cc18b5b819",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xVnYdoyfe0Q6c1k4",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "819d501c-194b-442d-9aa3-34fa1e74ce9b",
+              "name": "Project Name",
+              "value": "={{ $json['Project Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a46d4ba1-221e-475b-9065-5165a9da9096",
+              "name": "Actual Total",
+              "value": "={{ $json['Projected Total'] }}",
+              "type": "number"
+            },
+            {
+              "id": "2ff3700f-0975-4536-aeae-7fcaa85fe105",
+              "name": "Actual Total",
+              "value": "={{ $json['Actual Total'] }}",
+              "type": "number"
+            },
+            {
+              "id": "2b026b8f-7eaf-4308-96d8-cb91d8f0e6da",
+              "name": "Variance",
+              "value": "={{ $json.Variance }}",
+              "type": "number"
+            },
+            {
+              "id": "747f08aa-1428-4b84-b1ec-9bdec5efa67f",
+              "name": "Contingency Percentage",
+              "value": "={{ $json['Contingency Percentage'] }}",
+              "type": "number"
+            },
+            {
+              "id": "c4e7e886-ba59-44f5-b6b2-2445cd7cf4f0",
+              "name": "Budget Total w/ Contingency",
+              "value": "={{ $json['Budget Total w/ Contingency'] }}",
+              "type": "number"
+            },
+            {
+              "id": "11388882-10f6-412a-be35-ee8211a7b7c3",
+              "name": "Variance w/ Contingency",
+              "value": "={{ $json['Variance w/ Contingency'] }}",
+              "type": "number"
+            },
+            {
+              "id": "836bb269-2bd7-40ab-8bc2-0680926bb68a",
+              "name": "Current Paid Total",
+              "value": "={{ $json['Current Paid Total'] }}",
+              "type": "number"
+            },
+            {
+              "id": "a2a41b36-27b8-4773-9c25-a70a3889d390",
+              "name": "Amount Due Total",
+              "value": "={{ $json['Amount Due Total'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -700,
+        -120
+      ],
+      "id": "ef9ec11c-a230-46f5-8757-9c0a3030d0bb",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-18T15:41:03.000Z",
+  "versionId": "355c5430-c5f7-4cbf-b776-406fbcdad384"
+}
