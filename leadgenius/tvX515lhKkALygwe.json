@@ -169,7 +169,7 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 5
+              "hoursInterval": 2
             }
           ]
         }
@@ -1040,6 +1040,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-20T14:06:24.000Z",
-  "versionId": "33a626dc-9b20-4979-af54-594e51bd8dd7"
+  "updatedAt": "2025-06-22T05:23:06.000Z",
+  "versionId": "878514a3-f16f-4ce4-aefb-601187cefeb7"
 }
