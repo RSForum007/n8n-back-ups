@@ -676,21 +676,13 @@
   },
   "staticData": {
     "node:Gmail Trigger": {
-      "lastTimeChecked": 1750474821,
+      "lastTimeChecked": 1750541512,
       "possibleDuplicates": [
-        "197906e1468d1410",
-        "1978fcfc85cf2b80",
-        "1978e3675a14d96b"
+        "1979467bd6ac984a"
       ]
     }
   },
   "tags": [
-    {
-      "createdAt": "2025-06-20T11:40:46.289Z",
-      "updatedAt": "2025-06-20T11:40:46.289Z",
-      "id": "II2uxvF4CifRRQyq",
-      "name": "Lets Automate It"
-    },
     {
       "createdAt": "2025-06-20T11:40:46.372Z",
       "updatedAt": "2025-06-20T11:40:46.372Z",
@@ -705,6 +697,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-06-20T14:05:01.000Z",
-  "versionId": "1eef91f0-a1da-4096-8387-71f777d49124"
+  "updatedAt": "2025-06-22T04:19:34.000Z",
+  "versionId": "58de36a8-fb73-4fc4-bc88-5e9ae8641e15"
 }
