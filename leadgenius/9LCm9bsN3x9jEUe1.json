@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "Telegram": {
       "main": [
@@ -36,13 +36,7 @@
     },
     "DeepSeek Chat Model": {
       "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "AI Agent": {
@@ -117,6 +111,22 @@
           }
         ]
       ]
+    },
+    "Deepseek R1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
     }
   },
   "createdAt": "2025-06-19T15:49:38.454Z",
@@ -130,14 +140,13 @@
     {
       "parameters": {
         "resource": "file",
-        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
-        "path": "e355a3eb-cdae-4260-8474-60ad0e622aa7"
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1180,
-        -140
+        -1040,
+        -160
       ],
       "id": "9d9dae68-57a4-40f8-8d14-96deda0b1adb",
       "name": "Telegram",
@@ -158,8 +167,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -940,
-        -80
+        -840,
+        -140
       ],
       "id": "aff9a811-fa07-4b18-b0f5-65ce436fc96d",
       "name": "OpenAI",
@@ -187,7 +196,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1000,
+        -780,
         -400
       ],
       "id": "b6e417b1-3428-4624-9933-6b50708384e8",
@@ -204,7 +213,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -720,
+        -500,
         -360
       ],
       "id": "e7cc1988-3e67-4a9c-b2b1-f16b940f2bdd",
@@ -217,8 +226,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -740,
-        -20
+        -300,
+        -60
       ],
       "id": "e5722009-8174-48b3-a54d-335097304bfa",
       "name": "DeepSeek Chat Model",
@@ -235,13 +244,12 @@
         "text": "={{ $json.output }}",
         "additionalFields": {
           "appendAttribution": false
-        },
-        "path": "f41036ed-b90c-41bd-b3bc-fc63fdb0945d"
+        }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -20,
+        200,
         -100
       ],
       "id": "36ed1f4e-a1d6-4071-b9ba-5077fb083548",
@@ -315,8 +323,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -1360,
-        -320
+        -1220,
+        -360
       ],
       "id": "bf6e92ee-5029-401d-bc4c-11d6a87631a7",
       "name": "Switch"
@@ -326,14 +334,13 @@
         "updates": [
           "message"
         ],
-        "additionalFields": {},
-        "path": "230458ad-370e-45f6-bf69-1f736d194f65"
+        "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1640,
-        -340
+        -1520,
+        -360
       ],
       "id": "48c00b6a-76fa-43a0-951e-6cecdf3d3614",
       "name": "Telegram Trigger",
@@ -368,8 +375,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -200,
-        -500
+        -260,
+        -520
       ],
       "id": "d88c9387-7ce5-4e4c-a43d-4da2cef22dfc",
       "name": "SearchCRM",
@@ -403,8 +410,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -300,
-        -480
+        -360,
+        -520
       ],
       "id": "354abe04-432a-40aa-be4f-3feb4d93559d",
       "name": "Ardept Projects",
@@ -420,14 +427,15 @@
         "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
         "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
         "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
-        "options": {},
-        "path": "1c756a0a-fb99-471a-9fe9-2a14b753b375"
+        "options": {
+          "appendAttribution": false
+        }
       },
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        -80,
-        -500
+        -160,
+        -520
       ],
       "id": "d6dc2c2e-6dc0-4879-b116-9666652c7894",
       "name": "Gmail",
@@ -436,6 +444,67 @@
         "gmailOAuth2": {
           "id": "LuFVGDPwc4RW3TI5",
           "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-reasoner",
+          "mode": "list",
+          "cachedResultName": "deepseek-reasoner"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -500,
+        -180
+      ],
+      "id": "0ee2639e-1fe9-406c-ab60-39a61ff35db3",
+      "name": "Deepseek R1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepseek.com/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "deepseek-reasoner"
+            },
+            {
+              "name": "messages",
+              "value": "={\n[\n{\"role\": \"user\", \"content\": \"You are a helpful assistant.\"}\n]\n}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1460,
+        -540
+      ],
+      "id": "9d24eeda-f628-480b-9ac5-300d3be38ff8",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OQ4NrzREjXGAOnsI",
+          "name": "Header Auth account"
         }
       }
     }
@@ -447,6 +516,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-19T15:49:51.000Z",
-  "versionId": "7005343f-70d3-435b-b20d-ab19b165600c"
+  "updatedAt": "2025-06-22T16:31:58.000Z",
+  "versionId": "c72bbb3c-01c0-4b4c-a0bb-3d509c7e520f"
 }
