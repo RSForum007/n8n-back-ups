@@ -251,46 +251,6 @@
             "node": "Set Idea",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Get records",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get records1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get scenes",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get video1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get video",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Baserow11",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Baserow13",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Baserow15",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -492,23 +452,7 @@
     },
     "Open Router - Deepseek v3.1": {
       "ai_languageModel": [
-        [
-          {
-            "node": "Output Parser 🛠",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Script Writier 🧠",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Long form to Script Writier 🧠",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Open Router - Deepseek v3.": {
@@ -537,7 +481,7 @@
       "main": [
         [
           {
-            "node": "Baserow - Create record",
+            "node": "Baserow2",
             "type": "main",
             "index": 0
           }
@@ -776,6 +720,32 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "DeepSeek R1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Output Parser 🛠",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Long form to Script Writier 🧠",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Script Writier 🧠",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baserow - Create record": {
+      "main": [
+        []
       ]
     }
   },
@@ -1246,7 +1216,13 @@
         2320
       ],
       "id": "7902800c-c906-4ec8-a31d-c9eca5e75127",
-      "name": "Baserow4"
+      "name": "Baserow4",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1270,7 +1246,13 @@
         2340
       ],
       "id": "7505e724-1753-402b-bce7-db135e3e4471",
-      "name": "Baserow5"
+      "name": "Baserow5",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1295,7 +1277,13 @@
         2980
       ],
       "id": "5a9024a9-6a9d-4cd1-bd61-5e3345003512",
-      "name": "Baserow11"
+      "name": "Baserow11",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1319,7 +1307,13 @@
         2980
       ],
       "id": "0fbe0bff-c4c5-4e43-b8e6-1e7726c32919",
-      "name": "Baserow12"
+      "name": "Baserow12",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1349,7 +1343,13 @@
         3240
       ],
       "id": "8588482b-42ed-4b4f-9497-eebdf127f760",
-      "name": "Baserow13"
+      "name": "Baserow13",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1373,7 +1373,13 @@
         3240
       ],
       "id": "23e49641-32e3-4eb8-b88d-516731da01ba",
-      "name": "Baserow14"
+      "name": "Baserow14",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1403,7 +1409,13 @@
         3500
       ],
       "id": "8c6b8328-9a12-44e3-a65d-4dd9942d7d97",
-      "name": "Baserow15"
+      "name": "Baserow15",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1581,8 +1593,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -1020,
-        1600
+        -260,
+        180
       ],
       "id": "ea338823-8515-45d3-88b6-d6df247ce584",
       "name": "On form submission",
@@ -1639,7 +1651,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=User Imput:\n{{ $json.response.text }}",
+        "text": "=User Imput:\n{{ $json.text }}",
         "hasOutputParser": true,
         "messages": {
           "messageValues": [
@@ -1811,7 +1823,13 @@
         1880
       ],
       "id": "e6abe47a-e9a4-4c99-8169-fa321fbd6b2e",
-      "name": "Baserow21"
+      "name": "Baserow21",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1837,40 +1855,40 @@
     {
       "parameters": {
         "operation": "create",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6635,
+              "fieldId": 6619,
               "fieldValue": "={{ $('Output Parser 🛠').item.json.output.Title }}"
             },
             {
-              "fieldId": 6636,
+              "fieldId": 6620,
               "fieldValue": "={{ $('Output Parser 🛠').item.json.output.Description }}"
             },
             {
-              "fieldId": 6637,
+              "fieldId": 6622,
               "fieldValue": "={{ $json.Script }}"
             },
             {
-              "fieldId": 6650,
+              "fieldId": 6631,
               "fieldValue": "={{ $('Set Idea').item.json['User Input'] }}"
             },
             {
-              "fieldId": 6648,
+              "fieldId": 6630,
               "fieldValue": "={{ $('On form submission').item.json['Generative Style'] }}"
             },
             {
-              "fieldId": 6710,
+              "fieldId": 6627,
               "fieldValue": "={{ $('On form submission').item.json['TTS Voice'] }}"
             },
             {
-              "fieldId": 6708,
+              "fieldId": 6632,
               "fieldValue": "Processing"
             },
             {
-              "fieldId": 6778,
+              "fieldId": 6633,
               "fieldValue": "={{ $('On form submission').item.json['Image Provider'] }}"
             }
           ]
@@ -1879,11 +1897,17 @@
       "type": "n8n-nodes-base.baserow",
       "typeVersion": 1,
       "position": [
-        1600,
-        160
+        2300,
+        280
       ],
       "id": "c72590d7-80c6-4c93-9d0c-f15297f76090",
-      "name": "Baserow - Create record"
+      "name": "Baserow - Create record",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1913,7 +1937,13 @@
         2660
       ],
       "id": "9fd323d6-41b3-4e26-90d1-7e9c8188ca08",
-      "name": "Get video"
+      "name": "Get video",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1937,7 +1967,13 @@
         2660
       ],
       "id": "057cadac-638e-4eb2-bf75-caf6ef09a7fd",
-      "name": "Get Scenes"
+      "name": "Get Scenes",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1961,7 +1997,13 @@
         2660
       ],
       "id": "83229722-b75e-4f8d-969b-6fd14bfbf601",
-      "name": "Baserow"
+      "name": "Baserow",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2015,7 +2057,13 @@
         580
       ],
       "id": "2266cd95-e034-4719-bd59-fe65c42e3773",
-      "name": "Get records"
+      "name": "Get records",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2045,7 +2093,13 @@
         1100
       ],
       "id": "13a6932d-38dd-40f6-b7de-282cf9140fd3",
-      "name": "Get records1"
+      "name": "Get records1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2075,7 +2129,13 @@
         2320
       ],
       "id": "a8c700ab-5e1b-412e-afb3-30134b42521a",
-      "name": "Get video1"
+      "name": "Get video1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2117,7 +2177,13 @@
         3500
       ],
       "id": "8e845a35-ea3c-43c7-82f7-e81605deb924",
-      "name": "Baserow1"
+      "name": "Baserow1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2127,8 +2193,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        780,
-        380
+        920,
+        480
       ],
       "id": "d13b2a1f-9a49-474a-bb37-1e39d2806483",
       "name": "Open Router - Deepseek v3.1"
@@ -2339,7 +2405,13 @@
         1080
       ],
       "id": "164445bd-1650-4b9f-9061-833a20a847c9",
-      "name": "Baserow19"
+      "name": "Baserow19",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2399,7 +2471,13 @@
         1080
       ],
       "id": "066286f3-187a-4c03-86ef-8b60c1b22e8a",
-      "name": "Baserow22"
+      "name": "Baserow22",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2516,7 +2594,13 @@
         1600
       ],
       "id": "88574db9-97c0-43b0-bdb5-1ddd3511833a",
-      "name": "Get scenes"
+      "name": "Get scenes",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2743,7 +2827,13 @@
         1420
       ],
       "id": "f0ebd32b-dba6-4a2d-a8a8-89984700b507",
-      "name": "Update Scene record"
+      "name": "Update Scene record",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2758,6 +2848,88 @@
       "id": "6c8a13cd-878f-480d-a2da-e0b6f2222944",
       "name": "Wait 1s",
       "webhookId": "833a4309-7169-43f7-bfc3-edfe58e50d97"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-chat",
+          "mode": "list",
+          "cachedResultName": "deepseek-chat"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        480
+      ],
+      "id": "a2453e4a-7122-4f85-b6fc-d703f4d3caf6",
+      "name": "DeepSeek R1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": 169,
+        "tableId": 683,
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": 6619,
+              "fieldValue": "={{ $('Output Parser 🛠').item.json.output.Title }}"
+            },
+            {
+              "fieldId": 6620,
+              "fieldValue": "={{ $('Output Parser 🛠').item.json.output.Description }}"
+            },
+            {
+              "fieldId": 6622,
+              "fieldValue": "={{ $json.Script }}"
+            },
+            {
+              "fieldId": 6631,
+              "fieldValue": "={{ $('Set Idea').item.json['User Input'] }}"
+            },
+            {
+              "fieldId": 6630,
+              "fieldValue": "={{ $('On form submission').item.json['Generative Style'] }}"
+            },
+            {
+              "fieldId": 6627,
+              "fieldValue": "={{ $('On form submission').item.json['TTS Voice'] }}"
+            },
+            {
+              "fieldId": 6632,
+              "fieldValue": "Processing"
+            },
+            {
+              "fieldId": 6633,
+              "fieldValue": "={{ $('On form submission').item.json['Image Provider'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        160
+      ],
+      "id": "1ea258b1-182c-4524-9886-927797ec2262",
+      "name": "Baserow2",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -2767,6 +2939,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-22T15:39:55.000Z",
-  "versionId": "b5807ad8-c326-41fe-9e30-5073e334e4d1"
+  "updatedAt": "2025-06-24T16:06:26.000Z",
+  "versionId": "1fa9814f-a366-4c37-82aa-173f8643c652"
 }
