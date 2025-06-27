@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Get records1",
+            "node": "Baserow13",
             "type": "main",
             "index": 0
           }
@@ -445,22 +445,6 @@
           {
             "node": "Baserow4",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Open Router - Deepseek v3.1": {
-      "ai_languageModel": [
-        []
-      ]
-    },
-    "Open Router - Deepseek v3.": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Image Prompter V2 📷",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -722,7 +706,7 @@
         ]
       ]
     },
-    "OpenAI Chat Model": {
+    "DeepSeek R1": {
       "ai_languageModel": [
         [
           {
@@ -742,12 +726,25 @@
           }
         ]
       ]
+    },
+    "DeepSeek R": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompter V2 📷",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-06-25T13:54:14.569Z",
   "id": "LKscWs56V6qss2VL",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "Brain Rotter v2",
   "nodes": [
     {
@@ -797,7 +794,13 @@
         2340
       ],
       "id": "ac68f56a-25d3-496e-8ff6-f93f2449e82d",
-      "name": "Create Clips"
+      "name": "Create Clips",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -819,7 +822,13 @@
         2660
       ],
       "id": "cd3aabf1-cf34-43da-bd04-526cb213f453",
-      "name": "Combine Clips"
+      "name": "Combine Clips",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -922,8 +931,13 @@
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Raw Video URL'] }}\"\n        },\n        {\n            \"file_url\": \"{{ $json['TTS Audio'][0].url }}\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]volume=1[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}\n",
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Raw Video URL'] }}\"\n        },\n        {\n            \"file_url\": \"{{ $json['TTS Audio'][0].url }}\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]volume=1[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
         "options": {
           "timeout": 50000
         }
@@ -935,7 +949,13 @@
         2980
       ],
       "id": "b77240d9-1209-4e7a-960d-643c5de119e8",
-      "name": "Combine Clips3"
+      "name": "Combine Clips3",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -945,7 +965,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Captions URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/music/epic-emotinal-inspirational-207071.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
+        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Caption URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/nca-toolkit/music/fun-happy-loop-kids-energy-357904.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -955,7 +975,13 @@
         3500
       ],
       "id": "0626ead9-bba0-472a-a25d-8239396743a9",
-      "name": "Add Music"
+      "name": "Add Music",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -1176,7 +1202,7 @@
         "specifyBody": "json",
         "jsonBody": "={\n    \"video_url\": \"{{ $json['Video + Audio URL'] }}\",\n    \"settings\": {\n        \"line_color\": \"#FFFFFF\",\n        \"word_color\": \"#22b525\",\n        \"all_caps\": false,\n        \"max_words_per_line\": 3,\n        \"font_size\": 50,\n        \"bold\": false,\n        \"italic\": false,\n        \"underline\": false,\n        \"strikeout\": false,\n        \"outline_width\": 6,\n        \"shadow_offset\": 8,\n        \"style\": \"highlight\",\n        \"font_family\": \"The Bold Font\",\n        \"position\": \"top_center\"\n    },\n    \"id\": \"{{ $json.id }}\"\n}",
         "options": {
-          "timeout": 90000
+          "timeout": 500000
         }
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1186,18 +1212,24 @@
         3240
       ],
       "id": "01415bb8-1f87-49fe-8e14-27b63e7eadd1",
-      "name": "Create Captions"
+      "name": "Create Captions",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6623,
+                "field": 6616,
                 "value": "={{ $json.id }}"
               }
             ]
@@ -1211,18 +1243,24 @@
         2320
       ],
       "id": "7dd3886f-4a99-4fff-97cc-c167c7306721",
-      "name": "Baserow4"
+      "name": "Baserow4",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "rowId": "={{ $('Loop Over Items3').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6628,
+              "fieldId": 6635,
               "fieldValue": "={{ $json.response }}"
             }
           ]
@@ -1235,18 +1273,24 @@
         2340
       ],
       "id": "f26af223-4131-44fc-ad10-b4ca1c845732",
-      "name": "Baserow5"
+      "name": "Baserow5",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6641,
+                "field": 6640,
                 "operator": "empty"
               }
             ]
@@ -1260,18 +1304,24 @@
         2980
       ],
       "id": "a4f38356-6e9b-4fea-8649-d663b7b5b710",
-      "name": "Baserow11"
+      "name": "Baserow11",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "rowId": "={{ $('Baserow11').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6641,
+              "fieldId": 6640,
               "fieldValue": "={{ $json.response[0].file_url }}"
             }
           ]
@@ -1284,22 +1334,28 @@
         2980
       ],
       "id": "2690d583-4bcc-46e5-9e7f-c7efc864a215",
-      "name": "Baserow12"
+      "name": "Baserow12",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6640,
+                "field": 6624,
                 "operator": "empty"
               },
               {
-                "field": 6708,
+                "field": 6632,
                 "operator": "contains",
                 "value": "Processing"
               }
@@ -1314,18 +1370,24 @@
         3240
       ],
       "id": "28c40e76-9889-4c0c-bebb-2c82ec008df3",
-      "name": "Baserow13"
+      "name": "Baserow13",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "rowId": "={{ $('Baserow13').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6640,
+              "fieldId": 6624,
               "fieldValue": "={{ $json.response }}"
             }
           ]
@@ -1338,22 +1400,28 @@
         3240
       ],
       "id": "848b16b1-afdf-49b9-8daf-61d8bf0990b1",
-      "name": "Baserow14"
+      "name": "Baserow14",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6639,
+                "field": 6623,
                 "operator": "empty"
               },
               {
-                "field": 6708,
+                "field": 6632,
                 "operator": "contains",
                 "value": "Processing"
               }
@@ -1368,7 +1436,13 @@
         3500
       ],
       "id": "a87c179c-083a-4089-b0e5-60501e27111f",
-      "name": "Baserow15"
+      "name": "Baserow15",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1546,8 +1620,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -280,
-        1120
+        -240,
+        3260
       ],
       "id": "66d0573a-53b8-47e7-a206-36530fe97149",
       "name": "On form submission",
@@ -1757,13 +1831,13 @@
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "rowId": "={{ $('Loop Over Items').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6627,
+              "fieldId": 6634,
               "fieldValue": "={{ $json.name }}"
             }
           ]
@@ -1776,7 +1850,13 @@
         1880
       ],
       "id": "9c4cc29e-7fa3-407c-a833-dcc5ebce260d",
-      "name": "Baserow21"
+      "name": "Baserow21",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -1858,18 +1938,18 @@
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6642,
+                "field": 6625,
                 "operator": "empty"
               },
               {
-                "field": 6708,
+                "field": 6632,
                 "operator": "contains",
                 "value": "Processing"
               }
@@ -1884,17 +1964,23 @@
         2660
       ],
       "id": "639c6b21-062b-4d49-aa00-8c2dff585884",
-      "name": "Get video"
+      "name": "Get video",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6623,
+                "field": 6616,
                 "value": "={{ $json.id }}"
               }
             ]
@@ -1908,18 +1994,24 @@
         2660
       ],
       "id": "7ae64a6e-608f-4240-92e7-959391555d32",
-      "name": "Get Scenes"
+      "name": "Get Scenes",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "rowId": "={{ $json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6642,
+              "fieldId": 6625,
               "fieldValue": "={{ $json.response }}"
             }
           ]
@@ -1932,7 +2024,13 @@
         2660
       ],
       "id": "36b4e239-dd88-4962-896a-c4af673dcd19",
-      "name": "Baserow"
+      "name": "Baserow",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2002,18 +2100,18 @@
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6644,
+                "field": 6639,
                 "operator": "empty"
               },
               {
-                "field": 6708,
+                "field": 6632,
                 "operator": "contains",
                 "value": "Processing"
               }
@@ -2028,22 +2126,28 @@
         1100
       ],
       "id": "590fff1f-13e7-43f2-85df-0ab9dc888f8c",
-      "name": "Get records1"
+      "name": "Get records1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6642,
+                "field": 6625,
                 "operator": "empty"
               },
               {
-                "field": 6708,
+                "field": 6632,
                 "operator": "contains",
                 "value": "Processing"
               }
@@ -2058,7 +2162,13 @@
         2320
       ],
       "id": "77104e10-ec30-4da0-a950-3745147feabf",
-      "name": "Get video1"
+      "name": "Get video1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2077,17 +2187,17 @@
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "rowId": "={{ $('Baserow15').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6639,
+              "fieldId": 6623,
               "fieldValue": "={{ $json.response[0].file_url }}"
             },
             {
-              "fieldId": 6708,
+              "fieldId": 6632,
               "fieldValue": "Done"
             }
           ]
@@ -2100,34 +2210,13 @@
         3500
       ],
       "id": "390262c2-26c6-458f-80f2-aea802bae77c",
-      "name": "Baserow1"
-    },
-    {
-      "parameters": {
-        "model": "deepseek/deepseek-chat-v3-0324:free",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        880,
-        400
-      ],
-      "id": "1c83c3fd-6ba1-4780-8980-095089a747c9",
-      "name": "Open Router - Deepseek v3.1"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        1120,
-        1220
-      ],
-      "id": "2058789c-3a47-43f6-aad5-1937024ddb66",
-      "name": "Open Router - Deepseek v3."
+      "name": "Baserow1",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2219,7 +2308,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://host.docker.internal:85/api/user-files/upload-file/",
+        "url": "http://host.docker.internal:80/api/user-files/upload-file/",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -2242,7 +2331,13 @@
         1880
       ],
       "id": "788b41c5-9527-4adb-858d-0732917b055f",
-      "name": "HTTP - Upload To Baserow"
+      "name": "HTTP - Upload To Baserow",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "04NpFcN5uxeMv6Eh",
+          "name": "baserow"
+        }
+      }
     },
     {
       "parameters": {
@@ -2315,13 +2410,13 @@
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 683,
         "rowId": "={{ $('Get records1').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6644,
+              "fieldId": 6639,
               "fieldValue": "={{ $json.ids }}"
             }
           ]
@@ -2334,7 +2429,13 @@
         1080
       ],
       "id": "b194e9d2-a948-46b0-a7d4-78fc3cd40e6b",
-      "name": "Baserow19"
+      "name": "Baserow19",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2368,20 +2469,20 @@
     {
       "parameters": {
         "operation": "create",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6624,
+              "fieldId": 6617,
               "fieldValue": "={{ $json.output.Prompt }}"
             },
             {
-              "fieldId": 6626,
+              "fieldId": 6618,
               "fieldValue": "={{ $('Split Out').item.json.json.duration }}"
             },
             {
-              "fieldId": 6779,
+              "fieldId": 6637,
               "fieldValue": "={{ $('Get records1').item.json['Image Provider'].value }}"
             }
           ]
@@ -2394,7 +2495,13 @@
         1080
       ],
       "id": "4b6e93b9-ab10-43bc-a083-dc088356fe7b",
-      "name": "Baserow22"
+      "name": "Baserow22",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2420,7 +2527,13 @@
         1880
       ],
       "id": "660b3ee9-c288-4bab-b0c1-5ff1606353d4",
-      "name": "HTTP - Together.ai"
+      "name": "HTTP - Together.ai",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "qMkGIkNWmPxVPaNe",
+          "name": "together.ai"
+        }
+      }
     },
     {
       "parameters": {
@@ -2436,7 +2549,7 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $('Loop Over Items').item.json['Image Provider'].value }}",
+                    "leftValue": "={{ $json['Image Provider'].value }}",
                     "rightValue": "fal.ai",
                     "operator": {
                       "type": "string",
@@ -2461,7 +2574,7 @@
                 "conditions": [
                   {
                     "id": "3e78a869-ccdb-4d17-b4f0-bc61733f6232",
-                    "leftValue": "={{ $('Loop Over Items').item.json['Image Provider'].value }}",
+                    "leftValue": "={{ $json['Image Provider'].value }}",
                     "rightValue": "together.ai",
                     "operator": {
                       "type": "string",
@@ -2482,22 +2595,22 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        420,
-        1620
+        440,
+        1600
       ],
       "id": "245b3dff-755f-4ca3-839b-8036ed54c90a",
       "name": "Switch - Image Provider"
     },
     {
       "parameters": {
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "returnAll": true,
         "additionalOptions": {
           "filters": {
             "fields": [
               {
-                "field": 6627,
+                "field": 6634,
                 "operator": "empty"
               }
             ]
@@ -2511,7 +2624,13 @@
         1600
       ],
       "id": "75cc8ba1-494d-4c81-bab8-6520b17a55f0",
-      "name": "Get scenes"
+      "name": "Get scenes",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2541,7 +2660,13 @@
         1540
       ],
       "id": "2877b776-93ce-4f8a-903c-8d66cb577744",
-      "name": "fal.ai - Submit request"
+      "name": "fal.ai - Submit request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -2626,7 +2751,13 @@
         1420
       ],
       "id": "ae52c71a-9262-49f5-8eea-e9215c94820a",
-      "name": "HTTP - Upload To Baserow1"
+      "name": "HTTP - Upload To Baserow1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "04NpFcN5uxeMv6Eh",
+          "name": "baserow"
+        }
+      }
     },
     {
       "parameters": {},
@@ -2684,7 +2815,13 @@
         1540
       ],
       "id": "b8681642-0915-4787-8fac-6f720a0c0875",
-      "name": "HTTP - get status"
+      "name": "HTTP - get status",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "04NpFcN5uxeMv6Eh",
+          "name": "baserow"
+        }
+      }
     },
     {
       "parameters": {
@@ -2700,7 +2837,13 @@
         1420
       ],
       "id": "f9687173-3c09-4cb6-b656-59ca0eae273e",
-      "name": "HTTP - get image url"
+      "name": "HTTP - get image url",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "04NpFcN5uxeMv6Eh",
+          "name": "baserow"
+        }
+      }
     },
     {
       "parameters": {
@@ -2719,13 +2862,13 @@
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 94,
+        "databaseId": 169,
         "tableId": 682,
         "rowId": "={{ $('Loop Over Items').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6627,
+              "fieldId": 6634,
               "fieldValue": "={{ $json.name }}"
             }
           ]
@@ -2738,7 +2881,13 @@
         1420
       ],
       "id": "3a35629f-8bae-41c3-8cde-8aa2da785b83",
-      "name": "Update Scene record"
+      "name": "Update Scene record",
+      "credentials": {
+        "baserowApi": {
+          "id": "w30y1EVydxFzBLw8",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2771,7 +2920,32 @@
         400
       ],
       "id": "e343680b-0fe0-49dd-a4a7-557e97b66558",
-      "name": "OpenAI Chat Model",
+      "name": "DeepSeek R1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-reasoner",
+          "mode": "list",
+          "cachedResultName": "deepseek-reasoner"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1080,
+        1240
+      ],
+      "id": "cd7cbe3a-7f7f-43ff-9119-0288fbd1031b",
+      "name": "DeepSeek R",
       "credentials": {
         "openAiApi": {
           "id": "Dv8GS1HUIR25OoY1",
@@ -2780,28 +2954,13 @@
       }
     }
   ],
-  "pinData": {
-    "On form submission": [
-      {
-        "json": {
-          "The Main Topic": "5 insane facts about space and black holes",
-          "Duration": "2 Minutes",
-          "Generative Style": "fantasy",
-          "Video Type": "From user idea",
-          "TTS Voice": "am_adam",
-          "Image Provider": "together.ai",
-          "submittedAt": "2025-06-25T09:54:49.261-04:00",
-          "formMode": "test"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-25T15:05:54.000Z",
-  "versionId": "9ae13603-012b-4011-9b0b-b93071d29e14"
+  "updatedAt": "2025-06-26T17:52:03.000Z",
+  "versionId": "30efb510-b33d-4d75-a180-0fa8e13da6a5"
 }
