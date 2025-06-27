@@ -52,13 +52,7 @@
     },
     "When clicking ‘Test workflow’": {
       "main": [
-        [
-          {
-            "node": "Download YT Videos1",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "deepseek R1": {
@@ -84,8 +78,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -220,
-        2380
+        -240,
+        460
       ],
       "id": "4c817b88-6d89-4d0c-bccc-93616105d522",
       "name": "When clicking ‘Test workflow’"
@@ -106,6 +100,12 @@
       "id": "28846543-98a6-4625-aa8f-82cca613f422",
       "name": "Test NCA Toolkit",
       "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "x1FVsox5cS3d35CU",
+          "name": "nca-toolkit"
+        }
+      },
       "notes": "/v1/toolkit/test"
     },
     {
@@ -860,6 +860,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-23T14:59:38.000Z",
-  "versionId": "6f9d4f96-160a-4ca5-a566-fbbdbb15bd6a"
+  "updatedAt": "2025-06-26T12:30:02.000Z",
+  "versionId": "ab266083-2cad-42bb-8433-d67191b035cd"
 }
