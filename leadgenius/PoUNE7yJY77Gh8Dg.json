@@ -1,0 +1,95 @@
+{
+  "active": false,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deepseek R1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-28T10:49:21.169Z",
+  "id": "PoUNE7yJY77Gh8Dg",
+  "isArchived": false,
+  "meta": null,
+  "name": "Deepseek Generated",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -460,
+        -100
+      ],
+      "id": "e647a284-94bd-4b7c-9767-b366de1b3638",
+      "name": "When chat message received",
+      "webhookId": "a009622c-4609-477f-b8bd-376d55aaa29f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "8088dc3c-e50d-4bef-99c1-797bd3c37253",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-reasoner",
+          "mode": "list",
+          "cachedResultName": "deepseek-reasoner"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -180,
+        80
+      ],
+      "id": "0921264e-f526-4e67-86e2-1460626ef9ad",
+      "name": "Deepseek R1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-28T10:52:30.529Z",
+  "versionId": "2f4abea0-0ae1-41e6-8bcc-cb99675dac22"
+}
