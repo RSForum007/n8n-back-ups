@@ -1,0 +1,586 @@
+{
+  "active": false,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get all flows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all flows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Back Up flow": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Items": {
+      "main": [
+        [
+          {
+            "node": "Compare Versions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit existing file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create new file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Git Hub Parameters": {
+      "main": [
+        [
+          {
+            "node": "Get Current Back Ups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Back Ups": {
+      "main": [
+        [
+          {
+            "node": "If back up file is too large",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If back up file is too large": {
+      "main": [
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Merge Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Back Up to Git Hub": {
+      "main": [
+        [
+          {
+            "node": "Set Git Hub Parameters",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Items",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Compare Versions": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Execute Back Up flow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-28T10:49:22.537Z",
+  "id": "mcDzKMWQJX2yN7V6",
+  "isArchived": false,
+  "meta": null,
+  "name": "Github Backup",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "066c5867-06f3-4c65-a09d-42ed6bf0d7fc",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        240,
+        0
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## How to backup n8n workflows to GitHub\n\n1. Create n8n credential for the n8n node\n\n2. Create a Git Hub Account\n\n3. Get a Git Hub Token and create Git Hub Credential for the Git Hub nodes\n\n4. Add the Github Parameters to the \"Set Git Hub Parameters\" node\n\n- **repo.owner:** your Github username\n- **repo.name:** the name of your repository\n- **repo.path:** the folder to use within the repository. If it doesn't exist it will be created.\n\nIf your username was `john-doe` and your repository was called `n8n-backups` and you wanted the workflows to go into a `workflows` folder you would set:\n\n- repo.owner - john-doe\n- repo.name - n8n-backups\n- repo.path - workflows/\n\n\nThe workflow calls itself using a sub workflow, to help reduce memory usage.",
+        "height": 701,
+        "width": 371,
+        "color": 4
+      },
+      "id": "6d68ad85-d27a-4940-a985-533490bbfe23",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -240,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Get Workflows",
+        "height": 335,
+        "width": 1166,
+        "color": 7
+      },
+      "id": "425ec49b-e889-4adf-90f9-7e9271d457a6",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        160,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "id": "7b184ef4-cf02-409f-9a86-0e260d6a756a",
+      "name": "Get all flows",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        480,
+        0
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "n8nApi": {
+          "id": "EmdFpqINyv8ViHPs",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $workflow.id }}",
+          "cachedResultName": "={{ $workflow.id }}"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "id": "308b516a-299c-4939-ae70-75cfa4b5e51b",
+      "name": "Execute Back Up flow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "position": [
+        1040,
+        0
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {},
+      "id": "7aed17f7-148a-41b8-a39e-92e66ca0d8ee",
+      "name": "Merge Items",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        260,
+        600
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$json.github_status}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "same"
+            },
+            {
+              "value2": "different",
+              "output": 1
+            },
+            {
+              "value2": "new",
+              "output": 2
+            }
+          ]
+        }
+      },
+      "id": "3ae73ff8-ec8d-42dd-b6a0-766f3b5e24ec",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        760,
+        580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $('Set Git Hub Parameters').item.json.repo.owner }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $('Set Git Hub Parameters').item.json.repo.name }}"
+        },
+        "filePath": "={{ $('Set Git Hub Parameters').item.json.repo.path }}{{$('Back Up to Git Hub').first().json.id}}.json",
+        "fileContent": "={{$('Compare Versions').item.json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "={{$('Back Up to Git Hub').first().json.name}} ({{$json.github_status}})"
+      },
+      "id": "8e36502d-2007-4b9c-821e-ce7a1c892f59",
+      "name": "Create new file",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        1080,
+        720
+      ],
+      "typeVersion": 1,
+      "webhookId": "899c6624-d5f7-4431-8eb7-2f1faa06f9b0",
+      "credentials": {
+        "githubApi": {
+          "id": "0SSwcRRaBTerhPGO",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $('Set Git Hub Parameters').item.json.repo.owner }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $('Set Git Hub Parameters').item.json.repo.name }}"
+        },
+        "filePath": "={{ $('Set Git Hub Parameters').item.json.repo.path }}{{$('Back Up to Git Hub').first().json.id}}.json",
+        "fileContent": "={{$('Compare Versions').item.json[\"n8n_data_stringy\"]}}",
+        "commitMessage": "={{$('Back Up to Git Hub').first().json.name}} ({{$json.github_status}})"
+      },
+      "id": "47e48738-cd82-4490-8fcc-151af47d3044",
+      "name": "Edit existing file",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        1080,
+        540
+      ],
+      "typeVersion": 1,
+      "webhookId": "b214c3c7-aa3b-4d90-9655-4f52103c04aa",
+      "credentials": {
+        "githubApi": {
+          "id": "0SSwcRRaBTerhPGO",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cf546c5-5737-4dbd-851b-17d68e0a3780",
+              "name": "repo.owner",
+              "type": "string",
+              "value": "RSForum007"
+            },
+            {
+              "id": "452efa28-2dc6-4ea3-a7a2-c35d100d0382",
+              "name": "repo.name",
+              "type": "string",
+              "value": "n8n-back-ups"
+            },
+            {
+              "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
+              "name": "repo.path",
+              "type": "string",
+              "value": "leadgenius/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a1c2404-e319-41b9-a6a3-9262533dbba5",
+      "name": "Set Git Hub Parameters",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        480,
+        280
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $json.repo.owner }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $json.repo.name }}"
+        },
+        "filePath": "={{ $json.repo.path }}{{ $('Back Up to Git Hub').item.json.id }}.json",
+        "asBinaryProperty": false,
+        "additionalParameters": {}
+      },
+      "id": "8c671832-fc85-49a6-ac83-6d64e47abef1",
+      "name": "Get Current Back Ups",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        680,
+        280
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "webhookId": "5aba94fd-417e-44fe-bedf-ab9e40033dde",
+      "credentials": {
+        "githubApi": {
+          "id": "0SSwcRRaBTerhPGO",
+          "name": "GitHub account"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 1,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "45ce825e-9fa6-430c-8931-9aaf22c42585",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.content }}",
+              "rightValue": ""
+            },
+            {
+              "id": "9619a55f-7fb1-4f24-b1a7-7aeb82365806",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5fa7d0bc-80de-4c4a-99dc-b7e41257663d",
+      "name": "If back up file is too large",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        900,
+        280
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.download_url }}",
+        "options": {}
+      },
+      "id": "d24fd77f-dd69-4d80-a803-5d0b39750bdd",
+      "name": "Download File",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1120,
+        280
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "b2b497e3-2e77-4e37-b61c-a7dfb58675c5",
+      "name": "Back Up to Git Hub",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        280,
+        280
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## Back Up new or apply changes",
+        "height": 360,
+        "width": 1180
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        160,
+        500
+      ],
+      "typeVersion": 1,
+      "id": "c1e58d3c-501a-4da8-8d21-d9beacb31470",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Sub Workflow - check for existing back ups\n",
+        "height": 260,
+        "width": 1160,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        160,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "02c0acf3-06d3-49f7-b34c-3d935c763fd5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n}\n\n// Check if file returned with content\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  // Decode base64 content and parse JSON\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n// No file returned / new workflow\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else {\n  // Order JSON object\n  const n8nWorkflow = $input.all()[1].json;\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n  \n  // Proper formatting\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\n// Return items\nreturn $input.all();"
+      },
+      "id": "25bf03e9-9f46-42da-b359-459bac639036",
+      "name": "Compare Versions",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        500,
+        600
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        780,
+        -80
+      ],
+      "id": "37ace3b7-8fda-4518-ad47-26d3fef474ba",
+      "name": "Loop Over Items"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        15
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-28T11:01:10.977Z",
+  "versionId": "a4b6165b-e0f6-4cba-bc72-c1293c95c167"
+}
