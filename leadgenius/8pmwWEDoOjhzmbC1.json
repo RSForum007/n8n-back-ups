@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "Telegram": {
       "main": [
@@ -107,7 +107,7 @@
         ]
       ]
     },
-    "Gmail": {
+    "Send a message in Gmail": {
       "ai_tool": [
         [
           {
@@ -122,27 +122,28 @@
   "createdAt": "2025-06-28T10:49:18.293Z",
   "id": "8pmwWEDoOjhzmbC1",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "telegram chatbot + google sheets - TESTED WORKIN",
   "nodes": [
     {
       "parameters": {
         "resource": "file",
-        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
-        "path": "e355a3eb-cdae-4260-8474-60ad0e622aa7"
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
         -1180,
-        -140
+        -160
       ],
       "id": "9d9dae68-57a4-40f8-8d14-96deda0b1adb",
       "name": "Telegram",
       "webhookId": "e355a3eb-cdae-4260-8474-60ad0e622aa7",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "wex9xHVVF5xDekF6",
           "name": "Telegram account"
         }
       }
@@ -156,7 +157,7 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -940,
+        -920,
         -80
       ],
       "id": "aff9a811-fa07-4b18-b0f5-65ce436fc96d",
@@ -202,8 +203,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -720,
-        -360
+        -700,
+        -380
       ],
       "id": "e7cc1988-3e67-4a9c-b2b1-f16b940f2bdd",
       "name": "AI Agent"
@@ -215,14 +216,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -740,
-        -20
+        -700,
+        -160
       ],
       "id": "e5722009-8174-48b3-a54d-335097304bfa",
       "name": "DeepSeek Chat Model",
       "credentials": {
         "deepSeekApi": {
-          "id": "tacowdwt0JhCG1EA",
+          "id": "e5kgqqon4DMtTCio",
           "name": "DeepSeek account"
         }
       }
@@ -233,21 +234,20 @@
         "text": "={{ $json.output }}",
         "additionalFields": {
           "appendAttribution": false
-        },
-        "path": "f41036ed-b90c-41bd-b3bc-fc63fdb0945d"
+        }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -20,
-        -100
+        -140,
+        -400
       ],
       "id": "36ed1f4e-a1d6-4071-b9ba-5077fb083548",
       "name": "Telegram1",
       "webhookId": "f41036ed-b90c-41bd-b3bc-fc63fdb0945d",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "wex9xHVVF5xDekF6",
           "name": "Telegram account"
         }
       }
@@ -324,13 +324,12 @@
         "updates": [
           "message"
         ],
-        "additionalFields": {},
-        "path": "230458ad-370e-45f6-bf69-1f736d194f65"
+        "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1640,
+        -1560,
         -340
       ],
       "id": "48c00b6a-76fa-43a0-951e-6cecdf3d3614",
@@ -338,7 +337,7 @@
       "webhookId": "230458ad-370e-45f6-bf69-1f736d194f65",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "wex9xHVVF5xDekF6",
           "name": "Telegram account"
         }
       }
@@ -366,14 +365,14 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -200,
-        -500
+        -300,
+        -80
       ],
       "id": "d88c9387-7ce5-4e4c-a43d-4da2cef22dfc",
       "name": "SearchCRM",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xVnYdoyfe0Q6c1k4",
+          "id": "3dVAnE9XHBxJae4F",
           "name": "Google Sheets account"
         }
       }
@@ -401,14 +400,14 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -300,
-        -480
+        -420,
+        -80
       ],
       "id": "354abe04-432a-40aa-be4f-3feb4d93559d",
       "name": "Ardept Projects",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xVnYdoyfe0Q6c1k4",
+          "id": "3dVAnE9XHBxJae4F",
           "name": "Google Sheets account"
         }
       }
@@ -418,33 +417,34 @@
         "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
         "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
         "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
-        "options": {},
-        "path": "1c756a0a-fb99-471a-9fe9-2a14b753b375"
+        "options": {
+          "appendAttribution": false
+        }
       },
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        -80,
-        -500
+        -180,
+        -80
       ],
       "id": "d6dc2c2e-6dc0-4879-b116-9666652c7894",
-      "name": "Gmail",
+      "name": "Send a message in Gmail",
       "webhookId": "1c756a0a-fb99-471a-9fe9-2a14b753b375",
       "credentials": {
         "gmailOAuth2": {
-          "id": "LuFVGDPwc4RW3TI5",
+          "id": "2Wfgk8puktAWfAeV",
           "name": "Gmail account"
         }
       }
     }
   ],
-  "pinData": null,
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-06-28T10:52:14.104Z",
-  "versionId": "fbf8ea94-3da2-4433-9786-dde5febf4b62"
+  "triggerCount": 1,
+  "updatedAt": "2025-06-30T03:42:57.971Z",
+  "versionId": "d763c5aa-1e15-4279-9256-fa01ce5f970a"
 }
