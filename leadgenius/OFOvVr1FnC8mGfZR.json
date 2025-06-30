@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Get scenes",
+            "node": "Set Idea",
             "type": "main",
             "index": 0
           }
@@ -1623,8 +1623,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3120,
-        1260
+        -2940,
+        -180
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2915,7 +2915,7 @@
     },
     {
       "parameters": {
-        "model": "anthropic/claude-3.7-sonnet",
+        "model": "openai/gpt-4o-mini",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -2935,7 +2935,7 @@
     },
     {
       "parameters": {
-        "model": "anthropic/claude-sonnet-4",
+        "model": "openai/gpt-4o-mini",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -2954,28 +2954,13 @@
       }
     }
   ],
-  "pinData": {
-    "On form submission": [
-      {
-        "json": {
-          "The Main Topic": "\"The One Thing All Successful People Learned From Their Mothers\"",
-          "Duration": "2 Minutes",
-          "Generative Style": "Disney Pixar",
-          "Video Type": "From user idea",
-          "TTS Voice": "af_alloy",
-          "Image Provider": "together.ai",
-          "submittedAt": "2025-06-30T04:12:44.546-04:00",
-          "formMode": "test"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-30T08:17:21.090Z",
-  "versionId": "48b189e7-6094-4e3c-8e51-7bc4e21df263"
+  "updatedAt": "2025-06-30T11:41:19.052Z",
+  "versionId": "ac103772-fc3b-4140-bfd8-060f6ddc9e40"
 }
