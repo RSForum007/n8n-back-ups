@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Get video1",
+            "node": "Baserow15",
             "type": "main",
             "index": 0
           }
@@ -1623,8 +1623,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3280,
-        1960
+        -2880,
+        3160
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2976,6 +2976,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-30T14:53:30.259Z",
-  "versionId": "65985312-501d-42fa-95a8-84ac5d0f37f9"
+  "updatedAt": "2025-06-30T15:19:37.227Z",
+  "versionId": "6fc2ebe0-086a-4e0f-ad42-107439e15c04"
 }
