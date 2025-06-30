@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Set Idea",
+            "node": "Get video1",
             "type": "main",
             "index": 0
           }
@@ -968,7 +968,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Caption URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/nca-toolkit/music/YT-inspiring-piano(Remix).mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
+        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Caption URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/nca-toolkit/music/melody-101v2.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1623,8 +1623,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -2940,
-        -180
+        -3280,
+        1960
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -1803,7 +1803,7 @@
     },
     {
       "parameters": {
-        "content": "## Image Generation - flux/schnell\n",
+        "content": "## Image Generation - flux/schnell\n## Chec here kun Meron Agad need to regenerate",
         "height": 840,
         "width": 2240,
         "color": 5
@@ -1819,7 +1819,7 @@
     },
     {
       "parameters": {
-        "amount": 15
+        "amount": 10
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -2954,13 +2954,28 @@
       }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "The Main Topic": "\"Why Your Mother's Prayers Are More Powerful Than You Think\"",
+          "Duration": "2 Minutes",
+          "Generative Style": "Disney Pixar",
+          "Video Type": "From user idea",
+          "TTS Voice": "af_heart",
+          "Image Provider": "together.ai",
+          "submittedAt": "2025-06-30T10:18:10.180-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-30T11:41:19.052Z",
-  "versionId": "ac103772-fc3b-4140-bfd8-060f6ddc9e40"
+  "updatedAt": "2025-06-30T14:53:30.259Z",
+  "versionId": "65985312-501d-42fa-95a8-84ac5d0f37f9"
 }
