@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Baserow15",
+            "node": "Get scenes",
             "type": "main",
             "index": 0
           }
@@ -1623,8 +1623,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3080,
-        3160
+        -3120,
+        1260
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2935,7 +2935,7 @@
     },
     {
       "parameters": {
-        "model": "anthropic/claude-3.7-sonnet",
+        "model": "anthropic/claude-sonnet-4",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -2958,13 +2958,13 @@
     "On form submission": [
       {
         "json": {
-          "The Main Topic": "Words That Heal: The 10 Most Powerful Things Mothers Say",
+          "The Main Topic": "\"The One Thing All Successful People Learned From Their Mothers\"",
           "Duration": "2 Minutes",
           "Generative Style": "Disney Pixar",
           "Video Type": "From user idea",
           "TTS Voice": "af_alloy",
           "Image Provider": "together.ai",
-          "submittedAt": "2025-06-29T22:34:26.166-04:00",
+          "submittedAt": "2025-06-30T04:12:44.546-04:00",
           "formMode": "test"
         }
       }
@@ -2976,6 +2976,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-30T03:23:13.126Z",
-  "versionId": "8019357d-3f80-48a9-8960-3486034ba752"
+  "updatedAt": "2025-06-30T08:17:21.090Z",
+  "versionId": "48b189e7-6094-4e3c-8e51-7bc4e21df263"
 }
