@@ -86,7 +86,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "My workflow",
+  "name": "Restore workflow from github",
   "nodes": [
     {
       "parameters": {},
@@ -428,6 +428,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-06-28T10:52:54.801Z",
-  "versionId": "999882f7-d5b9-4628-99a3-bc5fe533c365"
+  "updatedAt": "2025-06-28T11:08:25.080Z",
+  "versionId": "0f606852-4efc-47f7-8288-5e47f09cd916"
 }
