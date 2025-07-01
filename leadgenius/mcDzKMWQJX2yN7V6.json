@@ -182,22 +182,6 @@
     },
     {
       "parameters": {
-        "content": "## How to backup n8n workflows to GitHub\n\n1. Create n8n credential for the n8n node\n\n2. Create a Git Hub Account\n\n3. Get a Git Hub Token and create Git Hub Credential for the Git Hub nodes\n\n4. Add the Github Parameters to the \"Set Git Hub Parameters\" node\n\n- **repo.owner:** your Github username\n- **repo.name:** the name of your repository\n- **repo.path:** the folder to use within the repository. If it doesn't exist it will be created.\n\nIf your username was `john-doe` and your repository was called `n8n-backups` and you wanted the workflows to go into a `workflows` folder you would set:\n\n- repo.owner - john-doe\n- repo.name - n8n-backups\n- repo.path - workflows/\n\n\nThe workflow calls itself using a sub workflow, to help reduce memory usage.",
-        "height": 701,
-        "width": 371,
-        "color": 4
-      },
-      "id": "6d68ad85-d27a-4940-a985-533490bbfe23",
-      "name": "Sticky Note1",
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -240,
-        -140
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
         "content": "## Get Workflows",
         "height": 335,
         "width": 1166,
@@ -580,6 +564,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-30T03:43:31.862Z",
-  "versionId": "b5255cfe-ac0c-49eb-a943-e58e48225dfd"
+  "updatedAt": "2025-06-30T15:20:34.421Z",
+  "versionId": "dbf1e72b-0c06-4878-8663-6945ea930db8"
 }
