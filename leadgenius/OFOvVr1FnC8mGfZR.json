@@ -248,7 +248,17 @@
       "main": [
         [
           {
-            "node": "Get scenes",
+            "node": "Set Idea",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get records1",
             "type": "main",
             "index": 0
           }
@@ -968,7 +978,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Caption URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/nca-toolkit/music/melody-101v2.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
+        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json['Video + Caption URL'] }}\"\n        },\n        {\n            \"file_url\": \"http://host.docker.internal:9000/nca-toolkit/music/Instru-Guitar.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]aloop=loop=-1:size=2G[audio_loop];[0:a]volume=2[audio1];[audio_loop]volume=0.5[audio2];[audio1][audio2]amix=inputs=2:duration=first[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1623,8 +1633,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3040,
-        1260
+        -3260,
+        -140
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -1774,7 +1784,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "=You are an image prompt generator agent for video production. Your role is to create starting frames for a longer video by transforming script segments into visually descriptive image prompts. Each scene will be generated in a specified artistic style, which must be factored into the prompt to ensure consistency.  \n\nOutput a JSON object containing the prompt for the current script segment that you are presented with:  \n\n```json\n{\n  \"Prompt\": \"enter prompt here\"\n}\n```  \n\n### **IMPORTANT INSTRUCTIONS:**  \n\n- **Always** incorporate the given style into the visual description.  \n- **Never** include text in the images.\n- **Never** exceed 300 characters in your prompt.  \n- **Keep images visually compelling** – Instead of basic or static representations, focus on **dynamic compositions, dramatic angles, striking lighting, immersive textures, and environmental storytelling**.  \n- **Small subjects should have compelling micro-world narratives** – If the subject is small (e.g., a drop of water, a single key, a lone leaf), provide a **rich atmosphere**, interplay of lighting, and framing that enhances storytelling.  \n- **Focus on depth, detail, and artistic impact** rather than excessive complexity.  \n\n\nA well-crafted prompt should now include:  \n\n- **Subject:** The main focus of the image.  \n- **Style:** The artistic style provided for this scene (e.g., Lego, Minecraft, Disney Pixar, Hand-Drawn, Chibi, Anime, Hyper-Realistic, Cyberpunk).  \n- **Composition:** Use **engaging angles** (macro close-ups, over-the-shoulder, dynamic perspectives).  \n- **Lighting:** Prioritize dramatic effects like **backlighting, neon glows, moody shadows, or iridescent reflections** for added immersion. \n- **Micro-World Storytelling:** Ensure even small objects contribute to a **scene with intrigue, interaction, or emotion**.  \n- **Color Palette:** The dominant colors or color scheme.  \n- **Mood/Atmosphere:** The emotional tone of the image.  \n- **Technical Details:** Camera effects like **bokeh, depth of field, contrast**, or lens distortion to make the image feel real.  \n- **Additional Elements:** Small but meaningful details that **enhance interest without overwhelming the scene**.  \n\n\nExample Prompts\n\n- **Style: Hyper-Realistic** – A hyperrealistic macro shot of a single droplet of glue stretching delicately from a cracked porcelain teacup, caught in the moment before it falls. The soft golden glow from a nearby desk lamp refracts through the droplet, revealing tiny swirling textures inside. Dust particles float around, illuminated in the warm evening light.  \n- **Style: Minecraft** – A blocky Minecraft-style cavern glowing with radiant blue crystals embedded in stone. A pixelated adventurer stands at the entrance, silhouetted against eerie, ambient light. Shadows dance across the cave walls, creating intrigue.  \n- **Style: Disney Pixar** – A cozy animated bakery at sunrise, where a little girl with oversized round glasses watches a tray of fresh golden pastries steaming on the counter. Soft beams of morning sunlight filter in, casting a warm, dreamy glow on the checkered tiles.  \n- **Style: Cyberpunk** – A neon-lit cyberpunk alleyway drenched in rain. The headlights of a hoverbike cut through thin mist as a shadowy figure in a metallic trench coat leans against a graffiti-covered wall. Bright neon blues and deep magentas create dramatic contrast.  \n\n"
+              "message": "=You are an image prompt generator agent for video production. Your role is to create starting frames for a longer video by transforming script segments into visually descriptive image prompts. Each scene will be generated in a specified artistic style, which must be factored into the prompt to ensure consistency.  \n\nOutput a JSON object containing the prompt for the current script segment that you are presented with:  \n\n```json\n{\n  \"Prompt\": \"enter prompt here\"\n}\n```  \n\n### **IMPORTANT INSTRUCTIONS:**  \n\n- **Always** incorporate the given style into the visual description.  \n- **Never** include text in the images.\n- **Never** exceed 240 characters in your prompt.  \n- **Keep images visually compelling** – Instead of basic or static representations, focus on **dynamic compositions, dramatic angles, striking lighting, immersive textures, and environmental storytelling**.  \n- **Small subjects should have compelling micro-world narratives** – If the subject is small (e.g., a drop of water, a single key, a lone leaf), provide a **rich atmosphere**, interplay of lighting, and framing that enhances storytelling.  \n- **Focus on depth, detail, and artistic impact** rather than excessive complexity.  \n\n\nA well-crafted prompt should now include:  \n\n- **Subject:** The main focus of the image.  \n- **Style:** The artistic style provided for this scene (e.g., Lego, Minecraft, Disney Pixar, Hand-Drawn, Chibi, Anime, Hyper-Realistic, Cyberpunk).  \n- **Composition:** Use **engaging angles** (macro close-ups, over-the-shoulder, dynamic perspectives).  \n- **Lighting:** Prioritize dramatic effects like **backlighting, neon glows, moody shadows, or iridescent reflections** for added immersion. \n- **Micro-World Storytelling:** Ensure even small objects contribute to a **scene with intrigue, interaction, or emotion**.  \n- **Color Palette:** The dominant colors or color scheme.  \n- **Mood/Atmosphere:** The emotional tone of the image.  \n- **Technical Details:** Camera effects like **bokeh, depth of field, contrast**, or lens distortion to make the image feel real.  \n- **Additional Elements:** Small but meaningful details that **enhance interest without overwhelming the scene**.  \n\n\nExample Prompts\n\n- **Style: Hyper-Realistic** – A hyperrealistic macro shot of a single droplet of glue stretching delicately from a cracked porcelain teacup, caught in the moment before it falls. The soft golden glow from a nearby desk lamp refracts through the droplet, revealing tiny swirling textures inside. Dust particles float around, illuminated in the warm evening light.  \n- **Style: Minecraft** – A blocky Minecraft-style cavern glowing with radiant blue crystals embedded in stone. A pixelated adventurer stands at the entrance, silhouetted against eerie, ambient light. Shadows dance across the cave walls, creating intrigue.  \n- **Style: Disney Pixar** – A cozy animated bakery at sunrise, where a little girl with oversized round glasses watches a tray of fresh golden pastries steaming on the counter. Soft beams of morning sunlight filter in, casting a warm, dreamy glow on the checkered tiles.  \n- **Style: Cyberpunk** – A neon-lit cyberpunk alleyway drenched in rain. The headlights of a hoverbike cut through thin mist as a shadowy figure in a metallic trench coat leans against a graffiti-covered wall. Bright neon blues and deep magentas create dramatic contrast.  \n\n"
             }
           ]
         }
@@ -2976,6 +2986,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-01T11:05:25.229Z",
-  "versionId": "1f4af6fd-f139-4879-aee9-b2ea9c06d6fc"
+  "updatedAt": "2025-07-01T12:27:06.371Z",
+  "versionId": "0f526dbe-55ab-4d09-a2ef-949df611df1f"
 }
