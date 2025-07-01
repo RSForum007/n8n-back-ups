@@ -135,8 +135,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1180,
-        -160
+        -1160,
+        -180
       ],
       "id": "9d9dae68-57a4-40f8-8d14-96deda0b1adb",
       "name": "Telegram",
@@ -157,8 +157,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -920,
-        -80
+        -980,
+        -160
       ],
       "id": "aff9a811-fa07-4b18-b0f5-65ce436fc96d",
       "name": "OpenAI",
@@ -186,8 +186,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1000,
-        -400
+        -1040,
+        -460
       ],
       "id": "b6e417b1-3428-4624-9933-6b50708384e8",
       "name": "Edit Fields"
@@ -203,7 +203,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -700,
+        -840,
         -380
       ],
       "id": "e7cc1988-3e67-4a9c-b2b1-f16b940f2bdd",
@@ -216,8 +216,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -700,
-        -160
+        -820,
+        -180
       ],
       "id": "e5722009-8174-48b3-a54d-335097304bfa",
       "name": "DeepSeek Chat Model",
@@ -239,8 +239,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -140,
-        -400
+        -460,
+        -380
       ],
       "id": "36ed1f4e-a1d6-4071-b9ba-5077fb083548",
       "name": "Telegram1",
@@ -365,8 +365,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -300,
-        -80
+        -540,
+        -100
       ],
       "id": "d88c9387-7ce5-4e4c-a43d-4da2cef22dfc",
       "name": "SearchCRM",
@@ -400,8 +400,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -420,
-        -80
+        -660,
+        -100
       ],
       "id": "354abe04-432a-40aa-be4f-3feb4d93559d",
       "name": "Ardept Projects",
@@ -424,8 +424,8 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        -180,
-        -80
+        -420,
+        -120
       ],
       "id": "d6dc2c2e-6dc0-4879-b116-9666652c7894",
       "name": "Send a message in Gmail",
@@ -445,6 +445,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-30T03:42:57.971Z",
-  "versionId": "d763c5aa-1e15-4279-9256-fa01ce5f970a"
+  "updatedAt": "2025-06-30T15:21:14.383Z",
+  "versionId": "a6e16660-4866-42ab-a1cc-02206a97e580"
 }
