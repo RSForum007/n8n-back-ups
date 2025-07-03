@@ -248,7 +248,22 @@
       "main": [
         [
           {
+            "node": "Set Idea",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "Get records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get records1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get scenes",
             "type": "main",
             "index": 0
           }
@@ -1623,8 +1638,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -2920,
-        260
+        -3320,
+        340
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2935,7 +2950,7 @@
     },
     {
       "parameters": {
-        "model": "anthropic/claude-3.7-sonnet",
+        "model": "openai/gpt-4o",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -2958,13 +2973,13 @@
     "On form submission": [
       {
         "json": {
-          "The Main Topic": "\"The Best Advice My Mother Ever Gave Me\"",
+          "The Main Topic": "\"What I Learned About Love From My Mother’s Marriage\"",
           "Duration": "2 Minutes",
           "Generative Style": "Disney Pixar",
           "Video Type": "From user idea",
           "TTS Voice": "af_heart",
           "Image Provider": "together.ai",
-          "submittedAt": "2025-07-03T11:54:17.521-04:00",
+          "submittedAt": "2025-07-03T12:34:24.382-04:00",
           "formMode": "test"
         }
       }
@@ -2976,6 +2991,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-03T15:56:36.085Z",
-  "versionId": "7b19e970-5097-405b-a896-c672f41d5946"
+  "updatedAt": "2025-07-03T16:35:25.778Z",
+  "versionId": "f56ff12e-fce9-49ea-aae0-71dd9d0262b3"
 }
