@@ -36,13 +36,7 @@
     },
     "DeepSeek Chat Model": {
       "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "AI Agent": {
@@ -117,6 +111,17 @@
           }
         ]
       ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-06-28T10:49:18.293Z",
@@ -135,8 +140,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1160,
-        -180
+        -1220,
+        -120
       ],
       "id": "9d9dae68-57a4-40f8-8d14-96deda0b1adb",
       "name": "Telegram",
@@ -157,8 +162,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -980,
-        -160
+        -1060,
+        -180
       ],
       "id": "aff9a811-fa07-4b18-b0f5-65ce436fc96d",
       "name": "OpenAI",
@@ -216,8 +221,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -820,
-        -180
+        -760,
+        20
       ],
       "id": "e5722009-8174-48b3-a54d-335097304bfa",
       "name": "DeepSeek Chat Model",
@@ -436,6 +441,26 @@
           "name": "Gmail account"
         }
       }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -160
+      ],
+      "id": "71bffd0b-99c2-4bff-8a94-53c9cbc1e0ec",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -445,6 +470,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-06-30T15:21:14.383Z",
-  "versionId": "a6e16660-4866-42ab-a1cc-02206a97e580"
+  "updatedAt": "2025-07-03T15:26:26.577Z",
+  "versionId": "f71c6783-9285-4dec-b1e0-de96a0506026"
 }
