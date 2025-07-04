@@ -248,22 +248,7 @@
       "main": [
         [
           {
-            "node": "Set Idea",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get records",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get records1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get scenes",
+            "node": "Baserow15",
             "type": "main",
             "index": 0
           }
@@ -1638,8 +1623,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3320,
-        340
+        -3080,
+        3180
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2991,6 +2976,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-03T16:35:25.778Z",
-  "versionId": "f56ff12e-fce9-49ea-aae0-71dd9d0262b3"
+  "updatedAt": "2025-07-03T17:04:22.521Z",
+  "versionId": "d89999fd-3201-4fc9-8e36-6b3799db1bd5"
 }
