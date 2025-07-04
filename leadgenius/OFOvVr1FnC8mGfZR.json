@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Baserow15",
+            "node": "Get scenes",
             "type": "main",
             "index": 0
           }
@@ -747,7 +747,9 @@
   "createdAt": "2025-06-28T14:05:37.939Z",
   "id": "OFOvVr1FnC8mGfZR",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "Brain Rotter v2 copy",
   "nodes": [
     {
@@ -1623,8 +1625,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3080,
-        3180
+        -3040,
+        1260
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2514,7 +2516,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"model\": \"black-forest-labs/FLUX.1-schnell-Free\",\n    \"prompt\": {{ JSON.stringify($json.Prompt) }},\n    \"width\": 576,\n    \"height\": 1024,\n    \"steps\": 4,\n    \"n\": 1,\n    \"response_format\": \"b64_json\"\n   }",
+        "jsonBody": "={\n    \"model\": \"black-forest-labs/FLUX.1-schnell\",\n    \"prompt\": {{ JSON.stringify($json.Prompt) }},\n    \"width\": 576,\n    \"height\": 1024,\n    \"steps\": 7,\n    \"n\": 1,\n    \"response_format\": \"b64_json\"\n   }",
         "options": {
           "response": {
             "response": {
@@ -2754,7 +2756,13 @@
         1080
       ],
       "id": "d14d3ead-7f59-47cd-9c59-8025f4b36b19",
-      "name": "HTTP - Upload To Baserow1"
+      "name": "HTTP - Upload To Baserow1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "8gDHI2NKFoxxIV90",
+          "name": "together.ai"
+        }
+      }
     },
     {
       "parameters": {},
@@ -2834,7 +2842,13 @@
         1080
       ],
       "id": "b567e4ef-a969-4157-82b1-9e7482d4775c",
-      "name": "HTTP - get image url"
+      "name": "HTTP - get image url",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "8gDHI2NKFoxxIV90",
+          "name": "together.ai"
+        }
+      }
     },
     {
       "parameters": {
@@ -2872,7 +2886,13 @@
         1080
       ],
       "id": "9e2d0fd8-f1df-4baa-8b92-0228fa115181",
-      "name": "Update Scene record"
+      "name": "Update Scene record",
+      "credentials": {
+        "baserowApi": {
+          "id": "ldxQU3fflAKKpPak",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -2958,13 +2978,13 @@
     "On form submission": [
       {
         "json": {
-          "The Main Topic": "\"What I Learned About Love From My Mother’s Marriage\"",
-          "Duration": "2 Minutes",
-          "Generative Style": "Disney Pixar",
+          "The Main Topic": "\"How a Mother’s Heart Knows No Bounds\"",
+          "Duration": "1 Minute",
+          "Generative Style": "Chibi",
           "Video Type": "From user idea",
           "TTS Voice": "af_heart",
           "Image Provider": "together.ai",
-          "submittedAt": "2025-07-03T12:34:24.382-04:00",
+          "submittedAt": "2025-07-04T10:36:59.038-04:00",
           "formMode": "test"
         }
       }
@@ -2976,6 +2996,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-03T17:04:22.521Z",
-  "versionId": "d89999fd-3201-4fc9-8e36-6b3799db1bd5"
+  "updatedAt": "2025-07-04T14:59:50.212Z",
+  "versionId": "23f1f787-99e9-42fd-853a-715c415f7800"
 }
