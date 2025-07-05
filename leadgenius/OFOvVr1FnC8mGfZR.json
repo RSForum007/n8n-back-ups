@@ -248,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Get scenes",
+            "node": "Baserow11",
             "type": "main",
             "index": 0
           }
@@ -1625,8 +1625,8 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -3040,
-        1260
+        -2900,
+        2640
       ],
       "id": "d96570bd-6a3a-4e45-b492-dd6ae2c75f77",
       "name": "On form submission",
@@ -2516,7 +2516,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n    \"model\": \"black-forest-labs/FLUX.1-schnell\",\n    \"prompt\": {{ JSON.stringify($json.Prompt) }},\n    \"width\": 576,\n    \"height\": 1024,\n    \"steps\": 7,\n    \"n\": 1,\n    \"response_format\": \"b64_json\"\n   }",
+        "jsonBody": "={\n    \"model\": \"black-forest-labs/FLUX.1-schnell\",\n    \"prompt\": {{ JSON.stringify($json.Prompt) }},\n    \"width\": 576,\n    \"height\": 1024,\n    \"steps\": 8,\n    \"n\": 1,\n    \"response_format\": \"b64_json\"\n   }",
         "options": {
           "response": {
             "response": {
@@ -2978,13 +2978,13 @@
     "On form submission": [
       {
         "json": {
-          "The Main Topic": "\"How a Mother’s Heart Knows No Bounds\"",
+          "The Main Topic": "Why My Mom is the Strongest Woman I Know",
           "Duration": "1 Minute",
-          "Generative Style": "Chibi",
+          "Generative Style": "Disney Pixar",
           "Video Type": "From user idea",
           "TTS Voice": "af_heart",
           "Image Provider": "together.ai",
-          "submittedAt": "2025-07-04T10:36:59.038-04:00",
+          "submittedAt": "2025-07-04T11:20:15.128-04:00",
           "formMode": "test"
         }
       }
@@ -2996,6 +2996,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-04T14:59:50.212Z",
-  "versionId": "23f1f787-99e9-42fd-853a-715c415f7800"
+  "updatedAt": "2025-07-04T15:37:03.937Z",
+  "versionId": "2a7e1b8e-8e66-4981-956d-9155d7ec399d"
 }
