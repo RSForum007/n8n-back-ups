@@ -223,21 +223,39 @@
           }
         ]
       ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Get many voices": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-07-05T06:59:25.179Z",
   "id": "prpt2yHf2WCiiOgg",
   "isArchived": false,
-  "meta": null,
-  "name": "My workflow 3C",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "chatterbox tts",
   "nodes": [
     {
       "parameters": {},
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        220,
-        500
+        360,
+        -180
       ],
       "id": "a90dc2ba-c32e-4e48-9f5e-7ae996e26731",
       "name": "When clicking ‘Execute workflow’"
@@ -589,18 +607,6 @@
       "name": "Sticky Note3"
     },
     {
-      "parameters": {},
-      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
-      "typeVersion": 1,
-      "position": [
-        640,
-        1520
-      ],
-      "id": "3790b828-86d3-483e-9cff-088d885c1b44",
-      "name": "ElevenLabs1",
-      "credentials": {}
-    },
-    {
       "parameters": {
         "options": {}
       },
@@ -628,7 +634,7 @@
     },
     {
       "parameters": {
-        "amount": 1
+        "amount": 2
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -847,6 +853,27 @@
       "id": "207f0857-e94d-485a-8c0a-5a7b675a8e95",
       "name": "Upload Reference",
       "notes": "/upload_reference"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        640,
+        1520
+      ],
+      "id": "3790b828-86d3-483e-9cff-088d885c1b44",
+      "name": "Get many voices",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "ZEnVMq1fLOiHsYnV",
+          "name": "ElevenLabs account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -856,6 +883,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-05T06:59:25.179Z",
-  "versionId": "f44de79f-b2e6-410a-9dbc-fe8baa21ba34"
+  "updatedAt": "2025-07-05T07:28:33.372Z",
+  "versionId": "b7fd52e0-799e-4a72-91ea-eb9c22572e7e"
 }
