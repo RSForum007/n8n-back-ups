@@ -240,7 +240,13 @@
     },
     "Get Audio Duration": {
       "main": [
-        []
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "OpenRouter": {
@@ -256,18 +262,7 @@
     },
     "OpenRouter1": {
       "ai_languageModel": [
-        [
-          {
-            "node": "Scripter",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Parser",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Parser": {
@@ -313,12 +308,30 @@
           }
         ]
       ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Scripter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-07-05T08:53:33.356Z",
   "id": "qx9MXWNYjeIjEgr7",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "bed time storys",
   "nodes": [
     {
@@ -658,7 +671,13 @@
         800
       ],
       "id": "113a0e99-c871-4251-b53a-682ae66bc9fc",
-      "name": "Create Video Clips"
+      "name": "Create Video Clips",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -693,7 +712,13 @@
         800
       ],
       "id": "0a368bb9-7913-49f0-85f0-d70cf27eeb98",
-      "name": "Create Video"
+      "name": "Create Video",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -716,7 +741,13 @@
       ],
       "id": "209b6245-5ec9-4b77-8623-3b97491959ef",
       "name": "Add TTS To Video",
-      "notesInFlow": true
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
     },
     {
       "parameters": {
@@ -798,7 +829,13 @@
         420
       ],
       "id": "b2930b87-0d9f-44aa-a9bd-d1a3e017490c",
-      "name": "Upload Image"
+      "name": "Upload Image",
+      "credentials": {
+        "s3": {
+          "id": "OvGfhaikiM3JFYZn",
+          "name": "S3 account"
+        }
+      }
     },
     {
       "parameters": {
@@ -835,17 +872,17 @@
     {
       "parameters": {
         "operation": "update",
-        "databaseId": 169,
+        "databaseId": 170,
         "tableId": 684,
         "rowId": "={{ $('Get many rows').item.json.id }}",
         "fieldsUi": {
           "fieldValues": [
             {
-              "fieldId": 6668,
+              "fieldId": 6650,
               "fieldValue": "={{ $json.response[0].file_url }}"
             },
             {
-              "fieldId": 6662,
+              "fieldId": 6649,
               "fieldValue": "done"
             }
           ]
@@ -858,7 +895,13 @@
         1080
       ],
       "id": "2c606244-9ce1-4934-ba71-9de1d76c75ff",
-      "name": "Update record"
+      "name": "Update record",
+      "credentials": {
+        "baserowApi": {
+          "id": "ldxQU3fflAKKpPak",
+          "name": "Baserow account"
+        }
+      }
     },
     {
       "parameters": {
@@ -901,6 +944,12 @@
       "id": "e4b5056a-4c5d-4de2-a210-a3252c2f1cba",
       "name": "OpenRouter",
       "notesInFlow": true,
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      },
       "notes": "google/gemini-2.0-flash-exp:free"
     },
     {
@@ -911,8 +960,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        880,
-        220
+        660,
+        280
       ],
       "id": "86f4026f-23b3-4ef9-a2a9-c3326b62df7a",
       "name": "OpenRouter1",
@@ -1015,6 +1064,26 @@
           "name": "Baserow account"
         }
       }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        200
+      ],
+      "id": "37686959-4ef0-4bf2-adb0-81d650628564",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -1024,6 +1093,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-05T09:00:21.112Z",
-  "versionId": "17511503-07ee-4e55-a996-cd1a9be0ec2e"
+  "updatedAt": "2025-07-05T09:37:26.383Z",
+  "versionId": "eded68da-5704-48a4-b84e-34c4b6e85eaf"
 }
