@@ -960,8 +960,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        660,
-        280
+        700,
+        180
       ],
       "id": "86f4026f-23b3-4ef9-a2a9-c3326b62df7a",
       "name": "OpenRouter1",
@@ -1093,6 +1093,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-05T09:37:26.383Z",
-  "versionId": "eded68da-5704-48a4-b84e-34c4b6e85eaf"
+  "updatedAt": "2025-07-05T11:14:15.420Z",
+  "versionId": "de304140-018a-4efd-af95-0f244b0370e9"
 }
