@@ -1,0 +1,474 @@
+{
+  "active": false,
+  "connections": {
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchCRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ardept Projects": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-05T17:57:24.934Z",
+  "id": "qEnyUL7NQUhMuGe0",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ARDEPT Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
+        "path": "8a014b9f-ca02-4357-8d6b-3c362f2ff818"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1220,
+        -120
+      ],
+      "id": "09d98f1e-9dc2-42a9-bc28-79de08b78be5",
+      "name": "Telegram",
+      "webhookId": "8a014b9f-ca02-4357-8d6b-3c362f2ff818",
+      "credentials": {
+        "telegramApi": {
+          "id": "wex9xHVVF5xDekF6",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1060,
+        -180
+      ],
+      "id": "1c5597b5-9a5f-43fb-ae0d-33e739d3c500",
+      "name": "OpenAI",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60eb824f-a780-4be4-a03d-2f4aecc0fcb5",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        -460
+      ],
+      "id": "3b9b8aeb-86fb-42ea-ae0d-5a24e4789fe6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Users Prompt: {{ $json.text }}",
+        "options": {
+          "systemMessage": "Role: You are a helpful assistant with access to CRM and email of user.\n\nGoal: Fulfill user's queries and tasks. User respective tools.\n\nTools:\n1. SearchCRM - to find people in CRM\n2. Ardept Projects - to search for Ardept projects on Project Name, Projected Total, Actual Total, Variance, Contingency percentage, Budget with Contingency, Variance with Contingency, Current paid total, Amount Due total.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -840,
+        -380
+      ],
+      "id": "92df9942-44f6-446e-819c-10ff9f7ef7b1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        20
+      ],
+      "id": "6b4b3f26-e039-48ef-97e5-7b2b5a4d0166",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "e5kgqqon4DMtTCio",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "path": "ef4dd99a-0ab8-46bb-9466-6b7ac9d56484"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -460,
+        -380
+      ],
+      "id": "d9572bf3-6d89-4209-80b8-035e0bda051f",
+      "name": "Telegram1",
+      "webhookId": "ef4dd99a-0ab8-46bb-9466-6b7ac9d56484",
+      "credentials": {
+        "telegramApi": {
+          "id": "wex9xHVVF5xDekF6",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "aac3a399-3b58-4e82-882d-d45ea285fc9d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3a53fa3f-d76b-41c1-b244-b94fde43c943",
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1360,
+        -320
+      ],
+      "id": "d706e0b8-f350-401a-ad8b-981325dbb15e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {},
+        "path": "dba1ed53-44b3-4b47-af0c-572c89452155"
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1560,
+        -340
+      ],
+      "id": "5f7c630e-d592-4d12-bfb3-ecac58f2d820",
+      "name": "Telegram Trigger",
+      "webhookId": "dba1ed53-44b3-4b47-af0c-572c89452155",
+      "credentials": {
+        "telegramApi": {
+          "id": "wex9xHVVF5xDekF6",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "A tools to search CRM",
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 851629707,
+          "mode": "list",
+          "cachedResultName": "Contacts CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=851629707"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        -540,
+        -100
+      ],
+      "id": "9f532832-c59b-4bca-b318-7d50a414480f",
+      "name": "SearchCRM",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3dVAnE9XHBxJae4F",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Columns: Project Name, Projected Total, Actual Total, Variance, Contingency percentage, Budget with Contingency, Variance with Contingency, Current paid total, Amount Due total.",
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 48757204,
+          "mode": "list",
+          "cachedResultName": "Construction Budget Totals",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=48757204"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        -660,
+        -100
+      ],
+      "id": "3871fdbd-7364-43f4-85d6-ba833306849c",
+      "name": "Ardept Projects",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3dVAnE9XHBxJae4F",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        },
+        "path": "284a474e-8779-4b04-b782-ec3317b97fa1"
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -420,
+        -120
+      ],
+      "id": "032b7087-3a86-4642-8ce7-7f2f6fb58416",
+      "name": "Send a message in Gmail",
+      "webhookId": "284a474e-8779-4b04-b782-ec3317b97fa1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "2Wfgk8puktAWfAeV",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -160
+      ],
+      "id": "077d45b7-01f1-4951-8e34-e048da128ae1",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-07-05T17:57:24.934Z",
+  "versionId": "83e220b6-e75b-45ad-86a6-ebbcad9a97da"
+}
