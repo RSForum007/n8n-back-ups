@@ -219,7 +219,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "Bree",
+  "name": "Bree Resume Screener",
   "nodes": [
     {
       "parameters": {
@@ -369,8 +369,10 @@
         },
         "folderId": {
           "__rl": true,
-          "value": "1HH8Iq4Vs9mLeuMwY5l-yo7DIVgOiGNsV",
-          "mode": "id"
+          "value": "1ELj-boDxAupeTLHjil4Mhv2ls1mPOMtW",
+          "mode": "list",
+          "cachedResultName": "Bree_Resume_Screener",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1ELj-boDxAupeTLHjil4Mhv2ls1mPOMtW"
         },
         "options": {}
       },
@@ -471,10 +473,10 @@
         "operation": "download",
         "fileId": {
           "__rl": true,
-          "value": "1DLnFGoPZX2Qdt-fvN6l7rAdEozZ57_VZQplPc_F8cAM",
+          "value": "1ktWMqtUTZAWsAShshpt6OgGzWLub5WkWhpagaJ2EyGo",
           "mode": "list",
-          "cachedResultName": "Job Title: AI Solutions Architect",
-          "cachedResultUrl": "https://docs.google.com/document/d/1DLnFGoPZX2Qdt-fvN6l7rAdEozZ57_VZQplPc_F8cAM/edit?usp=drivesdk"
+          "cachedResultName": "Job Title_ AI Solutions Architect",
+          "cachedResultUrl": "https://docs.google.com/document/d/1ktWMqtUTZAWsAShshpt6OgGzWLub5WkWhpagaJ2EyGo/edit?usp=drivesdk"
         },
         "options": {
           "googleFileConversion": {
@@ -539,7 +541,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1940,
+        1980,
         440
       ],
       "id": "3bcdd686-6ff7-49a4-bbea-5bdcfbefc44c",
@@ -558,8 +560,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        1720,
-        780
+        2220,
+        460
       ],
       "id": "965ca435-aaf7-4e47-b301-ae8700e24e7b",
       "name": "o4-mini",
@@ -608,10 +610,10 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1IybaKyVa7jpoyXatgK5gM7vKVO67pNnaHjuueaDlJKg",
+          "value": "1n7HSUJUK4fmWWAVqynQeIeqCHU4tAQ1YoA8UxGye3jY",
           "mode": "list",
           "cachedResultName": "Resume Screener",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IybaKyVa7jpoyXatgK5gM7vKVO67pNnaHjuueaDlJKg/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n7HSUJUK4fmWWAVqynQeIeqCHU4tAQ1YoA8UxGye3jY/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
@@ -1021,12 +1023,15 @@
   "staticData": {
     "node:Receive Resume": {
       "Receive Resume": {
-        "lastTimeChecked": 1752377015
+        "lastTimeChecked": 1752392845,
+        "possibleDuplicates": [
+          "19802c0f88c05781"
+        ]
       }
     }
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-07-13T03:23:35.301Z",
-  "versionId": "74f5fcb8-8d3d-49a5-a445-51ebba5e08ca"
+  "updatedAt": "2025-07-13T07:52:40.809Z",
+  "versionId": "04666bf1-6af1-47c7-929c-b09788263952"
 }
