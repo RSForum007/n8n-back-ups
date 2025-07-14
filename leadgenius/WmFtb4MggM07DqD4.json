@@ -1,0 +1,1096 @@
+{
+  "active": false,
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Generate UUID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Set length & Speed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scripter": {
+      "main": [
+        [
+          {
+            "node": "Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to/from binary data2": {
+      "main": [
+        [
+          {
+            "node": "Upload Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base46 To String": {
+      "main": [
+        [
+          {
+            "node": "Convert to/from binary data2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Local SD API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Prompt & url": {
+      "main": [
+        [
+          {
+            "node": "Create Video Clips",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate TTS2": {
+      "main": [
+        [
+          {
+            "node": "Upload Audio S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Audio S3": {
+      "main": [
+        [
+          {
+            "node": "Get Audio Duration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set length & Speed": {
+      "main": [
+        [
+          {
+            "node": "Scripter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "Video url to array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Video Clips": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video url to array": {
+      "main": [
+        [
+          {
+            "node": "Create Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Video": {
+      "main": [
+        [
+          {
+            "node": "Add TTS To Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add TTS To Video": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Local SD API": {
+      "main": [
+        [
+          {
+            "node": "Base46 To String",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Audio Duration": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Generate TTS2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate UUID": {
+      "main": [
+        [
+          {
+            "node": "Set Prompt & url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatter": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Scripter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-14T14:03:31.965Z",
+  "id": "WmFtb4MggM07DqD4",
+  "isArchived": false,
+  "meta": null,
+  "name": "bed time storys",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        360,
+        420
+      ],
+      "id": "34a2bdbe-5e5f-416f-8fcc-a435c9a35c3b",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        40,
+        60
+      ],
+      "id": "0c5ab529-a0b8-45f5-bc3d-ced6e3efa90c",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        400,
+        60
+      ],
+      "id": "79e63f28-6b88-43ce-9099-0e00333919bf",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"Prompt\": {\n        \"type\": \"string\",\n        \"description\": \"A detailed prompt describing a scene in dreamy, child-style cartoon art.\"\n      }\n    },\n    \"required\": [\"Prompt\"]\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        560
+      ],
+      "id": "fd338f44-46c0-4960-af84-2155cb855005",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a gentle bedtime storyteller. Your task is to write a calming, imaginative story for children, designed to ease them into peaceful sleep.\n\nThe story is based on the following structure provided by the user:\n- **Topic**: {{ $('Limit').item.json.topic }}\n- **Audience**: {{ $('Limit').item.json.audience }}\n- **Length**: {{ $json.length }} minutes\n\nThe story should:\n- Feature the character: **{{ $('Limit').item.json.character }}**\n- Be paced for bedtime, with soft language and a peaceful, whimsical tone\n- Be structured into {{ $('Limit').item.json['Images to generate'] }} flowing, dreamlike segments (approximately one every 30 seconds)\n- Avoid labels like \"Scene 1\" or visual stage directions—just tell the story\n- Gently transition between moments to create a seamless, soothing journey\n- Be suitable for text-to-speech output (TTS), so avoid abrupt endings, complex wordplay, or anything overly energetic\n\nEnd the story with a gentle wind-down that encourages sleep and gives a sense of comfort, warmth, and wonder.\n\nOnly return the clean, final story text—no explanations or formatting instructions. The script is for TTS never \\n\\n it must be plain text.\n\n\n\n\n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        760,
+        60
+      ],
+      "id": "fd8d236f-149f-403f-85b7-e8bc46577d58",
+      "name": "Scripter"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Full Script: {{ $('Parser').item.json.output.Story }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an AI assistant that generates **high-quality image generation prompts** for **bedtime story video production**.  \n\nYour goal is to convert a **complete story script** into a set of **visual scene prompts**, with each one representing a unique, cinematic moment from the story. These prompts will be used to create **painting-style visual assets** for animation or motion graphics.\n\n---\n\n### 📌 Requirements:\n\n- Create exactly **{{ $('Limit').item.json['Images to generate'] }}** prompts — one per unique visual moment.\n- **Each prompt must represent a distinct part of the story** — divide the story naturally into key scenes or beats.\n- Use the provided **art style** consistently across all prompts.\n- **Do not include character names, dialogue, or text** in the prompt.\n- **Keep each prompt under 240 characters.**\n- Add at the end of each prompt: Art style in a painting<lora:Milde_style_art:1>\n\n---\n\n### 🎬 Visual Prompt Guidelines:\n\nEach prompt should be:\n\n- **Scene-Based:** Capture a full visual moment from the story, not just a mood or object.\n- **Descriptive, not Narrative:** Focus on what’s visually present, not names or storytelling.\n- **Cinematic:** Include visual techniques (e.g., soft lighting, depth of field, wide shot, close-up).\n- **Emotionally Evocative:** Convey feelings like wonder, calm, or curiosity.\n- **Technically Rich:** Mention visual textures, light effects, depth, camera angle, and other compositional details.\n- **Consistently Styled:** Reflect the given artistic direction (e.g., watercolor, pastel, digital painting, Pixar-style).\n\n---\n\n### ❌ Avoid:\n\n- Using **character names** (e.g., \"Tilly the Turtle\")\n- Including **spoken lines** or any **written text**\n- Overly poetic or vague language\n- Repeating visual setups between prompts\n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        20,
+        420
+      ],
+      "id": "4c570719-6638-41ce-be3f-4e82e70fd7b1",
+      "name": "Image Prompt Generator"
+    },
+    {
+      "parameters": {
+        "mode": "jsonToBinary",
+        "convertAllData": false,
+        "sourceKey": "base64Image",
+        "options": {
+          "dataIsBase64": true,
+          "mimeType": "image/png"
+        }
+      },
+      "id": "92dab521-ec90-4756-8916-e92158088286",
+      "name": "Convert to/from binary data2",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "base64Image",
+              "stringValue": "={{ $json.images }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "610fb8ce-fa90-4f92-a596-808e1395bd7a",
+      "name": "Base46 To String",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.1,
+      "position": [
+        1380,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1000,
+        420
+      ],
+      "id": "45c21eed-1a50-46d2-a3ff-709c11c5ec6b",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "content": "## Create Image Prompts\n",
+        "height": 360,
+        "width": 920,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        320
+      ],
+      "id": "f21750d7-b68a-41f9-9c4d-447d0cad84d7",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40dc6e90-ddd9-447e-8db0-6a7bb1906f9d",
+              "name": "prompt",
+              "value": "={{ $json.Prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "cbceb8b0-b983-41cd-b318-38f190a8f6fe",
+              "name": "FileName",
+              "value": "=http://host.docker.internal:9000/bed-time-stories/{{ $('Generate UUID').item.json.UUID }}.png",
+              "type": "string"
+            },
+            {
+              "id": "f411eb6e-d07f-4bd1-b186-f1e91897213d",
+              "name": "Clip Duration",
+              "value": "={{ $('Get Audio Duration').item.json.response[0].duration / $('Limit').item.json['Images to generate']}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        420
+      ],
+      "id": "04bc30b6-718e-4b68-a165-43184f215022",
+      "name": "Set Prompt & url"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": {{ JSON.stringify($json.output.Story) }},\n  \"voice\": \"{{ $('Limit').item.json.voice.value }}\",\n  \"response_format\": \"mp3\",\n  \"speed\": {{ $('Set length & Speed').item.json.speed }}\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        120
+      ],
+      "id": "faebe2cf-369d-4e44-8ad0-4e8a145f180b",
+      "name": "Generate TTS2",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "bed-time-stories",
+        "fileName": "={{ $('Limit').item.json.UUID }}.{{ $binary.data.fileExtension }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        1740,
+        120
+      ],
+      "id": "fc973691-534e-46d1-b22a-1f357826baf1",
+      "name": "Upload Audio S3",
+      "credentials": {
+        "s3": {
+          "id": "OvGfhaikiM3JFYZn",
+          "name": "S3 account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"Story\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"Story\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1320,
+        200
+      ],
+      "id": "be1d4520-09a4-4844-ac33-8ce1da37c069",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b72be074-4a67-4f45-be3e-e47d464131c3",
+              "name": "length",
+              "value": "={{ $json.length }}",
+              "type": "number"
+            },
+            {
+              "id": "3c6b0102-35c6-4a47-9923-46e044faa10e",
+              "name": "speed",
+              "value": "={{ $json.speed }}",
+              "type": "number"
+            },
+            {
+              "id": "09eebe6d-21a4-4737-b825-1e44df45493b",
+              "name": "Number of images to generate",
+              "value": "={{ $json['Images to generate'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        580,
+        60
+      ],
+      "id": "2b328f5d-0927-40a9-b749-355915a21b2c",
+      "name": "Set length & Speed"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "response"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        800
+      ],
+      "id": "36db359b-e5f5-4b09-9a7b-ed357c77deb5",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/image/transform/video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"image-zoom-out\",\n  \"image_url\": \"{{ $json.FileName }}\",\n  \"length\": {{ $json['Clip Duration'] }},\n  \"frame_rate\": 25,\n  \"zoom_speed\": 1.5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        800
+      ],
+      "id": "113a0e99-c871-4251-b53a-682ae66bc9fc",
+      "name": "Create Video Clips",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the array of URLs\nconst urls =  $input.first().json.response || [];\n\n// Map URLs into the required structure\nconst formattedURLs = urls.map(url => ({ \"video_url\": url }));\n\n// Return the transformed data\nreturn [{\n    json: {\n        \"video_urls\": formattedURLs\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        800
+      ],
+      "id": "d52182e9-2ffb-499d-88aa-e1abc6a960b6",
+      "name": "Video url to array"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/video/concatenate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"video_urls\": {{ JSON.stringify($json.video_urls) }},\n    \"id\": \"Job\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        800
+      ],
+      "id": "0a368bb9-7913-49f0-85f0-d70cf27eeb98",
+      "name": "Create Video",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/ffmpeg/compose",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"id\": \"audio-layering\",\n    \"inputs\": [\n        {\n            \"file_url\": \"{{ $json.response }}\"\n        },\n        {\n            \"file_url\": \"{{ $('Get Audio Duration').item.json.response[0].file_url }}\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[1:a]volume=1[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ]\n}\n",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        1080
+      ],
+      "id": "209b6245-5ec9-4b77-8623-3b97491959ef",
+      "name": "Add TTS To Video",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Create Script\n",
+        "height": 280,
+        "width": 1500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cb7901a6-1196-48ad-968a-bd83ec7d0c06",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Create TTS\n",
+        "height": 280,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        0
+      ],
+      "id": "4053306e-00e0-4c4d-928b-008ffcb1bd3e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Generate Images using local Juggernaut XI",
+        "height": 360,
+        "width": 960,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        940,
+        320
+      ],
+      "id": "0b894ad6-b779-4851-8503-66d201edd407",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:7860/sdapi/v1/txt2img",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"{{ $json.prompt }}\",\n  \"negative_prompt\": \"Naked, Nude, fake eyes, deformed eyes, bad eyes, cgi, 3D, digital, airbrushed\",\n  \"steps\": 25,\n  \"send_images\": true,\n  \"cfg_scale\": 3,\n  \"width\": 1024,\n  \"height\": 576,\n  \"sampler_name\": \"DPM++ 2M\",\n  \"scheduler\": \"Karras\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        420
+      ],
+      "id": "48dce73f-9729-480b-9fd9-00cc823509c1",
+      "name": "Local SD API",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "bed-time-stories",
+        "fileName": "={{ $('Generate UUID').item.json.UUID }}.png",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        1740,
+        420
+      ],
+      "id": "b2930b87-0d9f-44aa-a9bd-d1a3e017490c",
+      "name": "Upload Image",
+      "credentials": {
+        "s3": {
+          "id": "OvGfhaikiM3JFYZn",
+          "name": "S3 account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Create the video",
+        "height": 240,
+        "width": 960,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        940,
+        720
+      ],
+      "id": "a5db066b-55f1-4376-81f3-4d8088ca2f49",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Add TTS to video",
+        "height": 240,
+        "width": 340,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        980,
+        1000
+      ],
+      "id": "22e627ef-498f-421e-aff9-246efdb341e0",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "databaseId": 170,
+        "tableId": 684,
+        "rowId": "={{ $('Get many rows').item.json.id }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": 6650,
+              "fieldValue": "={{ $json.response[0].file_url }}"
+            },
+            {
+              "fieldId": 6649,
+              "fieldValue": "done"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        1080
+      ],
+      "id": "2c606244-9ce1-4934-ba71-9de1d76c75ff",
+      "name": "Update record",
+      "credentials": {
+        "baserowApi": {
+          "id": "ldxQU3fflAKKpPak",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/ffmpeg/compose",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"get-audio-duration\",\n  \"inputs\": [\n    {\n      \"file_url\": \"http://host.docker.internal:9000/bed-time-stories/{{ $('Limit').item.json.UUID }}.mp3\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"options\": [\n        {\n          \"option\": \"-f\",\n          \"argument\": \"mp3\"\n        }\n      ]\n    }\n  ],\n  \"metadata\": {\n    \"duration\": true\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        120
+      ],
+      "id": "a33663bc-a693-404c-91da-49c96e5b13a1",
+      "name": "Get Audio Duration",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=google/gemini-2.0-flash-exp:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        40,
+        560
+      ],
+      "id": "e4b5056a-4c5d-4de2-a210-a3252c2f1cba",
+      "name": "OpenRouter",
+      "notesInFlow": true,
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      },
+      "notes": "google/gemini-2.0-flash-exp:free"
+    },
+    {
+      "parameters": {
+        "model": "=google/gemini-2.0-flash-exp:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        700,
+        180
+      ],
+      "id": "86f4026f-23b3-4ef9-a2a9-c3326b62df7a",
+      "name": "OpenRouter1",
+      "notesInFlow": true,
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      },
+      "notes": "google/gemini-2.0-flash-exp:free"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=take the user imput and output as JSON\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"Story\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"Story\"]\n}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1220,
+        60
+      ],
+      "id": "cd7b5f22-c4e0-4889-8e62-85c041c56234",
+      "name": "Parser"
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "UUID"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        540,
+        420
+      ],
+      "id": "ddc4ae63-842b-498d-999f-91efcb4db41b",
+      "name": "Generate UUID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "05c8d19f-67c2-4e9e-b1fc-102c807dada8",
+              "name": "text",
+              "value": "={{ $json[\"text\"].replace(/\\n/g, \" \") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1080,
+        60
+      ],
+      "id": "5e1893b2-d97d-48dd-9ec1-ced7fc1958b9",
+      "name": "Formatter"
+    },
+    {
+      "parameters": {
+        "databaseId": 170,
+        "tableId": 684,
+        "returnAll": true,
+        "additionalOptions": {
+          "filters": {
+            "fields": [
+              {
+                "field": 6649,
+                "operator": "contains",
+                "value": "pending"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        220,
+        60
+      ],
+      "id": "8335b55b-d3fb-4e73-b59d-481365131de6",
+      "name": "Get many rows",
+      "credentials": {
+        "baserowApi": {
+          "id": "ldxQU3fflAKKpPak",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        200
+      ],
+      "id": "37686959-4ef0-4bf2-adb0-81d650628564",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MxioHsJmjZDt38mN",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T14:03:31.965Z",
+  "versionId": "4e63ea23-c026-4a79-b767-6434d22d7518"
+}
