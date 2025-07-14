@@ -1,11 +1,11 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "Telegram": {
       "main": [
         [
           {
-            "node": "OpenAI",
+            "node": "Transcribe audio or video",
             "type": "main",
             "index": 0
           }
@@ -25,24 +25,12 @@
     },
     "OpenAI": {
       "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "DeepSeek Chat Model": {
       "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "AI Agent": {
@@ -107,7 +95,7 @@
         ]
       ]
     },
-    "Gmail": {
+    "Send a message in Gmail": {
       "ai_tool": [
         [
           {
@@ -117,12 +105,36 @@
           }
         ]
       ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe audio or video": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-07-14T14:03:35.811Z",
   "id": "QPgo9lnOqGuUzZVy",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "telegram chatbot + google sheets",
   "nodes": [
     {
@@ -133,15 +145,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1180,
-        -140
+        -1460,
+        -300
       ],
       "id": "d3f8086d-a86d-4775-b9bd-49117108da38",
       "name": "Telegram",
       "webhookId": "ac0c4fe3-6115-43bc-a8f4-9ed417cec1bc",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "32yQqC2qF6jaGldc",
           "name": "Telegram account"
         }
       }
@@ -155,15 +167,15 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -940,
+        -1140,
         -80
       ],
       "id": "77642d27-8944-4537-8f21-08a68d032bc5",
       "name": "OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "FofTTdYsIQSnkVfr",
-          "name": "OpenAi account"
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
         }
       }
     },
@@ -184,8 +196,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1000,
-        -400
+        -1380,
+        -540
       ],
       "id": "0dfb0016-6690-4713-83e4-b93ea500dfe2",
       "name": "Edit Fields"
@@ -201,8 +213,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -720,
-        -360
+        -780,
+        -400
       ],
       "id": "0869b815-8a8c-4618-8da8-1a763b359433",
       "name": "AI Agent"
@@ -214,14 +226,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -740,
-        -20
+        -500,
+        -140
       ],
       "id": "47ac38ba-6fc8-424c-955f-ba52fc5f425c",
       "name": "DeepSeek Chat Model",
       "credentials": {
         "deepSeekApi": {
-          "id": "tacowdwt0JhCG1EA",
+          "id": "rJNl10I7vUu1LcTH",
           "name": "DeepSeek account"
         }
       }
@@ -245,7 +257,7 @@
       "webhookId": "dedf15c5-773a-4051-a698-9e680ee125a7",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "32yQqC2qF6jaGldc",
           "name": "Telegram account"
         }
       }
@@ -311,8 +323,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -1360,
-        -320
+        -1620,
+        -400
       ],
       "id": "08e2e0c1-9290-4ca7-a23a-057401890960",
       "name": "Switch"
@@ -327,15 +339,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1640,
-        -340
+        -1760,
+        -400
       ],
       "id": "60e5156a-857b-4ac6-87a3-165b88cc476f",
       "name": "Telegram Trigger",
       "webhookId": "eefffa66-b870-45cd-869c-a89b5872ab25",
       "credentials": {
         "telegramApi": {
-          "id": "0W0PD8N032LWNJSd",
+          "id": "32yQqC2qF6jaGldc",
           "name": "Telegram account"
         }
       }
@@ -363,14 +375,14 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -200,
-        -500
+        -300,
+        -660
       ],
       "id": "6e2cf2ad-2d22-4271-9f00-edef2af353cf",
       "name": "SearchCRM",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xVnYdoyfe0Q6c1k4",
+          "id": "VnYUNWu00t6X0Qvr",
           "name": "Google Sheets account"
         }
       }
@@ -398,14 +410,14 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -300,
-        -480
+        -480,
+        -640
       ],
       "id": "a5040dc6-b632-4801-a7e8-3dfe2b2f02be",
       "name": "Ardept Projects",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "xVnYdoyfe0Q6c1k4",
+          "id": "VnYUNWu00t6X0Qvr",
           "name": "Google Sheets account"
         }
       }
@@ -421,26 +433,68 @@
       "typeVersion": 2.1,
       "position": [
         -80,
-        -500
+        -640
       ],
       "id": "fb4ecbc2-f2ae-453c-aca8-94ab12b2a33f",
-      "name": "Gmail",
+      "name": "Send a message in Gmail",
       "webhookId": "5c0d8a77-68ab-4344-93f6-31f6a9aa52f8",
       "credentials": {
         "gmailOAuth2": {
-          "id": "LuFVGDPwc4RW3TI5",
+          "id": "UImTehtfG77VxF1N",
           "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        -180
+      ],
+      "id": "6f8b6a2f-25c0-4281-bb2f-99b1beb98e11",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "PhcWOUod8OUw29Ob",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "operation": "speechToText",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        -1100,
+        -300
+      ],
+      "id": "c5b1e1c7-f811-49df-ab94-f603a824748c",
+      "name": "Transcribe audio or video",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "QplPNJGZRBhKLNPF",
+          "name": "ElevenLabs account"
         }
       }
     }
   ],
-  "pinData": null,
+  "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": null,
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:04:07.000Z",
-  "versionId": "4e5df031-6031-4e01-b481-da4a54ba67fb"
+  "triggerCount": 1,
+  "updatedAt": "2025-07-14T14:39:28.000Z",
+  "versionId": "3ba80df9-0230-4c1d-900c-f08a27ad8b3b"
 }
