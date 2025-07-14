@@ -1,0 +1,565 @@
+{
+  "active": false,
+  "connections": {
+    "Get Voices": {
+      "main": [
+        [
+          {
+            "node": "Split Out Voices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Set Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Voices": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Fields": {
+      "main": [
+        [
+          {
+            "node": "Create Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Speech": {
+      "main": [
+        [
+          {
+            "node": "Set File Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File Name": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create Speech3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "openai/gpt-4.1-nano": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Create Speech2": {
+      "main": [
+        [
+          {
+            "node": "Get Timestamps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deepseek Chat": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-14T14:03:10.741Z",
+  "id": "zq0zT92QUKHaguLz",
+  "isArchived": false,
+  "meta": null,
+  "name": "TTS testing",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1260,
+        -260
+      ],
+      "id": "5e5799fc-608a-44aa-a907-dcbad5b68240",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:8880/v1/audio/voices",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        660
+      ],
+      "id": "6f5b250e-c041-47c7-9e14-edde2ae57be2",
+      "name": "Get Voices",
+      "notesInFlow": true,
+      "notes": "/v1/audio/voices"
+    },
+    {
+      "parameters": {
+        "maxItems": 100
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        660
+      ],
+      "id": "e3bbad91-31c3-4710-84df-1bef20991082",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        660
+      ],
+      "id": "ffe2d0bb-8bc2-488c-8ca2-378808340a92",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "voices",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        840,
+        660
+      ],
+      "id": "dcd48a38-bb7e-4a05-a106-201c9f7f2d0f",
+      "name": "Split Out Voices"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e947982f-8d5e-4642-9590-b7553abe2183",
+              "name": "Text",
+              "value": "=The quick brown fox jumps over the lazy dog near the riverbank, pausing briefly to sniff the breeze — then, with a sudden leap, it disappears into the woods",
+              "type": "string"
+            },
+            {
+              "id": "55005a3f-6bd8-4dfa-8467-bc7860e5496e",
+              "name": "voice",
+              "value": "={{ $json.voices }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1520,
+        580
+      ],
+      "id": "714a33ec-ec43-45a7-9870-04f15418ad86",
+      "name": "Set Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"{{ $json.Text }}\",\n  \"voice\": \"{{ $('Split Out Voices').item.json.voices }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        580
+      ],
+      "id": "003a9918-f083-455e-b402-8b586fcdbdf3",
+      "name": "Create Speech",
+      "notesInFlow": true,
+      "notes": "/v1/audio/speech"
+    },
+    {
+      "parameters": {
+        "jsCode": "$input.item.binary.data.fileName = $input.first().json.voice + \".\" + $input.item.binary.data.fileExtension\n\nreturn $input.item;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        640
+      ],
+      "id": "358d22b1-f591-49ae-ae0d-53035978984f",
+      "name": "Set File Name"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"Hello, this is a test of the kokoro text-to-speech system.\",\n  \"voice\": \"am_adam\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        80
+      ],
+      "id": "5608765d-798b-4956-83ac-5764436d7fc4",
+      "name": "Create Speech1",
+      "notesInFlow": true,
+      "notes": "/v1/audio/speech"
+    },
+    {
+      "parameters": {
+        "content": "## Simple TTS\n",
+        "height": 260,
+        "width": 380,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        580,
+        0
+      ],
+      "id": "063562f4-681d-43cc-b05c-9bdafe9be938",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Generate Speech for all voices\n",
+        "height": 300,
+        "width": 1540,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        580,
+        560
+      ],
+      "id": "b9aece10-1066-49f6-aa6e-7b50d327b504",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/dev/captioned_speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"Hello, this is a test of the kokoro text-to-speech system.\",\n  \"voice\": \"af_heart\",\n  \"response_format\": \"mp3\",\n  \"download_format\": \"mp3\",\n  \"return_timestamps\": true,\n  \"speed\": 1\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        80
+      ],
+      "id": "73307200-ee34-4cfa-ba2c-d6fdf5ab9101",
+      "name": "Create Speech2",
+      "notesInFlow": true,
+      "notes": "/v1/audio/speech"
+    },
+    {
+      "parameters": {
+        "content": "## TTS With Captions\n",
+        "height": 260,
+        "width": 380,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        980,
+        0
+      ],
+      "id": "5d96bbe1-dee1-4819-b427-fa672cf795ed",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Generate some sample text for TTS",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1600,
+        60
+      ],
+      "id": "700ae9da-aaa5-475f-aeb0-c90177ec14c4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": {{ JSON.stringify($json.output) }},\n  \"voice\": \"af_alloy\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        60
+      ],
+      "id": "046a1b81-90ca-4bf9-b68e-83ae2f1b9f37",
+      "name": "Create Speech3",
+      "notesInFlow": true,
+      "notes": "/v1/audio/speech"
+    },
+    {
+      "parameters": {
+        "content": "## TTS From LLM\n",
+        "height": 260,
+        "width": 740,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        0
+      ],
+      "id": "1aca0a8c-5346-4c59-96df-4fb2cbb30194",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "model": "=openai/gpt-4.1-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        -120
+      ],
+      "id": "fdd1512d-ceff-479c-a206-1843de5aa603",
+      "name": "openai/gpt-4.1-nano"
+    },
+    {
+      "parameters": {
+        "url": "=http://host.docker.internal:8880/dev/timestamps/{{ $json.headers[\"x-timestamps-path\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        80
+      ],
+      "id": "1cb83ac4-1558-4888-bf97-2e0b2db35e1d",
+      "name": "Get Timestamps"
+    },
+    {
+      "parameters": {
+        "content": "## Get Voices\n",
+        "height": 260,
+        "width": 380,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        580,
+        280
+      ],
+      "id": "ee255a1a-c656-46f9-b32c-0aea40aa8f3e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:8880/v1/audio/voices",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        360
+      ],
+      "id": "4bec83c9-a42e-4e67-93c3-97bccecc1877",
+      "name": "Get Voices1",
+      "notesInFlow": true,
+      "notes": "/v1/audio/voices"
+    },
+    {
+      "parameters": {
+        "content": "## Mix Voices\n",
+        "height": 260,
+        "width": 380,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        980,
+        280
+      ],
+      "id": "48f1a263-8445-4118-b374-ba4665ee8f1d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"Hello, this is a test of the text-to-speech system.\",\n  \"voice\": \"af_alloy(0.5)+af_bella(0.5)\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        360
+      ],
+      "id": "1ea815b3-5c2f-4254-855b-6656250c7baa",
+      "name": "Create Speech4",
+      "notesInFlow": true,
+      "notes": "/v1/audio/speech"
+    },
+    {
+      "parameters": {
+        "content": "## 🗣️ Kokoro TTS Workflow (Demo)\n\nThis n8n workflow showcases several demos using the **Kokoro TTS** API, including:\n\n- 🔊 Basic speech synthesis\n- 🧠 LLM-generated TTS text\n- 📃 Captioned speech with timestamp support\n- 🎙️ Voice blending with custom weights\n- 📜 Bulk generation for all available voices\n\n### 💡 Notes\n- This workflow is **completely free to use** — feel free to remix, modify, and build on top of it.\n- Designed for local dev environments (`host.docker.internal`), so adjust endpoints as needed for deployment.\n\n### 📺 More Cool Projects\n\nCheck out my YouTube channel for more AI, automation, and TTS demos:  \n**[youtube.com/@BenjaminK123](https://www.youtube.com/@BenjaminK123)**\n\nEnjoy and happy building! 🚀\n",
+        "height": 860,
+        "width": 560,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4019048d-3b6f-4ec9-9f29-030e88e9ca8e",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-chat",
+          "mode": "list",
+          "cachedResultName": "deepseek-chat"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1480,
+        160
+      ],
+      "id": "c4b0c8cd-fc75-47dc-acb1-bf4010bae2e4",
+      "name": "Deepseek Chat",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T14:03:10.741Z",
+  "versionId": "09bc76f2-921e-463f-ab3d-4fa2b56f7a22"
+}
