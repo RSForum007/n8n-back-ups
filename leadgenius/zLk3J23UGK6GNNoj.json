@@ -1,0 +1,17 @@
+{
+  "active": false,
+  "connections": {},
+  "createdAt": "2025-07-14T14:03:10.184Z",
+  "id": "zLk3J23UGK6GNNoj",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow",
+  "nodes": [],
+  "pinData": null,
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T14:03:10.184Z",
+  "versionId": "8f712b40-b8fa-4cee-84e7-5fcec88c8983"
+}
