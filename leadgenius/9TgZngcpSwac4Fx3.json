@@ -1,0 +1,687 @@
+{
+  "active": false,
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "If promotion email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Needs Reply": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Assess if message needs a reply",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess if message needs a reply": {
+      "main": [
+        [
+          {
+            "node": "If Needs Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If promotion email": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Assess if message needs a reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Create Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Assess if message needs a reply",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ContactsCRM": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-14T14:03:19.256Z",
+  "id": "9TgZngcpSwac4Fx3",
+  "isArchived": false,
+  "meta": null,
+  "name": "Gmail Auto Reply",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "labelIds": [
+            "IMPORTANT",
+            "INBOX",
+            "CATEGORY_PERSONAL"
+          ]
+        },
+        "options": {}
+      },
+      "id": "c9ae66c9-753c-494c-b67e-dbe5aa110d73",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "position": [
+        100,
+        100
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LuFVGDPwc4RW3TI5",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "53849246-ad32-4845-9976-9f9688f5a6f2",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.needsReply }}",
+              "rightValue": "true"
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "e86f9c8f-c354-4865-b02d-b678b54363d4",
+      "name": "If Needs Reply",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1040,
+        100
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsonSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"needsReply\": {\n      \"type\": \"boolean\"\n      }\n  },\n  \"required\": [\"needsReply\"]\n}\n"
+      },
+      "id": "49a4e662-2439-468d-a7cb-7b5284ce0ea7",
+      "name": "JSON Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        860,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Re: {{ $('Gmail Trigger').item.json.headers.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.data }}\n\nRegards,\nBobby\n\n<p>From: {{ $('If promotion email').item.json.from.value[0].name }}</p>\n\n<p>Email: {{ $('If promotion email').item.json.from.value[0].address }}</p>\n\n<p>Subject: {{ $('If promotion email').item.json.subject }}</p>\n\n{{ $('If promotion email').item.json.textAsHtml }}",
+        "options": {
+          "fromAlias": "={{ $('If promotion email').item.json.to.value[0].address }}",
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}",
+          "sendTo": "={{ $('Gmail Trigger').item.json.headers.from }}"
+        }
+      },
+      "id": "56034c9c-60e3-4b98-b694-ea85f03eeb2b",
+      "name": "Gmail - Create Draft",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        1980,
+        120
+      ],
+      "typeVersion": 2.1,
+      "webhookId": "c2bf38ce-158f-41ab-9cb4-cee5a694d632",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LuFVGDPwc4RW3TI5",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "prompt": "=Subject: {{ $json.subject }}\nMessage:\n{{ $json.textAsHtml }} ",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Your task is to assess if the message requires a response. Return in JSON format true if it does, false otherwise.\nMarketing emails don't require a response.\n\nPlease return in this JSON format\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"needsReply\": {\n      \"type\": \"boolean\"\n      }\n  },\n  \"required\": [\"needsReply\"]\n}\n"
+            }
+          ]
+        }
+      },
+      "id": "1145f34f-9968-4c3c-a81e-7111739d8bdc",
+      "name": "Assess if message needs a reply",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        660,
+        80
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "content": "## When I receive email",
+        "height": 394.42512272977456,
+        "width": 304.10628068244364
+      },
+      "id": "d0054f5a-a013-43cd-a239-ff7b68aef7f6",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## ... check if I must reply\n",
+        "height": 397,
+        "width": 596
+      },
+      "id": "83a668ab-5962-486a-a94b-0f7daaca70a6",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        360,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Generate a Reply",
+        "height": 400,
+        "width": 673
+      },
+      "id": "8a3b89e8-e924-4a8d-acab-2e404c85a6ed",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        980,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## ...as a Draft in the conversation",
+        "height": 395,
+        "width": 386
+      },
+      "id": "e9384a00-4edd-43b7-b289-10b462582a28",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1740,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fcf34bf4-5f16-4e24-99a6-754709c2a3c8",
+              "leftValue": "={{ $json.labelIds }}",
+              "rightValue": "CATEGORY_PROMOTIONS",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "f7078017-b0ae-4e78-81d0-a7c0f44bca42",
+              "leftValue": "={{ $json.labelIds }}",
+              "rightValue": "Updates",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "5168e2ad-629b-4f44-9d1f-e449d5d21d36",
+              "leftValue": "={{ $json.from.value[0].address }}",
+              "rightValue": "noreply",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        420,
+        120
+      ],
+      "id": "5ee6cefb-d73a-4f91-a73a-5c1159ca9889",
+      "name": "If promotion email"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Subject: {{ $('Gmail Trigger').item.json.subject }}\nMessage: {{ $('Gmail Trigger').item.json.textAsHtml }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You're a helpful personal assistant to me (Bobby P. Dionido) and your task is to draft replies on my behalf to my incoming emails related to this topic. Whenever I provide some text from an email, return an appropriate draft reply for it and nothing else.\nEnsure that the reply is suitable for casual email setting and addresses the topic in a clear, structured, and detailed manner.\nDo not make things up.\n\nDetailed instructions:\n- Be concise and maintain a casual tone.\n- Start with \"Hi [First Name],\"\n- When replying to yes-no questions, draft 2 responses: one affirmative and one negative separated by \" - - - - - - - OR - - - - - - - \"\n- If you don't know an answer, you can leave placeholders like \"[YOUR_ANSWER_HERE]\".\n- Don't use any special formatting, only plain text.\n- Reply in the same language as the inbound email.\n\nTools:\n-ContactsCRM - to search for names in CRM\n\nExample.\nHere is the incoming email:\n\"Hi Bobby,\nHope you're doing well! I was thinking it would be fun to get to know each other a bit better. I'm curious about a few things:\n\nWhat's your favorite color?\nDo you have a favorite movie or type of movies you enjoy?\nWhat's your go-to favorite food?\n\nSpeaking of movies, I was wondering if you'd be interested in catching a film sometime soon? If you're up for it, when would work best for your schedule? I'm pretty flexible and would love to plan something fun.\nLet me know what you think!\n\n\nHere is an example response:\n\"Dear [Name],\n\nThanks for reaching out! I'd love to answer your questions and also chat about movie plans.\n\nMy favorite color is blue. I’ve always found it calming and peaceful.\n\nAs for movies, I’m really into sci-fi and action films, but I also enjoy a good comedy now and then to lighten the mood.\n\nMy go-to favorite food has to be pizza—can't go wrong with a classic!\n\nI’d definitely be up for catching a movie sometime! I’m pretty flexible too, but next weekend works best for me. What about you?\n\nLooking forward to it!\n\n\nPlease format your reply using well formatted HTML using <p> </p> tags. Use line breaks and new paragraphs where needed. \n\nReturn the reply in JSON \n\n{\n\t\"reply\": \"\"\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1260,
+        100
+      ],
+      "id": "7aae3acf-5544-4227-82ed-03be941ce05c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        460
+      ],
+      "id": "35470a12-9fc9-42e4-b4d8-1d629adc5b65",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "FofTTdYsIQSnkVfr",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"reply\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        200
+      ],
+      "id": "a2dfdf68-f4c3-4c9c-9331-a090b1dc10f1",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "Checks inbox for new email",
+        "height": 80,
+        "width": 220,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        60,
+        280
+      ],
+      "typeVersion": 1,
+      "id": "53b91c36-24e0-41f0-97e2-d2ba7a91f889",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "Basic check to see if it the email is likely to need a reply",
+        "height": 80,
+        "width": 160,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        380,
+        280
+      ],
+      "typeVersion": 1,
+      "id": "d6806a2f-f2a9-466b-a1a4-c1c269ee4341",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "AI checks to see if email requires a reply",
+        "height": 80,
+        "width": 150,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        680,
+        280
+      ],
+      "typeVersion": 1,
+      "id": "3aca3bf8-e0d1-48c6-b37b-2d6255a282e6",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "Create reply",
+        "height": 80,
+        "width": 150,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1240,
+        300
+      ],
+      "typeVersion": 1,
+      "id": "902b104e-7249-4b25-b0df-69f5fee17c8a",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "Convert to HTML",
+        "height": 80,
+        "width": 150,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1760,
+        300
+      ],
+      "typeVersion": 1,
+      "id": "18076d5c-e60f-4dee-857c-7e39517ca120",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "Load to Gmail drafts folder for review",
+        "height": 80,
+        "width": 150,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1960,
+        300
+      ],
+      "typeVersion": 1,
+      "id": "f1857772-87b4-4dd8-b72c-e59da5a51e20",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.output.reply }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        120
+      ],
+      "id": "c7f4cd15-91a3-419c-8423-37a57d9a1c0a",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        580,
+        460
+      ],
+      "id": "2f24628f-91db-4661-a29e-23a36f971c3f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "FofTTdYsIQSnkVfr",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        580,
+        260
+      ],
+      "id": "8ef5a1ea-f4e0-488d-b420-f0cdd71aadd1",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "tacowdwt0JhCG1EA",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        280
+      ],
+      "id": "64e83ad1-96a6-45cb-baee-2d3228e2b90e",
+      "name": "DeepSeek Chat Model1",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "tacowdwt0JhCG1EA",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get row(s) in sheet in Google Sheets. information to get name and personal info like email, age, birthday, work, birthplace and family members",
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 851629707,
+          "mode": "list",
+          "cachedResultName": "Contacts CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=851629707"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        1440,
+        280
+      ],
+      "id": "7f9526a5-c54b-4a27-a597-39a313fb1f38",
+      "name": "ContactsCRM",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xVnYdoyfe0Q6c1k4",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Re: {{ $('Gmail Trigger').item.json.headers.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.data }}\n\nRegards,\nBobby\n\n\n<p style=\"margin:0px; line-height: 1.38;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><span style=\"font-size: 13px; font-family: Arial, sans-serif; color: rgb(0, 0, 0)\">Kind Regards</span></p><p style=\"margin:0px; line-height: 1.38;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"></p><p style=\"margin:0px; margin: 0px;\"></p><div style=\"margin-left:-13.5pt;\" dir=\"ltr\" align=\"left\"><table style=\"border:none;border-collapse:collapse;\"><tbody><tr style=\"height:0pt\"><td colspan=\"1\" rowspan=\"1\" style=\"border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;overflow:hidden;overflow-wrap:break-word;\"><p style=\"margin:0px; text-align: center;line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><img style=\"height: 136px;width: 136px;margin-left: 0px;margin-top: 0px;clear: both;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXdtIdRgZsvWXOx3dYpTHfcGo3jo1ybXSlbNpv6YlcvbfkQg7kbBbpZK9UOvq8wlHJPMCDhbPkkKlHvOZA2tsVP4JZ6LYxQ-FVIyJOP7zZE7GN2tAedsKA1ogrOsakQmjfpojcvGCQ?key=zcPer2lI0WR5K0gPzmz__bXD\" width=\"136\" height=\"136\"></p></td><td colspan=\"2\" rowspan=\"1\" style=\"border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;\"><p style=\"margin:0px; line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><strong><span style=\"font-size: 17px; font-family: Arial, sans-serif; color: rgb(104, 49, 255)\">Robin Tindall</span></strong></p><p style=\"margin:0px; line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><strong><span style=\"font-size: 13px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\">AI and Automation Expert</span></strong></p><p style=\"margin:0px; margin: 0px;\"></p><p style=\"margin:0px; line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(104, 49, 255)\">Email:</span></strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\"> </span><a target=\"_blank\" title=\"savetime@mt.letsautomateit.biz\" href=\"mailto:robmobius@gmail.com\"><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\">savetime@mt.letsautomateit.biz</span></a></p><p style=\"margin:0px; line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(104, 49, 255)\">Website:</span></strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\"> </span><a target=\"_blank\" href=\"https://letsautomateit.biz\"><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\">https://letsautomateit.biz</span></a></p><p style=\"margin:0px; line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(104, 49, 255)\">Locations:</span></strong><span style=\"font-size: 12px; font-family: Krub, sans-serif; color: rgb(0, 0, 0)\"> Cape Town</span></p></td></tr></tbody></table></div><p style=\"margin:0px; margin: 0px;\"></p><div style=\"margin-left:0pt;\" dir=\"ltr\" align=\"left\"><table style=\"border:none;border-collapse:collapse;\"><tbody><tr style=\"height:0pt\"><td colspan=\"1\" rowspan=\"1\" style=\"border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;overflow:hidden;overflow-wrap:break-word;\"><p style=\"margin:0px; text-align: justify;line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><a target=\"_blank\" href=\"https://www.youtube.com/channel/UCUBQHgk72kKZJM2NyRm0dfg\" style=\"text-decoration:none;\"><u><img style=\"height: 24.663212435233163px;width: 136px;margin-left: 0px;margin-top: -0.3316062176165824px;clear: both;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXceONF8phINSCUAsG6o572I5-_1MurFcSSIb63pdvQPBTOMHxb4hgsc4Y_e6hMYw5SFRQ2FrV7UBxv7ZQut3qqVRfCxLthkF-1WLBfLqOA_H9SHjkyAW5PHbgCKtFea48mefNY6?key=zcPer2lI0WR5K0gPzmz__bXD\" width=\"136\" height=\"24.663212435233163\"></u></a></p></td><td colspan=\"1\" rowspan=\"1\" style=\"border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;overflow:hidden;overflow-wrap:break-word;\"><p style=\"margin:0px; text-align: justify;line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><a target=\"_blank\" href=\"https://letsautomateit.biz/community\" style=\"text-decoration:none;\"><u><img style=\"height: 24px;width: 132.34285714285713px;margin-left: -1.6714285714285695px;margin-top: 0px;clear: both;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXc8raF-Djgqqylyl47HqJktd-PDL4itQbfsHUALSbT3SfGgK0YjZy9sMMOgxfVXsPBy25jp6XUKgoILZvc42tY9FbcuDLSC6xXIJfwFnnLPi48C67Npd0L97OvlBysFP2qyxHwlbQ?key=zcPer2lI0WR5K0gPzmz__bXD\" width=\"132.34285714285713\" height=\"24\"></u></a></p></td><td colspan=\"1\" rowspan=\"1\" style=\"border-left:solid #ffffff 1pt;border-right:solid #ffffff 1pt;border-bottom:solid #ffffff 1pt;border-top:solid #ffffff 1pt;vertical-align:middle;overflow:hidden;overflow-wrap:break-word;\"><p style=\"margin:0px; text-align: justify;line-height: 1.2;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><a target=\"_blank\" href=\"https://letsautomateit.biz\" style=\"text-decoration:none;\"><u><img style=\"height: 24px;width: 132.34285714285713px;margin-left: -0.17142857142856416px;margin-top: 0px;clear: both;\" src=\"https://lh7-rt.googleusercontent.com/docsz/AD_4nXdnNRN0FNT70aL4NatOrxSOrLAFabCK5y7R7pi6iNNaAGo0Dai1_56YZNYYyeQD_aBM6O4HCdNhbBonBGMxfLsvqYFt1-rIXPMxCICuvrHu8OwIf5cU3YgH0rLD4fxzOvDsuiCK?key=zcPer2lI0WR5K0gPzmz__bXD\" width=\"132.34285714285713\" height=\"24\"></u></a></p></td></tr></tbody></table><p style=\"margin:0px; margin: 0px;\"></p></div><p style=\"margin:0px; line-height: 1.38;margin: 0px;margin-top: 0pt;margin-bottom: 0pt;\" dir=\"ltr\"><span style=\"font-size: 10px; font-family: Arial, sans-serif; color: rgb(0, 0, 0)\">This electronic transmission is strictly confidential to the sender and intended solely for the addressee. It may contain information which is covered by legal, professional or other privilege. If you are not the intended addressee, or someone authorised by the addressee you must not retain, disclose in any form, copy or take any action in reliance on this transmission. If you have received this transmission in error, please notify the sender as soon as possible and destroy this message.</span></p>\n<p>From: {{ $('If promotion email').item.json.from.value[0].name }}</p>\n\n<p>Email: {{ $('If promotion email').item.json.from.value[0].address }}</p>\n\n<p>Subject: {{ $('If promotion email').item.json.subject }}</p>\n\n{{ $('If promotion email').item.json.textAsHtml }}",
+        "options": {
+          "fromAlias": "={{ $('If promotion email').item.json.to.value[0].address }}",
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}",
+          "sendTo": "={{ $('Gmail Trigger').item.json.headers.from }}"
+        }
+      },
+      "id": "8a3b8738-8f95-4607-87ae-de1f43958c3b",
+      "name": "Gmail - Create Draft1",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        1880,
+        460
+      ],
+      "typeVersion": 2.1,
+      "webhookId": "c2bf38ce-158f-41ab-9cb4-cee5a694d632",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LuFVGDPwc4RW3TI5",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Gmail Trigger": {
+      "lastTimeChecked": 1751024847,
+      "possibleDuplicates": [
+        "1979f58268d8663e"
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T14:03:19.256Z",
+  "versionId": "9f1a8ee7-79cc-41b4-8083-4418ad0d3eac"
+}
