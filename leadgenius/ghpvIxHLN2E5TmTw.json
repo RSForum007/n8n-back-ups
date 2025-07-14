@@ -1,0 +1,865 @@
+{
+  "active": false,
+  "connections": {
+    "S3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set MimeType": {
+      "main": [
+        [
+          {
+            "node": "S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Media1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Download YT Videos1": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Media1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "deepseek R1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-14T14:03:27.805Z",
+  "id": "ghpvIxHLN2E5TmTw",
+  "isArchived": false,
+  "meta": null,
+  "name": "NCA Toolkit",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        440
+      ],
+      "id": "4c817b88-6d89-4d0c-bccc-93616105d522",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:8080/v1/toolkit/test",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        460
+      ],
+      "id": "28846543-98a6-4625-aa8f-82cca613f422",
+      "name": "Test NCA Toolkit",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/toolkit/test"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:8080/v1/toolkit/authenticate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        460
+      ],
+      "id": "16c95cf6-4a1d-4f19-86d1-04907f147e77",
+      "name": "Authenticate  NCA Toolkit",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/toolkit/authenticate"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "nca-toolkit",
+        "fileName": "={{ $binary.data.fileName}}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        4120
+      ],
+      "id": "22b3350f-7344-40d1-909a-63b5f0505555",
+      "name": "S3"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response.media.media_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        140,
+        4120
+      ],
+      "id": "744e9232-ccf5-4b21-b9df-b28729a8dbab",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        4120
+      ],
+      "id": "02a0ef4a-359f-4679-b80e-cdf24b6e04e9",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const newMimeType = 'video/mp4'; // set your desired MIME type\n\nitems.forEach(item => {\n  if (item.binary && item.binary.data) {\n    // Only change the MIME type, keeping everything else untouched.\n    item.binary.data.mimeType = newMimeType;\n  }\n});\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        820,
+        4120
+      ],
+      "id": "39d0e764-3199-42e3-bf6e-d62f43852333",
+      "name": "Set MimeType"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('HTTP Request1').item.json.response }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        4120
+      ],
+      "id": "05b71302-9c41-43b5-9adf-40e79415f415",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/media/transcribe",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"media_url\": \"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Video.mp4\",\n    \"task\": \"transcribe\",\n    \"include_text\": true,\n    \"include_srt\": true,\n    \"include_segments\": true,\n    \"response_type\": \"direct\",\n    \"id\": \"custom-job-123\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        940
+      ],
+      "id": "e76cded8-a326-4e07-b0a7-637b63634628",
+      "name": "Transcribe Media",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/media/transcribe"
+    },
+    {
+      "parameters": {
+        "content": "### A basic endpoint to verify the availability and functionality of the API. Useful for initial setup and connection tests.\n\n**Documentation Link: [Test Endpoint Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/toolkit/test.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        320
+      ],
+      "id": "b987687c-4d60-4f3d-b0ad-318fe6e5ea08",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## No-Code Architects Toolkit API\n\n**The API can convert audio files. It creates transcriptions of content. It translates content between languages. It adds captions to videos. It can do very complicated media processing for content creation. The API can also manage files across multiple cloud services like Google Drive, Amazon S3, Google Cloud Storage, and Dropbox.\n\nYou can deploy this toolkit in several ways. It works with Docker. It runs on Google Cloud Platform. It functions on Digital Ocean. You can use it with any system that hosts Docker.\n\nEasily replace services like ChatGPT Whisper, Cloud Convert, Createomate, JSON2Video, PDF(dot)co, Placid and OCodeKit.**\n\n### [Github Link](https://github.com/stephengpope/no-code-architects-toolkit)",
+        "height": 2740,
+        "width": 2180,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fc59d8c3-fd56-4945-bb12-4a98cf47b89c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "### Verifies the provided API key and authenticates the user. Returns a success message if the API key is valid.\n\n**Documentation Link: [Authenticate Endpoint Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/toolkit/authenticate.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        320
+      ],
+      "id": "9bc3d009-e1da-4b1a-8d0d-51cd97357358",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "### Transcribes audio files to text using advanced speech-to-text processing. Supports various languages and audio formats.\n\n**Documentation Link: [Audio Transcribe Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/media/media_transcribe.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        800
+      ],
+      "id": "327ee1df-5a92-431b-88c0-9137f609abfd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "###  Converts an image into a video file with configurable options like duration, frame rate, and zoom effects. Ideal for creating video slideshows or transitions.\n**Documentation Link: [Image to Video Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/image/convert/image_to_video.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        800
+      ],
+      "id": "4d6a712d-fff3-4c05-8629-f7d21029964d",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "### Converts various media files (audio or video) to MP3 format with configurable bitrate and quality settings.\n\n**Documentation Link: [Media to MP3 Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/media/convert/media_to_mp3.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        800
+      ],
+      "id": "ec0a6fac-6417-4ef1-a2fb-40f800ba2f32",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "### Core Features",
+        "height": 460,
+        "width": 1580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        260
+      ],
+      "id": "3df1685d-e2e9-4c86-b728-2887a727cd3b",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "### Media Transformation",
+        "height": 460,
+        "width": 1580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        740
+      ],
+      "id": "eb881dd6-4af4-4f9c-a585-97617968c4ff",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/media/transform/mp3",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"media_url\":\"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Video.mp4\",\n    \"bitrate\": \"256k\",\n    \"id\": \"five\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        940
+      ],
+      "id": "ebe7e642-056e-4e7c-a060-d43b2791bb1d",
+      "name": "Convert To MP3",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/media/convert/mp3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/image/transform/video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"image_url\":\"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Image.png\",\n    \"length\": 15,\n    \"frame_rate\": 25,\n    \"zoom_speed\": 3,\n    \"id\": \"local-extract\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        940
+      ],
+      "id": "6afae2d5-02bf-4967-bf73-a2fbbb367fb0",
+      "name": "Image To Video",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/image/transform/video"
+    },
+    {
+      "parameters": {
+        "content": "### Video Processing",
+        "height": 460,
+        "width": 1580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        1220
+      ],
+      "id": "7800b5c2-b787-4a1d-b2d6-6979412539e0",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "### Adds captions to a video file, including options for font, position, and styling. It also supports automated language detection and custom replacements in captions.\n\n**Documentation Link: [Video Caption Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/video/caption_video.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        1280
+      ],
+      "id": "425183cb-19d9-45cb-ba43-9fe0d6f3796b",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "### Combines multiple video files into a single video file. The input files are concatenated in the specified order, and the final video is uploaded to cloud storage.\n\n**Documentation Link: [Video Concatenate Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/video/concatenate.md)**",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        1280
+      ],
+      "id": "be21525b-6519-4ffb-9799-85bd1e5a1171",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/video/caption",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"video_url\": \"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Video.mp4\",\n    \"settings\": {\n        \"line_color\": \"#FFFFFF\",\n        \"word_color\": \"#FFFF00\",\n        \"all_caps\": false,\n        \"max_words_per_line\": 3,\n        \"font_size\": 60,\n        \"bold\": false,\n        \"italic\": false,\n        \"underline\": false,\n        \"strikeout\": false,\n        \"outline_width\": 3,\n        \"shadow_offset\": 4,\n        \"style\": \"highlight\",\n        \"font_family\": \"The Bold Font\",\n        \"position\": \"bottom_center\"\n    },\n    \"id\": \"gdrive-five\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        1420
+      ],
+      "id": "19f3c899-b5a0-480a-aafd-2cfcc243bd74",
+      "name": "Add Captions",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/video/caption"
+    },
+    {
+      "parameters": {
+        "content": "### Advanced Media Manipulation - Provides a flexible way to compose and manipulate media files using FFmpeg. Supports complex media operations like transcoding, concatenation, and filtering.\n**Documentation Link: [FFmpeg Compose Documentation](https://github.com/stephengpope/no-code-architects-toolkit/blob/main/docs/ffmpeg/ffmpeg_compose.md)**",
+        "height": 460,
+        "width": 1580,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        1700
+      ],
+      "id": "b9885139-ba3e-4f39-82be-9dc68160f10a",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "### This node trims a 5-second clip (from 10s to 15s) from the input video and audio, then outputs it with basic encoding and some metadata like thumbnail and duration.\n",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        1780
+      ],
+      "id": "aaf19927-6f66-4449-9f5b-7a269da9a675",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/ffmpeg/compose",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inputs\": [\n    {\n      \"file_url\": \"https://storage.googleapis.com/sgplabs-general-storage/Horizontal Video.mp4\"\n    }\n  ],\n  \"filters\": [\n    {\n      \"filter\": \"[0:v]trim=start=10:end=15,setpts=PTS-STARTPTS[vout];[0:a]atrim=start=10:end=15,asetpts=PTS-STARTPTS[aout]\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"options\": [\n        { \"option\": \"-map\", \"argument\": \"[vout]\" },\n        { \"option\": \"-map\", \"argument\": \"[aout]\" },\n        { \"option\": \"-c:v\", \"argument\": \"libx264\" },\n        { \"option\": \"-c:a\", \"argument\": \"aac\" }\n      ]\n    }\n  ],\n  \"metadata\": {\n    \"thumbnail\": true,\n    \"filesize\": true,\n    \"duration\": true,\n    \"bitrate\": true,\n    \"encoder\": true\n  },\n  \"id\": \"extract_clip_001\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        1920
+      ],
+      "id": "1ede4fee-ad9c-4408-8eee-adfdc1437ca8",
+      "name": "Compose Clip",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/ffmpeg/compose"
+    },
+    {
+      "parameters": {
+        "content": "### This node crops a vertical slice from the original video, scales it to 1080x1920 for vertical format, and keeps the original audio. Great for turning horizontal videos into vertical ones for shorts or reels.\n",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        1780
+      ],
+      "id": "81629b64-ffac-40f8-af52-e17b7a5be4d5",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/ffmpeg/compose",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inputs\": [\n    {\n      \"file_url\": \"https://storage.googleapis.com/sgplabs-general-storage/Horizontal Video.mp4\"\n    }\n  ],\n  \"filters\": [\n    {\n      \"filter\": \"[0:v]crop=658:1080:656:0,scale=1080:1920[v]\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"options\": [\n        {\n          \"option\": \"-map\",\n          \"argument\": \"[v]\"\n        },\n        {\n          \"option\": \"-map\",\n          \"argument\": \"0:a\"\n        },\n        {\n          \"option\": \"-c:a\",\n          \"argument\": \"copy\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        1920
+      ],
+      "id": "b2c71538-a61a-42d0-9a60-cbad03baa213",
+      "name": "Compose Crop",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/ffmpeg/compose"
+    },
+    {
+      "parameters": {
+        "content": "### This node layers two audio tracks — one from the video and one from an external MP3 — adjusting their volumes and mixing them together, while keeping the original video unchanged. Perfect for adding background music under existing dialogue or sound.\n",
+        "height": 340,
+        "width": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        1780
+      ],
+      "id": "e2ab9848-be6f-4893-8c09-ff2c1f017615",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/ffmpeg/compose",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"inputs\": [\n        {\n            \"file_url\": \"https://storage.googleapis.com/sgplabs-general-storage/Horizontal%20Video.mp4\"\n        },\n        {\n            \"file_url\": \"https://storage.googleapis.com/sgplabs-general-storage/I'm%20Back.mp3\"\n        }\n    ],\n    \"filters\": [\n        {\n            \"filter\": \"[0:a]volume=1[audio1];[1:a]volume=0.60[audio2];[audio1][audio2]amix=inputs=2:duration=longest[outa]\"\n        }\n    ],\n    \"outputs\": [\n        {\n            \"options\": [\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"0:v\"\n                },\n                {\n                    \"option\": \"-map\",\n                    \"argument\": \"[outa]\"\n                },\n                {\n                    \"option\": \"-c:v\",\n                    \"argument\": \"copy\"\n                },\n                {\n                    \"option\": \"-c:a\",\n                    \"argument\": \"aac\"\n                }\n            ]\n        }\n    ],\n    \"id\": \"audio-layering\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        1920
+      ],
+      "id": "181229ad-e937-49e9-bd5c-db3ba89a690d",
+      "name": "Compose Mixer",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/ffmpeg/compose"
+    },
+    {
+      "parameters": {
+        "content": "## Bonus - Downloading youtube videos",
+        "height": 520,
+        "width": 1580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        2180
+      ],
+      "id": "3e106321-67f7-4906-8f3a-eb80f5959f9a",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/media/transcribe",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"media_url\": \"{{ $json.response.media.media_url }}\",\n    \"task\": \"transcribe\",\n    \"include_text\": true,\n    \"include_srt\": false,\n    \"include_segments\": false,\n    \"response_type\": \"direct\",\n    \"id\": \"custom-job-123\"\n  }",
+        "options": {
+          "timeout": 500000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        2380
+      ],
+      "id": "86110cc3-1ef7-4e0c-b6e2-00608482451e",
+      "name": "Transcribe Media1",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "/v1/media/transcribe"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please analyze the given text and create a structured summary following these guidelines:\n\n1. *General Summary*:\n   - Provide a concise overview of the main topic or purpose of the text in one paragraph.\n   - Focus on the essence of the content without excessive detail.\n\n2. *Key Moments*:\n   - List the most important points, events, or concepts from the text.\n   - Use bullet points for clarity.\n   - Keep each point short and focused.\n\n3. *Instructions (if applicable)*:\n   - If the text is a tutorial or instructional, list the steps in a clear order.\n   - Use numbered points for steps.\n   - If not applicable, state: \"This text does not contain instructions.\"\n\n4. *Format requirements*:\n   - Use markdown for headers (e.g., ## General Summary) and bullet points.\n   - Do not use tables; use simple text for lists or comparisons (e.g., \"Element: opis\").\n   - Ensure the message is simple and displays correctly in the Telegram app, avoiding unsupported features like nested lists or tables.\n\nHere is the text: {{ $json.response.text }}\n\n\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        600,
+        2380
+      ],
+      "id": "c67a5cd6-8edc-4b5a-9c70-0603606f2273",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openrouter/quasar-alpha",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        880,
+        2620
+      ],
+      "id": "4b27e42c-2b6d-4a4d-a52b-076fea8f9749",
+      "name": "OpenRouter Chat Model"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/image/transform/video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"image_url\":\"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Image.png\",\n    \"length\": 15,\n    \"frame_rate\": 25,\n    \"zoom_speed\": 3,\n    \"id\": \"local-extract\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        4120
+      ],
+      "id": "d2023b0f-53d5-4ae2-afb5-c3371f15afce",
+      "name": "Image To Video2",
+      "notesInFlow": true,
+      "notes": "/v1/image/transform/video"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/BETA/media/download",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"media_url\": \"https://www.youtube.com/watch?v=x0QoYIHGn68\",\n  \"id\": \"123\",\n  \"format\": {\n    \"quality\": \"bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b\"\n  },\n  \"audio\": {\n    \"extract\": true,\n    \"format\": \"mp3\",\n    \"quality\": \"192\"\n  },\n  \"thumbnails\": {\n    \"download\": false,\n    \"download_all\": false,\n    \"formats\": [\"jpg\", \"webp\"],\n    \"convert\": true,\n    \"embed_in_audio\": false\n  },\n  \"download\": {\n    \"max_filesize\": 100000000,\n    \"rate_limit\": \"5000000K\",\n    \"retries\": 3\n  }\n}",
+        "options": {
+          "timeout": 500000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        100,
+        2380
+      ],
+      "id": "7ce488ee-f17b-4037-84cf-8683d323c510",
+      "name": "Download YT Videos1",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "v1/BETA/media/download"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8080/v1/video/concatenate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"video_urls\":[\n        {\"video_url\":\"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Video.mp4\"},\n        {\"video_url\":\"https://storage.googleapis.com/sgplabs-general-storage/Vertical%20Video.mp4\"}\n    ],\n    \"id\": \"2323\"\n}",
+        "options": {
+          "timeout": 50000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        1420
+      ],
+      "id": "968ef754-497b-449c-94ca-dc3af0de3988",
+      "name": "Combine Videos",
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V1BLs9RJP3txsjQv",
+          "name": "nca-toolkit"
+        }
+      },
+      "notes": "v1/image/transform/video"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-reasoner",
+          "mode": "list",
+          "cachedResultName": "deepseek-reasoner"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        2600
+      ],
+      "id": "e55f8aa3-85d8-4e02-98e9-11fb856b3127",
+      "name": "deepseek R1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Dv8GS1HUIR25OoY1",
+          "name": "DeepSeek-R1"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T14:03:27.805Z",
+  "versionId": "2ae69bce-0c30-415d-bfb5-bae0e16e2e41"
+}
