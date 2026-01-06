@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Receive Resume": {
       "main": [
@@ -1018,6 +1020,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:32.574Z",
+      "createdAt": "2025-07-14T14:03:32.574Z",
+      "role": "workflow:owner",
+      "workflowId": "x9Ii0Rrx7Jh5SEpj",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": {
     "node:Receive Resume": {
       "Receive Resume": {
