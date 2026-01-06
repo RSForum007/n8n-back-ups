@@ -1,0 +1,283 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set node": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-19T12:08:07.420Z",
+  "id": "svwbnj1HEcC8ZNyS",
+  "isArchived": false,
+  "meta": null,
+  "name": "ultimate newsletter automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        336,
+        224
+      ],
+      "id": "b070df9f-4b1c-4a1f-b2d0-1a02f696ec73",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"url\": \"https://blog.hubspot.com/insiders/inbound-marketing-tips\",\n  \"topic\": \"Email onboarding\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        224
+      ],
+      "id": "0c03f013-9241-4800-9161-72ef0e943c4f",
+      "name": "Set node"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        224
+      ],
+      "id": "76328f18-7a73-4404-ad7f-f262822bd916",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "\n\nHTML: {{ $node[\"HTTP Request\"].json[\"body\"] }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a senior marketing strategist with expertise across the full digital landscape.\n\nBelow is an HTML article from a trusted marketing source.\n\nYour task is to:\n\n1. Use the content in this article purely as inspiration or a creative spark — do not copy or directly summarize from it.\n\n\n2. Combine the idea or theme of the article with your own deep knowledge in:\n\nDigital marketing\n\nAI marketing agents\n\nMarketing automation\n\nPersonal branding\n\nAgency growth\n\nProduct-led marketing\n\nLocal business marketing\n\nContent strategy\n\nLead generation\n\n\n\n3. Generate a unique, non-repetitive 3–4 sentence marketing tip or insight. This tip should:\n\nFeel organic and expert-level\n\nReflect broader marketing knowledge\n\nBe helpful across real-world business situations or campaigns\n\n\n\n\nYour response must:\n\nChange with every generation (even if the same article is used)\n\nBe written in a human tone\n\nNever copy the article itself, only use it to spark new insights\n\nDeliver smart, practical, and creative advice from a seasoned strategist’s voice\n\n{{ $json.data }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        128
+      ],
+      "id": "2249a6c4-9b50-486a-9ac8-b11cf0853a34",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        960,
+        400
+      ],
+      "id": "bc45b19f-60da-4c63-b78d-05d86b414254",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"tip\": \"Always test your subject line with a preview tool before sending.\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1296,
+        400
+      ],
+      "id": "f647a949-162f-48e2-806e-f87e3a6f8bcf",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ansGMfW-5mJCS6zmDtrOW5CpaOqaC9iofWx56l5-MIs",
+          "mode": "list",
+          "cachedResultName": "Newsletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ansGMfW-5mJCS6zmDtrOW5CpaOqaC9iofWx56l5-MIs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ansGMfW-5mJCS6zmDtrOW5CpaOqaC9iofWx56l5-MIs/edit#gid=0"
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1456,
+        208
+      ],
+      "id": "e9d7afa2-10c3-4a65-b4cf-3145c7b81805",
+      "name": "Google Sheets"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Smart fallback in case AI fails\nlet tip;\ntry {\n  tip = $node[\"Structured Output Parser\"].json.tip;\n} catch (e) {\n  tip = \"Never stop testing. What works today might underperform tomorrow.\";\n}\n\n// Subject line templates for daily variation\nconst subjectTemplates = [\n  \"Hey $input.first().json.Name, here's your AI-powered tip 💡\",\n  \"$input.first().json.Name, smart marketing starts with this 📈\",\n  \"Ready to level up,$input.first().json.Name ? Here's your daily insight\",\n  \"Daily growth advice for $input.first().json.Name 🚀\",\n  \"What's working now in marketing, $input.first().json.Name 🎯\",\n  \"Growth strategy delivered, $input.first().json.Name 📊\"\n];\n\nreturn items\n  .filter(item => item.json.Email && item.json.Email.includes('@'))\n  .map(item => {\n    const name = item.json.Name || \"there\";\n    \n    // Pick a random subject and personalize it\n    const rawSubject = subjectTemplates[Math.floor(Math.random() * subjectTemplates.length)];\n    const subject = rawSubject.replace(\"$input.first().json.Name\", name);\n\n    return {\n      json: {\n        email: item.json.Email,\n        name,\n        tip: tip.trim(),\n        subject,\n        sentAt: new Date().toISOString()\n      }\n    };\n  });\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1712,
+        208
+      ],
+      "id": "7ebb9c5a-da6a-4373-82d7-c7ee92da0e32",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Google Sheets').item.json.Email }}",
+        "subject": "={{ $json.subject }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body {\n      font-family: 'Segoe UI', sans-serif;\n      color: #333;\n      background-color: #f4f4f4;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      width: 100%;\n      max-width: 600px;\n      margin: 30px auto;\n      background: #ffffff;\n      padding: 30px;\n      border-radius: 10px;\n      box-shadow: 0 5px 15px rgba(0,0,0,0.05);\n    }\n    h1 {\n      font-size: 22px;\n      color: #1a73e8;\n    }\n    p {\n      font-size: 16px;\n      line-height: 1.6;\n    }\n    .footer {\n      font-size: 12px;\n      color: #999;\n      margin-top: 30px;\n      text-align: center;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>Hello {{ $('Google Sheets').item.json.Name }} 👋</h1>\n\n    <p>Here’s your <strong>marketing tip of the day</strong>, filled  with insights from real strategies and knowledge:</p>\n\n    <p><em>\"{{ $('AI Agent').item.json.output.tip }}\"</em></p>\n\n    <p>Stay sharp,<br>\n    <strong>Nafi’s AI Automation Lab 🚀</strong></p>\n\n    <div class=\"footer\">\n      This  message sent from your xyz company . To stop receiving tips, reply with \"Unsubscribe\".\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1632,
+        480
+      ],
+      "id": "6c310dfd-e518-4fb3-bc99-9af0def839f1",
+      "name": "Gmail",
+      "webhookId": "7e5da13e-b2e9-4942-9a45-1dc8f3129377"
+    },
+    {
+      "parameters": {
+        "content": "## Ultimate Newsletter Automation \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 720,
+        "width": 2040,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "70908a8a-8bb9-425d-a709-b0145174f1df",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-08-19T12:08:07.429Z",
+      "createdAt": "2025-08-19T12:08:07.429Z",
+      "role": "workflow:owner",
+      "workflowId": "svwbnj1HEcC8ZNyS",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-19T12:08:07.000Z",
+  "versionId": "c5dbe4aa-48c6-40f3-873c-690df53cf7d7"
+}
