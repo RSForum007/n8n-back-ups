@@ -1,0 +1,480 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Add label to message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add label to message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Create a draft1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add label to message": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add label to message1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-16T13:31:31.674Z",
+  "id": "qJxh1UFfjzUZMkEH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AI Email Drafter",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        320
+      ],
+      "id": "1a54336d-3c4a-43a0-b49e-fe425e92600f",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UImTehtfG77VxF1N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Chase AI Leads",
+              "description": "=Emails that are potential Chase AI leads. If the email asks about pricing, AI implementation, or just wants more AI info, route them here."
+            },
+            {
+              "category": "high priority Chase AI Leads",
+              "description": "high priority descrip..."
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        320
+      ],
+      "id": "eaa6a55f-1bcc-483b-a22d-e8f454323e8e",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "openai/gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "openai/gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -340,
+        540
+      ],
+      "id": "4efe8e46-655c-4185-a171-bfb1a7b6d697",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        620
+      ],
+      "id": "ff0039c2-55e1-47d1-b482-f3091667dcd4",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Text Classifier').item.json.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an AI Sales Development Representative for ChaseAI. Your primary role is to respond to inbound emails from potential leads who have questions about ChaseAI's products and services.\n\nYour goal is to:\n1.  Understand the lead's questions from their email.\n2.  Provide accurate, helpful, and concise answers based on the ChaseAI Knowledge Base (FAQs) provided below.\n3.  Maintain a professional, friendly, and encouraging tone.\n4.  If a question cannot be answered directly from the FAQs, acknowledge this politely and offer to connect them with a specialist or direct them to a relevant resource (e.g., a specific page on the ChaseAI website if you know it).\n5.  Encourage the lead to take the next step, such as scheduling a demo, a call, or visiting a pricing page (if applicable and appropriate for the query).\n\n**ChaseAI Knowledge Base (FAQs):**\n---\n**(IMPORTANT: You MUST replace the example FAQs below with ChaseAI's ACTUAL, detailed, and nuanced FAQs. The examples provided are placeholders and likely not suitable for real lead engagement.)**\n\n*   **Q: What kind of AI agents does ChaseAI build?**\n    *   A: ChaseAI specializes in building custom AI agents tailored to specific business needs, including [mention 2-3 key types, e.g., customer service bots, email automation agents, data analysis assistants, etc.]. We work closely with clients to understand their unique requirements.\n\n*   **Q: What is the typical cost for an AI agent?**\n    *   A: The cost of an AI agent can vary significantly based on its complexity, the scope of integration, and the specific functionalities required. We offer flexible pricing models, from project-based fees to subscription plans. To get an accurate quote, we'd recommend scheduling a brief consultation to discuss your specific needs. Would you be open to a quick call?\n\n*   **Q: How long does it take to develop an email AI agent?**\n    *   A: Development timelines depend on the agent's complexity. A simpler email AI agent might take [e.g., 4-8 weeks], while more sophisticated solutions could take [e.g., 3-6 months]. We prioritize efficient development without compromising quality and will provide a more precise timeline after understanding your project scope.\n\n*   **Q: What makes ChaseAI different from other AI providers?**\n    *   A: At ChaseAI, we focus on [mention 1-2 key differentiators, e.g., deep customization, dedicated support, our proprietary technology stack, a proven track record in X industry]. Our goal is to become a true partner in your AI journey.\n\n*   **Q: Can your AI agents integrate with [Specific Software, e.g., Salesforce, Zendesk]?**\n    *   A: Yes, our AI agents are designed for robust integration capabilities. We have experience integrating with many common platforms like [mention a few examples if true]. We can discuss your specific integration needs in more detail.\n\n**(Add MANY MORE of your actual FAQs here. Be comprehensive!)**\n---\n\n**Response Guidelines:**\n*   Always be professional, polite, and concise.\n*   Address the user's specific questions directly.\n*   If the user's question is vague, you can ask a clarifying question.\n*   If the FAQs don't cover a question, use a phrase like: \"That's a great question. While I don't have the specific details on [topic] in my current knowledge base, I can connect you with one of our specialists who can provide a comprehensive answer. Alternatively, you might find more information on our website at [link to relevant page if you have one].\"\n*   Aim to be helpful and move the conversation forward. If appropriate, suggest a next step (e.g., \"Would you be interested in a brief demo to see how it works?\" or \"I'd be happy to help schedule a call with our solutions team.\").\n*   Do not make up information if it's not in the FAQs.\n*   If the email seems like spam or is not a genuine lead inquiry, you can respond with a polite, generic message like: \"Thank you for your email. If you have specific questions about ChaseAI services, please let us know.\"\n\n**Sign-off:**\n*   Always sign off emails with: THANKS FOR SO SO MUCH FOR TALKING TO US\n    *(User Note: Consider if \"THANKS SO MUCH FOR CONTACTING US\" or \"THANKS FOR YOUR INTEREST IN CHASEAI\" might sound slightly more professional, but stick to the user's preference if \"SO SO MUCH\" is intentional).*\n\n**Input Format:**\nThe user's email will be provided as the input to you. Analyze it carefully to extract their questions and intent.\n\n---"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "ddf5ab70-ddae-43aa-9b74-3e8516291d22",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "openai/gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "openai/gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        220
+      ],
+      "id": "989b4fc4-b842-41b6-ad57-85f386b3a132",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Text Classifier').item.json.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an AI Sales Development Representative for ChaseAI. Your primary role is to respond to inbound emails from potential leads who have questions about ChaseAI's products and services.\n\nYour goal is to:\n1.  Understand the lead's questions from their email.\n2.  Provide accurate, helpful, and concise answers based on the ChaseAI Knowledge Base (FAQs) provided below.\n3.  Maintain a professional, friendly, and encouraging tone.\n4.  If a question cannot be answered directly from the FAQs, acknowledge this politely and offer to connect them with a specialist or direct them to a relevant resource (e.g., a specific page on the ChaseAI website if you know it).\n5.  Encourage the lead to take the next step, such as scheduling a demo, a call, or visiting a pricing page (if applicable and appropriate for the query).\n\n**ChaseAI Knowledge Base (FAQs):**\n---\n**(IMPORTANT: You MUST replace the example FAQs below with ChaseAI's ACTUAL, detailed, and nuanced FAQs. The examples provided are placeholders and likely not suitable for real lead engagement.)**\n\n*   **Q: What kind of AI agents does ChaseAI build?**\n    *   A: ChaseAI specializes in building custom AI agents tailored to specific business needs, including [mention 2-3 key types, e.g., customer service bots, email automation agents, data analysis assistants, etc.]. We work closely with clients to understand their unique requirements.\n\n*   **Q: What is the typical cost for an AI agent?**\n    *   A: The cost of an AI agent can vary significantly based on its complexity, the scope of integration, and the specific functionalities required. We offer flexible pricing models, from project-based fees to subscription plans. To get an accurate quote, we'd recommend scheduling a brief consultation to discuss your specific needs. Would you be open to a quick call?\n\n*   **Q: How long does it take to develop an email AI agent?**\n    *   A: Development timelines depend on the agent's complexity. A simpler email AI agent might take [e.g., 4-8 weeks], while more sophisticated solutions could take [e.g., 3-6 months]. We prioritize efficient development without compromising quality and will provide a more precise timeline after understanding your project scope.\n\n*   **Q: What makes ChaseAI different from other AI providers?**\n    *   A: At ChaseAI, we focus on [mention 1-2 key differentiators, e.g., deep customization, dedicated support, our proprietary technology stack, a proven track record in X industry]. Our goal is to become a true partner in your AI journey.\n\n*   **Q: Can your AI agents integrate with [Specific Software, e.g., Salesforce, Zendesk]?**\n    *   A: Yes, our AI agents are designed for robust integration capabilities. We have experience integrating with many common platforms like [mention a few examples if true]. We can discuss your specific integration needs in more detail.\n\n**(Add MANY MORE of your actual FAQs here. Be comprehensive!)**\n---\n\n**Response Guidelines:**\n*   Always be professional, polite, and concise.\n*   Address the user's specific questions directly.\n*   If the user's question is vague, you can ask a clarifying question.\n*   If the FAQs don't cover a question, use a phrase like: \"That's a great question. While I don't have the specific details on [topic] in my current knowledge base, I can connect you with one of our specialists who can provide a comprehensive answer. Alternatively, you might find more information on our website at [link to relevant page if you have one].\"\n*   Aim to be helpful and move the conversation forward. If appropriate, suggest a next step (e.g., \"Would you be interested in a brief demo to see how it works?\" or \"I'd be happy to help schedule a call with our solutions team.\").\n*   Do not make up information if it's not in the FAQs.\n*   If the email seems like spam or is not a genuine lead inquiry, you can respond with a polite, generic message like: \"Thank you for your email. If you have specific questions about ChaseAI services, please let us know.\"\n\n**Sign-off:**\n*   Always sign off emails with: THANKS FOR SO SO MUCH FOR TALKING TO US\n    *(User Note: Consider if \"THANKS SO MUCH FOR CONTACTING US\" or \"THANKS FOR YOUR INTEREST IN CHASEAI\" might sound slightly more professional, but stick to the user's preference if \"SO SO MUCH\" is intentional).*\n\n**Input Format:**\nThe user's email will be provided as the input to you. Analyze it carefully to extract their questions and intent.\n\n---"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        380,
+        480
+      ],
+      "id": "88108c03-7f28-4fc6-b8b6-a25e2de47cbc",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "openai/gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "openai/gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        740
+      ],
+      "id": "2f5d5ab5-53bc-4294-ae53-c582b63d524b",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "IMPORTANT"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dcdbd2dc-1bc5-4361-a69e-6ab7d41a0823",
+      "name": "Add label to message",
+      "webhookId": "39a21730-27a1-4344-bf0c-0bb92dd891fa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UImTehtfG77VxF1N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=RE:  {{ $('Gmail Trigger').item.json.subject }}",
+        "message": "={{ $json.text }}",
+        "options": {
+          "threadId": "={{ $('Text Classifier').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        0
+      ],
+      "id": "ede47564-6275-400d-83b4-24cb3482e1a5",
+      "name": "Create a draft",
+      "webhookId": "7b3d3c23-2725-4614-8c08-80ec52c1d7a7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UImTehtfG77VxF1N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "IMPORTANT"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        480
+      ],
+      "id": "b3fb83ce-d9ac-4f5c-94ed-f446049deca8",
+      "name": "Add label to message1",
+      "webhookId": "39a21730-27a1-4344-bf0c-0bb92dd891fa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UImTehtfG77VxF1N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=RE:  {{ $('Gmail Trigger').item.json.subject }}",
+        "message": "={{ $json.text }}",
+        "options": {
+          "threadId": "={{ $('Text Classifier').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        740,
+        480
+      ],
+      "id": "ef6f6a4d-fcf9-4072-bcf0-def9b559f0c9",
+      "name": "Create a draft1",
+      "webhookId": "7b3d3c23-2725-4614-8c08-80ec52c1d7a7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UImTehtfG77VxF1N",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "196dad321a8e679d",
+          "threadId": "196dad31d79cf8b5",
+          "labelIds": [
+            "UNREAD",
+            "IMPORTANT",
+            "SENT",
+            "INBOX"
+          ],
+          "sizeEstimate": 815,
+          "headers": {
+            "mime-version": "MIME-Version: 1.0",
+            "date": "Date: Fri, 16 May 2025 15:39:52 -0500",
+            "message-id": "Message-ID: <CAPQ45mtfpd4S5mDzwBEaiG5oEvUT4xzBtLtQ_6Dz1xqfUzyLag@mail.gmail.com>",
+            "subject": "Subject: Hi AI Question for you",
+            "from": "From: Chase Hannegan <hanneganc@gmail.com>",
+            "to": "To: Chase Hannegan <hanneganc@gmail.com>",
+            "content-type": "Content-Type: multipart/alternative; boundary=\"000000000000ba51a5063546c802\""
+          },
+          "html": "<div dir=\"ltr\">Hey I was interested in buying an AI agent that can handle all my emails, what would the next steps be?</div>\n",
+          "text": "Hey I was interested in buying an AI agent that can handle all my emails,\nwhat would the next steps be?\n",
+          "textAsHtml": "<p>Hey I was interested in buying an AI agent that can handle all my emails,<br/>what would the next steps be?</p>",
+          "subject": "Hi AI Question for you",
+          "date": "2025-05-16T20:39:52.000Z",
+          "to": {
+            "value": [
+              {
+                "address": "hanneganc@gmail.com",
+                "name": "Chase Hannegan"
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Chase Hannegan</span> &lt;<a href=\"mailto:hanneganc@gmail.com\" class=\"mp_address_email\">hanneganc@gmail.com</a>&gt;</span>",
+            "text": "\"Chase Hannegan\" <hanneganc@gmail.com>"
+          },
+          "from": {
+            "value": [
+              {
+                "address": "hanneganc@gmail.com",
+                "name": "Chase Hannegan"
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Chase Hannegan</span> &lt;<a href=\"mailto:hanneganc@gmail.com\" class=\"mp_address_email\">hanneganc@gmail.com</a>&gt;</span>",
+            "text": "\"Chase Hannegan\" <hanneganc@gmail.com>"
+          },
+          "messageId": "<CAPQ45mtfpd4S5mDzwBEaiG5oEvUT4xzBtLtQ_6Dz1xqfUzyLag@mail.gmail.com>"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-07-16T13:31:31.682Z",
+      "createdAt": "2025-07-16T13:31:31.682Z",
+      "role": "workflow:owner",
+      "workflowId": "qJxh1UFfjzUZMkEH",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-16T13:40:38.000Z",
+  "versionId": "5203c929-df49-461c-8dec-974c4a21cad8"
+}
