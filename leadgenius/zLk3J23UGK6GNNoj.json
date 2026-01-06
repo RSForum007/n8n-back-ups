@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {},
   "createdAt": "2025-07-14T14:03:10.184Z",
   "id": "zLk3J23UGK6GNNoj",
@@ -9,6 +11,15 @@
   "nodes": [],
   "pinData": null,
   "settings": {},
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:10.187Z",
+      "createdAt": "2025-07-14T14:03:10.187Z",
+      "role": "workflow:owner",
+      "workflowId": "zLk3J23UGK6GNNoj",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
