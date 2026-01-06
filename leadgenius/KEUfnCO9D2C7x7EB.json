@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Telegram": {
       "main": [
@@ -121,7 +123,7 @@
   },
   "createdAt": "2025-07-14T14:03:15.685Z",
   "id": "KEUfnCO9D2C7x7EB",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "telegram chatbot + google sheets",
   "nodes": [
@@ -438,9 +440,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:15.687Z",
+      "createdAt": "2025-07-14T14:03:15.687Z",
+      "role": "workflow:owner",
+      "workflowId": "KEUfnCO9D2C7x7EB",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:03:15.685Z",
-  "versionId": "663f6a64-9b19-4ea5-8397-74bc8ad38f21"
+  "updatedAt": "2025-07-14T15:21:36.000Z",
+  "versionId": "a7f78597-2a2e-461e-a1cd-4e3af63fd4e4"
 }
