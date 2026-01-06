@@ -1,0 +1,453 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-15T04:45:38.332Z",
+    "createdAt": "2025-12-15T04:45:38.332Z",
+    "versionId": "11022e87-608a-46bd-8df6-5b2b0acf75ee",
+    "workflowId": "XSjJi6zuoTi1DJ9T",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "b791ca11-9e9b-45fb-8856-506a649fd78e",
+        "name": "Execute Workflow Trigger",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1,
+        "position": [
+          208,
+          -64
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "a6bd399b-da0b-43e2-bfcb-8b99eac55c31",
+        "name": "Wikipedia",
+        "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+        "typeVersion": 1,
+        "position": [
+          656,
+          160
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "all",
+          "limit": "={{ $fromAI(\"limit\")}}",
+          "additionalFields": {
+            "keyword": "={{ $fromAI(\"keyword\") }}"
+          }
+        },
+        "id": "824a9e94-60a2-43b6-b42e-817a3136fbef",
+        "name": "Hacker News",
+        "type": "n8n-nodes-base.hackerNewsTool",
+        "typeVersion": 1,
+        "position": [
+          768,
+          160
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c827ff3b-2990-4db5-965e-3f3543113720",
+                "name": "response",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "b5ab9aab-3292-42c6-b9d0-4cc83526661e",
+        "name": "Response",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          960,
+          -64
+        ]
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.query }}",
+          "options": {
+            "systemMessage": "=You are a research assistant agent. You have Wikipedia, Hacker News API, and TalivyAPI at your disposal. \n\nTo answer the user's question, first search wikipedia. If you can't find your answer there, then search articles using Hacker News API. If that doesn't work either, then use TalivyAPI to search the internet to find the answer to user's question.\n\n*REMINDER*\nYou should only be calling one tool. Never call all three tools if you can get an answer with just one: Wikipedia, Hacker News API, and TalivyAPI. only use TalivyAPI to search to the internet if you cant find the answers from Wikipedia or Hacker News API"
+          }
+        },
+        "id": "b72a3896-88bd-4c45-87c1-f3134153a0a8",
+        "name": "Research Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.7,
+        "position": [
+          592,
+          -64
+        ]
+      },
+      {
+        "parameters": {
+          "model": "openai/gpt-4o-mini",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          384,
+          144
+        ],
+        "id": "3ad8e11d-77d2-4d70-b0e4-eedb81314e43",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "PhcWOUod8OUw29Ob",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "toolDescription": "Call this tool to conduct internet research",
+          "method": "POST",
+          "url": "https://api.tavily.com/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer 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"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "query",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+              },
+              {
+                "name": "search_depth",
+                "value": "advanced"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          896,
+          160
+        ],
+        "id": "8d1e1e34-c5d4-4ed0-ba1d-d57490621fe6",
+        "name": "TalivyAPI"
+      }
+    ],
+    "connections": {
+      "Execute Workflow Trigger": {
+        "main": [
+          [
+            {
+              "node": "Research Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wikipedia": {
+        "ai_tool": [
+          [
+            {
+              "node": "Research Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Hacker News": {
+        "ai_tool": [
+          [
+            {
+              "node": "Research Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Research Agent": {
+        "main": [
+          [
+            {
+              "node": "Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Research Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TalivyAPI": {
+        "ai_tool": [
+          [
+            {
+              "node": "Research Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "11022e87-608a-46bd-8df6-5b2b0acf75ee",
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hacker News": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TalivyAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-03T13:58:22.437Z",
+  "id": "XSjJi6zuoTi1DJ9T",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Bobby's Research Agent - working copy",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b791ca11-9e9b-45fb-8856-506a649fd78e",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -64
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a6bd399b-da0b-43e2-bfcb-8b99eac55c31",
+      "name": "Wikipedia",
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        656,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": "={{ $fromAI(\"limit\")}}",
+        "additionalFields": {
+          "keyword": "={{ $fromAI(\"keyword\") }}"
+        }
+      },
+      "id": "824a9e94-60a2-43b6-b42e-817a3136fbef",
+      "name": "Hacker News",
+      "type": "n8n-nodes-base.hackerNewsTool",
+      "typeVersion": 1,
+      "position": [
+        768,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c827ff3b-2990-4db5-965e-3f3543113720",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b5ab9aab-3292-42c6-b9d0-4cc83526661e",
+      "name": "Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are a research assistant agent. You have Wikipedia, Hacker News API, and TalivyAPI at your disposal. \n\nTo answer the user's question, first search wikipedia. If you can't find your answer there, then search articles using Hacker News API. If that doesn't work either, then use TalivyAPI to search the internet to find the answer to user's question.\n\n*REMINDER*\nYou should only be calling one tool. Never call all three tools if you can get an answer with just one: Wikipedia, Hacker News API, and TalivyAPI. only use TalivyAPI to search to the internet if you cant find the answers from Wikipedia or Hacker News API"
+        }
+      },
+      "id": "b72a3896-88bd-4c45-87c1-f3134153a0a8",
+      "name": "Research Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        592,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        384,
+        144
+      ],
+      "id": "3ad8e11d-77d2-4d70-b0e4-eedb81314e43",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "PhcWOUod8OUw29Ob",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Call this tool to conduct internet research",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "search_depth",
+              "value": "advanced"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        896,
+        160
+      ],
+      "id": "8d1e1e34-c5d4-4ed0-ba1d-d57490621fe6",
+      "name": "TalivyAPI"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-03T13:58:22.446Z",
+      "createdAt": "2025-09-03T13:58:22.446Z",
+      "role": "workflow:owner",
+      "workflowId": "XSjJi6zuoTi1DJ9T",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-03T13:58:40.000Z",
+  "versionId": "11022e87-608a-46bd-8df6-5b2b0acf75ee"
+}
