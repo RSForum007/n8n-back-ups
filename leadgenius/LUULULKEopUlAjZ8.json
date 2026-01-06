@@ -1,0 +1,371 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-15T04:45:38.332Z",
+    "createdAt": "2025-12-15T04:45:38.332Z",
+    "versionId": "ea918e1d-caa4-4348-bbae-af05bb201a6d",
+    "workflowId": "LUULULKEopUlAjZ8",
+    "nodes": [
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "if ($input.item.json.body) {\n    $input.item.json.content = $input.item.json.body\n        // Remove <style>, <script>, and other head-like content blocks\n        .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '')\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n        .replace(/<noscript[^>]*>[\\s\\S]*?<\\/noscript>/gi, '')\n        .replace(/<!--[\\s\\S]*?-->/g, '') // HTML comments\n        \n        // Remove common non-content elements\n        .replace(/<nav[^>]*>[\\s\\S]*?<\\/nav>/gi, '')\n        .replace(/<header[^>]*>[\\s\\S]*?<\\/header>/gi, '')\n        .replace(/<footer[^>]*>[\\s\\S]*?<\\/footer>/gi, '')\n        .replace(/<aside[^>]*>[\\s\\S]*?<\\/aside>/gi, '')\n        \n        // Convert common HTML entities before removing tags\n        .replace(/&nbsp;/g, ' ')\n        .replace(/&amp;/g, '&')\n        .replace(/&lt;/g, '<')\n        .replace(/&gt;/g, '>')\n        .replace(/&quot;/g, '\"')\n        .replace(/&#39;/g, \"'\")\n        .replace(/&mdash;/g, '—')\n        .replace(/&ndash;/g, '–')\n        \n        // Remove all HTML tags but preserve line breaks for paragraphs\n        .replace(/<\\/?(p|div|br|h[1-6])[^>]*>/gi, '\\n')\n        .replace(/<[^<>]+?>/g, '')\n        \n        // Remove CSS or JS snippets\n        .replace(/(?:\\.[\\w-]+|\\#[\\w-]+)?\\s*\\{[^}]*\\}/g, '')   // CSS rules\n        .replace(/\\bfunction\\s+\\w+\\s*\\([^)]*\\)\\s*\\{[^}]*\\}/g, '') // JS functions\n        .replace(/var\\s+\\w+\\s*=[\\s\\S]*?;/g, '') // Variable declarations\n        \n        // Remove UI junk and boilerplate phrases\n        .replace(/\\b(Subscribe|Newsletter|Book a (call|meeting)|Leave a Reply|Cancel Reply|Login|Logout|Sign\\s?up|Sign\\s?in|Your Name|Email Address|Website|Privacy Policy|Terms (of Service|& Conditions)|Close Menu|Skip to (main )?content|Back to top|Search|Menu|Share|Tweet|Pin|Read More|Continue Reading|Related Posts?|Tags?:|Categories?:)\\b/gi, '')\n        \n        // Remove social and footer keywords\n        .replace(/\\b(Facebook|Twitter|LinkedIn|Instagram|YouTube|TikTok|© \\d{4} [\\w\\s.]+|All Rights Reserved)\\b/gi, '')\n        \n        // Remove navigation and pagination text\n        .replace(/\\b(Next|Previous|Page \\d+( of \\d+)?|Home|About|Contact|Blog)\\b/gi, '')\n        \n        // Remove common Medium-specific elements\n        .replace(/\\b(clap|responses?|follow|member-only story|this story is published in|get the medium app)\\b/gi, '')\n        \n        // Clean up whitespace and formatting\n        .replace(/\\r?\\n|\\r/g, ' ')       // Remove all newlines first\n        .replace(/\\s{2,}/g, ' ')         // Collapse multiple spaces\n        .replace(/\\s+([.!?])/g, '$1')    // Remove space before punctuation\n        .trim();                         // Trim leading/trailing whitespace\n\n    // Optional: Set a minimum content length filter\n    if ($input.item.json.content.length < 50) {\n        $input.item.json.content = \"Content too short or unable to extract meaningful text\";\n    }\n    \n    // Optional: Add word count\n    $input.item.json.wordCount = $input.item.json.content.split(/\\s+/).filter(word => word.length > 0).length;\n}\n\nreturn $input.item;"
+        },
+        "id": "3332ac0a-e5d3-43f3-b528-2a4eb3177e3e",
+        "name": "Clean HTML",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          540,
+          0
+        ],
+        "executeOnce": false,
+        "typeVersion": 1,
+        "alwaysOutputData": true,
+        "continueOnFail": true
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "key": "body",
+                "cssSelector": "html"
+              }
+            ]
+          },
+          "options": {
+            "cleanUpText": true
+          }
+        },
+        "id": "a352a84b-6740-4f0e-ba50-ca659d059984",
+        "name": "Extract the Content",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1,
+        "position": [
+          360,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "df6e29eb-766c-4631-8502-152b7e06c2a0",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.link }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+              },
+              {
+                "name": "Accept-Language",
+                "value": "en-US,en;q=0.9"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-cache"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {
+                "maxRedirects": 5
+              }
+            },
+            "timeout": 30000
+          }
+        },
+        "id": "3fed8e5a-ff2d-47a1-9152-c2af2823df06",
+        "name": "Scrape URL",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          180,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "2e1efc56-7c70-4c80-bff8-834d8a1a3ddf",
+                "name": "body",
+                "value": "={{ $('Clean HTML').item.json.content }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          700,
+          0
+        ],
+        "id": "2921b4b4-4d68-4d4e-8c03-809a5f78e100",
+        "name": "Set output"
+      }
+    ],
+    "connections": {
+      "Clean HTML": {
+        "main": [
+          [
+            {
+              "node": "Set output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract the Content": {
+        "main": [
+          [
+            {
+              "node": "Clean HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Scrape URL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Scrape URL": {
+        "main": [
+          [
+            {
+              "node": "Extract the Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "ea918e1d-caa4-4348-bbae-af05bb201a6d",
+  "connections": {
+    "Clean HTML": {
+      "main": [
+        [
+          {
+            "node": "Set output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract the Content": {
+      "main": [
+        [
+          {
+            "node": "Clean HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Scrape URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape URL": {
+      "main": [
+        [
+          {
+            "node": "Extract the Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T15:24:19.344Z",
+  "id": "LUULULKEopUlAjZ8",
+  "isArchived": false,
+  "meta": null,
+  "name": "Simple site Scraper - Sub Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "if ($input.item.json.body) {\n    $input.item.json.content = $input.item.json.body\n        // Remove <style>, <script>, and other head-like content blocks\n        .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '')\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n        .replace(/<noscript[^>]*>[\\s\\S]*?<\\/noscript>/gi, '')\n        .replace(/<!--[\\s\\S]*?-->/g, '') // HTML comments\n        \n        // Remove common non-content elements\n        .replace(/<nav[^>]*>[\\s\\S]*?<\\/nav>/gi, '')\n        .replace(/<header[^>]*>[\\s\\S]*?<\\/header>/gi, '')\n        .replace(/<footer[^>]*>[\\s\\S]*?<\\/footer>/gi, '')\n        .replace(/<aside[^>]*>[\\s\\S]*?<\\/aside>/gi, '')\n        \n        // Convert common HTML entities before removing tags\n        .replace(/&nbsp;/g, ' ')\n        .replace(/&amp;/g, '&')\n        .replace(/&lt;/g, '<')\n        .replace(/&gt;/g, '>')\n        .replace(/&quot;/g, '\"')\n        .replace(/&#39;/g, \"'\")\n        .replace(/&mdash;/g, '—')\n        .replace(/&ndash;/g, '–')\n        \n        // Remove all HTML tags but preserve line breaks for paragraphs\n        .replace(/<\\/?(p|div|br|h[1-6])[^>]*>/gi, '\\n')\n        .replace(/<[^<>]+?>/g, '')\n        \n        // Remove CSS or JS snippets\n        .replace(/(?:\\.[\\w-]+|\\#[\\w-]+)?\\s*\\{[^}]*\\}/g, '')   // CSS rules\n        .replace(/\\bfunction\\s+\\w+\\s*\\([^)]*\\)\\s*\\{[^}]*\\}/g, '') // JS functions\n        .replace(/var\\s+\\w+\\s*=[\\s\\S]*?;/g, '') // Variable declarations\n        \n        // Remove UI junk and boilerplate phrases\n        .replace(/\\b(Subscribe|Newsletter|Book a (call|meeting)|Leave a Reply|Cancel Reply|Login|Logout|Sign\\s?up|Sign\\s?in|Your Name|Email Address|Website|Privacy Policy|Terms (of Service|& Conditions)|Close Menu|Skip to (main )?content|Back to top|Search|Menu|Share|Tweet|Pin|Read More|Continue Reading|Related Posts?|Tags?:|Categories?:)\\b/gi, '')\n        \n        // Remove social and footer keywords\n        .replace(/\\b(Facebook|Twitter|LinkedIn|Instagram|YouTube|TikTok|© \\d{4} [\\w\\s.]+|All Rights Reserved)\\b/gi, '')\n        \n        // Remove navigation and pagination text\n        .replace(/\\b(Next|Previous|Page \\d+( of \\d+)?|Home|About|Contact|Blog)\\b/gi, '')\n        \n        // Remove common Medium-specific elements\n        .replace(/\\b(clap|responses?|follow|member-only story|this story is published in|get the medium app)\\b/gi, '')\n        \n        // Clean up whitespace and formatting\n        .replace(/\\r?\\n|\\r/g, ' ')       // Remove all newlines first\n        .replace(/\\s{2,}/g, ' ')         // Collapse multiple spaces\n        .replace(/\\s+([.!?])/g, '$1')    // Remove space before punctuation\n        .trim();                         // Trim leading/trailing whitespace\n\n    // Optional: Set a minimum content length filter\n    if ($input.item.json.content.length < 50) {\n        $input.item.json.content = \"Content too short or unable to extract meaningful text\";\n    }\n    \n    // Optional: Add word count\n    $input.item.json.wordCount = $input.item.json.content.split(/\\s+/).filter(word => word.length > 0).length;\n}\n\nreturn $input.item;"
+      },
+      "id": "3332ac0a-e5d3-43f3-b528-2a4eb3177e3e",
+      "name": "Clean HTML",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        540,
+        0
+      ],
+      "executeOnce": false,
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "body",
+              "cssSelector": "html"
+            }
+          ]
+        },
+        "options": {
+          "cleanUpText": true
+        }
+      },
+      "id": "a352a84b-6740-4f0e-ba50-ca659d059984",
+      "name": "Extract the Content",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "df6e29eb-766c-4631-8502-152b7e06c2a0",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "3fed8e5a-ff2d-47a1-9152-c2af2823df06",
+      "name": "Scrape URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2e1efc56-7c70-4c80-bff8-834d8a1a3ddf",
+              "name": "body",
+              "value": "={{ $('Clean HTML').item.json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        0
+      ],
+      "id": "2921b4b4-4d68-4d4e-8c03-809a5f78e100",
+      "name": "Set output"
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T15:24:19.346Z",
+      "createdAt": "2025-09-04T15:24:19.346Z",
+      "role": "workflow:owner",
+      "workflowId": "LUULULKEopUlAjZ8",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-04T15:24:19.344Z",
+  "versionId": "ea918e1d-caa4-4348-bbae-af05bb201a6d"
+}
