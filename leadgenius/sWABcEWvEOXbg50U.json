@@ -1,0 +1,207 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Get Contruction template": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Get Contruction template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T15:24:23.682Z",
+  "id": "sWABcEWvEOXbg50U",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
+          "mode": "list",
+          "cachedResultName": "ArDept Construction-Budget-Simplified",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 347838304,
+          "mode": "list",
+          "cachedResultName": "EXAMPLE - Construction Budget",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=347838304"
+        },
+        "combineFilters": "OR",
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "E378"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -40,
+        -380
+      ],
+      "id": "2162a914-5f70-4483-b36e-5399c66dd53e",
+      "name": "Get Contruction template",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        -380
+      ],
+      "id": "d760a29a-0b0b-48b2-ac3d-c7215508abf2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -680,
+        -380
+      ],
+      "id": "fe8ffdb6-55ea-4126-b12f-606d938417b5",
+      "name": "When chat message received",
+      "webhookId": "73e20af9-e0b5-4aca-b499-13a926dc70c2"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -380,
+        -120
+      ],
+      "id": "eb176a54-15a0-4499-a472-3fa050004b05",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "chatId": "@RSForum007_bot",
+        "text": "Text",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        -360
+      ],
+      "id": "94c51d98-d9f0-4180-9957-ac998a5c3a47",
+      "name": "Telegram",
+      "webhookId": "0149a627-9a1a-43d2-b389-7539c566021b",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -120
+      ],
+      "id": "c19a5cb2-772b-4b64-b824-3dc23a131bd7",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "rJNl10I7vUu1LcTH",
+          "name": "DeepSeek account"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T15:24:23.685Z",
+      "createdAt": "2025-09-04T15:24:23.685Z",
+      "role": "workflow:owner",
+      "workflowId": "sWABcEWvEOXbg50U",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-04T15:24:23.682Z",
+  "versionId": "3fd0616f-1788-40a9-a96e-4b4591a5e97d"
+}
