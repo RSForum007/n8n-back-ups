@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "When chat message received": {
       "main": [
@@ -26,7 +28,7 @@
   },
   "createdAt": "2025-07-14T14:03:24.149Z",
   "id": "MiZQGiCsvxAVvo5B",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "Deepseek Generated",
   "nodes": [
@@ -87,9 +89,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:24.151Z",
+      "createdAt": "2025-07-14T14:03:24.151Z",
+      "role": "workflow:owner",
+      "workflowId": "MiZQGiCsvxAVvo5B",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:03:24.149Z",
-  "versionId": "573c9a02-a687-4571-aebf-afbb54fe331e"
+  "updatedAt": "2025-07-21T14:47:17.000Z",
+  "versionId": "1e094793-b0cf-4095-8656-f9238bcbbeff"
 }
