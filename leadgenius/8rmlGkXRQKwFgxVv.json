@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Get Voices": {
       "main": [
@@ -557,6 +559,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:30.300Z",
+      "createdAt": "2025-07-14T14:03:30.300Z",
+      "role": "workflow:owner",
+      "workflowId": "8rmlGkXRQKwFgxVv",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
