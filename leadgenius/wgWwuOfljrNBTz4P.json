@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Filter Data": {
       "main": [
@@ -15,7 +17,7 @@
   },
   "createdAt": "2025-07-14T14:03:18.635Z",
   "id": "wgWwuOfljrNBTz4P",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "My workflow 3",
   "nodes": [
@@ -102,9 +104,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:18.638Z",
+      "createdAt": "2025-07-14T14:03:18.638Z",
+      "role": "workflow:owner",
+      "workflowId": "wgWwuOfljrNBTz4P",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:03:18.635Z",
-  "versionId": "668e0872-a11e-4114-9848-dbe00a8601b8"
+  "updatedAt": "2025-07-14T15:22:24.000Z",
+  "versionId": "f43da432-fcda-48fd-801a-98e20a3b2a95"
 }
