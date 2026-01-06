@@ -1,0 +1,1113 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Database": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "researchAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set 'Text'": {
+      "main": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Voice File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe audio or video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Audio": {
+      "main": [
+        [
+          {
+            "node": "Send Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Agent Response": {
+      "main": [
+        [
+          {
+            "node": "Create Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personal Assistant": {
+      "main": [
+        [
+          {
+            "node": "Summarize Agent Response",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram Message split",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calendarAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "emailAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe audio or video": {
+      "main": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Schema": {
+      "main": [
+        [
+          {
+            "node": "Get Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Image": {
+      "main": [
+        [
+          {
+            "node": "Extract from File to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Image": {
+      "main": [
+        [
+          {
+            "node": "Response1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Summarize Agent Response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to Image File": {
+      "main": [
+        [
+          {
+            "node": "Analyze Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File to Base64": {
+      "main": [
+        [
+          {
+            "node": "Convert to Image File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Audio1": {
+      "main": [
+        [
+          {
+            "node": "Send Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Agent Response1": {
+      "main": [
+        [
+          {
+            "node": "Create Audio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Download Voice File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set 'Text'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Image Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Weather tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Telegram Message split": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T15:49:34.016Z",
+  "id": "F0HfwTdgrobFKDGR",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "V4-Bobby's Personal Assistant - WORKING copy",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {},
+        "path": "cfe3d7db-e009-431b-86dc-b165cf6ab9c4"
+      },
+      "id": "5b053c60-49d3-44fc-aced-2c9a04bd4b5d",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1296,
+        192
+      ],
+      "webhookId": "cfe3d7db-e009-431b-86dc-b165cf6ab9c4",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "id": "e5efae5e-edf2-4663-bb6d-46eec579a208",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        -912,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yc0FA1BxkfgZJcD0TrrZaW0gYdOH4JpB8Le6xKPM3o4",
+          "mode": "list",
+          "cachedResultName": "Bobby's Contact Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yc0FA1BxkfgZJcD0TrrZaW0gYdOH4JpB8Le6xKPM3o4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 67324339,
+          "mode": "list",
+          "cachedResultName": "Google Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yc0FA1BxkfgZJcD0TrrZaW0gYdOH4JpB8Le6xKPM3o4/edit#gid=67324339"
+        },
+        "options": {}
+      },
+      "id": "39cf2e00-f21d-4659-bda2-c2ee0f00e52a",
+      "name": "Contact Database",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -768,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "path": "f3473d6d-b802-41cd-a644-2e33a6fd4a4c"
+      },
+      "id": "f5a7581e-38bc-452a-acba-21bcd4994481",
+      "name": "Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        -256
+      ],
+      "webhookId": "f3473d6d-b802-41cd-a644-2e33a6fd4a4c",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "researchAgent",
+        "description": "Call this tool to search the internet to answer the user's question",
+        "workflowId": {
+          "__rl": true,
+          "value": "PSxXARKjtIqfA7tR",
+          "mode": "list",
+          "cachedResultName": "Bobby's Research Agent"
+        }
+      },
+      "id": "8d5c8383-3977-4f27-846f-b5add922dfd0",
+      "name": "researchAgent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        112,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4b1a083-224a-4284-a317-54d79ffe719e",
+      "name": "Set 'Text'",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -864,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {},
+        "path": "daceb9e4-a6f8-488b-b1b1-b9f2849f7257"
+      },
+      "id": "02de93bc-f5c6-4609-bcc4-0c43678859b9",
+      "name": "Download Voice File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -864,
+        0
+      ],
+      "webhookId": "daceb9e4-a6f8-488b-b1b1-b9f2849f7257",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/56AoDkrOh6qfVPDXZ7Pt",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_72e78f828ff305004b109f1de62f28bf3413a1098c6a7111"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ JSON.stringify($json.message.content).replace(/(^\\\"|\\\"$)/g, '') }}\"\n}\n",
+        "options": {}
+      },
+      "id": "f6408e66-0e3a-453a-b3c7-830ebac2f90a",
+      "name": "Create Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        368,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "fileName": "data.mpeg"
+        },
+        "path": "f8e4096e-f941-40b2-bfcf-52a2c868be6f"
+      },
+      "id": "85b74e23-c21b-4997-b513-eae27a07c59c",
+      "name": "Send Audio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        144
+      ],
+      "webhookId": "f8e4096e-f941-40b2-bfcf-52a2c868be6f",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Summarize this incoming information:  {{ $json.output }}\n\nOutput only plain text, there should be no markdown formatting or  any symbols.",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "72028040-01f2-46c4-b775-1d2aab05fce0",
+      "name": "Summarize Agent Response",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        80,
+        144
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, calendar events, inform about the weather, solve math and numberical problems,conduct research to the internet for the user. You have access to six tools to help you fulfill requests:\n\nContacts Data: Use this when you need to look up contact information like an email address. You need to use this tool BEFORE sending an email or BEFORE getting emails.\n\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails.\n\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\n\nResearch Agent: Use this to search the internet to answer the user's question.\n\nWeather tool: Use this to check the weather.\n\nCalculator tool: Use this tool to help you in solving math and numerical questions.\n\nProjects_Agent: Use this tool to access our projects. We can update our projects of get information on our projects.\n\nWhen a task requires using one or more of these tools, make sure to identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. Your goal is to be proactive, precise, and organized in managing these resources to provide a smooth experience for the user.\n\nremember my home address is: Block 824, Yishun St 81, Singapore\nand my office address is: Changi City Point, Singapore. use above address if i ask about Home or Office.\n\nHere is the current time/date: {{ $now.format('DD')}}"
+        }
+      },
+      "id": "652adc43-f8fc-4004-86e4-a25aa6f9ffe3",
+      "name": "Personal Assistant",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -480,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "name": "calendarAgent",
+        "description": "Call this tool for calendar actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "KFF9bC2w9fcBjDyl",
+          "mode": "list",
+          "cachedResultName": "Bobby's Calendar Agent"
+        }
+      },
+      "id": "5c2d8261-787b-44c0-8377-64fe9931953d",
+      "name": "calendarAgent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -512,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "name": "emailAgent",
+        "description": "Call this tool for email actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "F9swb5BkqqGRQrke",
+          "mode": "list",
+          "cachedResultName": "Bobby's Email Agent V2"
+        }
+      },
+      "id": "c4fe41ca-9780-4550-be78-9c9c27fa14f6",
+      "name": "emailAgent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "operation": "speechToText",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        0
+      ],
+      "id": "4000b0d4-2957-4063-bb33-de7e730c3165",
+      "name": "Transcribe audio or video",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "VyVi0c3igqAjzHaI",
+          "name": "ElevenLabs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -16
+      ],
+      "id": "4a265b42-8458-4b7a-805e-53be57298eb5",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "PhcWOUod8OUw29Ob",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17989eb0-feca-4631-b5c8-34b1d4a6c72b",
+              "name": "image_file_id",
+              "type": "string",
+              "value": "={{ $json.message.photo[2].file_id }}"
+            },
+            {
+              "id": "9317d7ae-dffd-4b1f-9a9c-b3cc4f1e0dd3",
+              "name": "Text",
+              "type": "string",
+              "value": "={{ $json.message.caption }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f332f3cf-57b3-4c11-845d-d2029ea967aa",
+      "name": "Image Schema",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1088,
+        576
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.image_file_id }}",
+        "additionalFields": {},
+        "path": "fb3fdb2c-0236-432b-b625-e8305e5c32e7"
+      },
+      "id": "077fbb7d-8046-4a1d-ad09-132e35608449",
+      "name": "Get Image",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -960,
+        576
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "fb3fdb2c-0236-432b-b625-e8305e5c32e7",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "openai/chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "OPENAI/CHATGPT-4O-LATEST"
+        },
+        "text": "={{ $('Image Schema').item.json.Text }}",
+        "inputType": "base64",
+        "simplify": false,
+        "options": {}
+      },
+      "id": "8adf5ea7-0081-48a6-b0f4-520fe3c42c79",
+      "name": "Analyze Image",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        -512,
+        576
+      ],
+      "typeVersion": 1.6,
+      "alwaysOutputData": false,
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data",
+        "options": {
+          "fileName": "={{ $json.result.file_path }}"
+        }
+      },
+      "id": "35b58336-8653-4938-9e06-1f56c0f44941",
+      "name": "Convert to Image File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -672,
+        576
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "id": "426453e4-4233-4756-9c99-ffb4623cc129",
+      "name": "Extract from File to Base64",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -832,
+        576
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/56AoDkrOh6qfVPDXZ7Pt",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_72e78f828ff305004b109f1de62f28bf3413a1098c6a7111"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ JSON.stringify($json.message.content).replace(/(^\\\"|\\\"$)/g, '') }}\"\n}\n",
+        "options": {}
+      },
+      "id": "37c95207-a051-4746-b7e6-dedee3674f1a",
+      "name": "Create Audio1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "fileName": "data.mpeg"
+        },
+        "path": "03816dbc-43d4-469b-b0a9-b839e73d8a63"
+      },
+      "id": "2a8542d7-188c-44ed-84ad-beef1a8be93c",
+      "name": "Send Audio1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        672
+      ],
+      "webhookId": "03816dbc-43d4-469b-b0a9-b839e73d8a63",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Summarize this incoming information: {{ $json.choices[0].message.content }}\n\nOutput only plain text, there should be no markdown formatting or  any symbols.",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "42861d0f-3245-4ce2-9160-f5f63937f0f5",
+      "name": "Summarize Agent Response1",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        -368,
+        672
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.photo[2].file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "154f9b49-caa0-4724-85c2-552ea543d7f2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "67ab9e63-6407-4879-90cb-52a9271b11b2",
+      "name": "Switch1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1088,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.choices[0].message.content }}",
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "path": "2a88addd-eae3-4997-aa82-cc4028256260"
+      },
+      "id": "fb921743-91ea-441e-b9ae-5d03c370ca6c",
+      "name": "Response1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        512
+      ],
+      "webhookId": "2a88addd-eae3-4997-aa82-cc4028256260",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "cityName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('City', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.openWeatherMapTool",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        384
+      ],
+      "id": "387f5cc0-2174-42a9-ad70-53f3ff690f50",
+      "name": "Weather tool",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "moo15vqJpkexQr7f",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        256,
+        416
+      ],
+      "id": "6589ba47-2683-4feb-a793-86ff158f5494",
+      "name": "Calculator tool"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -16
+      ],
+      "id": "b07f9589-6a37-4b13-84e3-5a4b3b4fdcab",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "3pGVESd93Pb5nrWi",
+          "name": "Google Gemini AI Pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText = $json[\"output\"] || \"\";\n\nif (typeof inputText !== \"string\") {\n  throw new Error(\"Input must be a string\");\n}\n\nconst mid = Math.ceil(inputText.length / 2);\nconst firstHalf = inputText.substring(0, mid);\nconst secondHalf = inputText.substring(mid);\n\nreturn [\n  { json: { blockNumber: 1, content: firstHalf } },\n  { json: { blockNumber: 2, content: secondHalf } }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -96
+      ],
+      "id": "ba3a4b36-0f3f-45bf-a6ce-ec10b7065cdf",
+      "name": "Telegram Message split"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').first().json.message.chat.id }}",
+        "text": "={{ $json.content }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        },
+        "path": "0344e4c7-ac9b-4ccb-bc96-7f6d9a97e7f2"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        -96
+      ],
+      "id": "3ddbf64f-c900-455b-8868-a861d0b33be4",
+      "name": "Send a text message",
+      "webhookId": "0344e4c7-ac9b-4ccb-bc96-7f6d9a97e7f2",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 483776831,
+          "message": {
+            "message_id": 418,
+            "from": {
+              "id": 5811640282,
+              "is_bot": false,
+              "first_name": "Bobby",
+              "username": "RSForum007",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 5811640282,
+              "first_name": "Bobby",
+              "username": "RSForum007",
+              "type": "private"
+            },
+            "date": 1757000036,
+            "text": "hello. what model are you currently running"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T15:49:34.023Z",
+      "createdAt": "2025-09-04T15:49:34.023Z",
+      "role": "workflow:owner",
+      "workflowId": "F0HfwTdgrobFKDGR",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-04T15:50:26.000Z",
+  "versionId": "201e86fe-bdfc-40b2-a868-ec0279719129"
+}
