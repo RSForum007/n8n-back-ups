@@ -1,0 +1,714 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get progress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get snapshot + data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "create summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "set keyword",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SAMPLE DATA": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set keyword": {
+      "main": [
+        [
+          {
+            "node": "Financial times scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get progress": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Get snapshot + data": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Financial times scraper": {
+      "main": [
+        [
+          {
+            "node": "Get progress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "create summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "create summary",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "SAMPLE DATA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-18T13:16:09.901Z",
+  "id": "IzsQMWva1ZvZhfxo",
+  "isArchived": false,
+  "meta": null,
+  "name": "Stock Market Daily Digest with Bright Data",
+  "nodes": [
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "f898673a-a7a8-41c2-bcdc-f73786df114e",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -1056,
+        320
+      ],
+      "webhookId": "cf27222d-20db-4ba5-bd4c-e6ca05efd4d7",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.brightdata.com/datasets/v3/progress/{{ $json.snapshot_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 66c9376f49d121d2b30f47741bab32fb29839601a701be86863fce69bf6dbf0e"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d32cb0db-45a6-4b0c-9e3d-475d670aa41b",
+      "name": "Get progress",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1440,
+        208
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "4712e222-2bad-4d91-be87-ab0e0693c0c6",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "ready"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "ready"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "9a473960-6ba5-4f1b-afc6-396348bd338d",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "=running"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "running"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b8d3278d-f917-4c91-b0f5-1981e9e6bb44",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -1264,
+        208
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "json",
+        "options": {}
+      },
+      "id": "74097d0f-b219-46b0-8578-a313a5c6eab1",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        -2080,
+        208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8d1bd0c8-37bf-4028-a20c-ac214ec06d7b",
+              "name": "json",
+              "type": "array",
+              "value": "=[\n  {\n    \"ticker\": \"NVDA\",\n    \"name\": \"NVIDIA Corporation\",\n    \"market_cap\": \"≈ $3.6T\"\n  },\n  {\n    \"ticker\": \"MSFT\",\n    \"name\": \"Microsoft Corporation\",\n    \"market_cap\": \"≈ $3.6T\"\n  },\n  {\n    \"ticker\": \"AAPL\",\n    \"name\": \"Apple Inc.\",\n    \"market_cap\": \"≈ $3.0T\"\n  },\n  {\n    \"ticker\": \"AMZN\",\n    \"name\": \"Amazon.com Inc.\",\n    \"market_cap\": \"≈ $2.2T\"\n  },\n  {\n    \"ticker\": \"GOOGL\",\n    \"name\": \"Alphabet Inc.\",\n    \"market_cap\": \"≈ $1.9T\"\n  },\n  {\n    \"ticker\": \"META\",\n    \"name\": \"Meta Platforms Inc.\",\n    \"market_cap\": \"≈ $1.5T\"\n  },\n  {\n    \"ticker\": \"BRK.B\",\n    \"name\": \"Berkshire Hathaway Inc.\",\n    \"market_cap\": \"≈ $1.1T\"\n  },\n  {\n    \"ticker\": \"TSLA\",\n    \"name\": \"Tesla Inc.\",\n    \"market_cap\": \"≈ $830B\"\n  },\n  {\n    \"ticker\": \"UNH\",\n    \"name\": \"UnitedHealth Group Inc.\",\n    \"market_cap\": \"≈ $450B\"\n  },\n  {\n    \"ticker\": \"JNJ\",\n    \"name\": \"Johnson & Johnson\",\n    \"market_cap\": \"≈ $450B\"\n  }\n]\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f33206d6-c19b-41cf-85fb-d11d5f18519d",
+      "name": "SAMPLE DATA",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -2288,
+        208
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8d9e80d9-16dd-4658-928f-d94735209bfd",
+              "name": "keyword",
+              "type": "string",
+              "value": "={{ $json.ticker }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a57452d1-10d8-436b-9229-10724b9101db",
+      "name": "set keyword",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1904,
+        208
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brightdata.com/datasets/v3/trigger",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "dataset_id",
+              "value": "gd_lmrpz3vxmz972ghd7"
+            },
+            {
+              "name": "include_errors",
+              "value": "true"
+            },
+            {
+              "name": "type",
+              "value": "discover_new"
+            },
+            {
+              "name": "discover_by",
+              "value": "keyword"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 66c9376f49d121d2b30f47741bab32fb29839601a701be86863fce69bf6dbf0e"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $('set keyword').all().map(item => item.json)}}",
+        "options": {}
+      },
+      "id": "1e1e6352-6ffc-4f30-9cd6-746d1835bd70",
+      "name": "Financial times scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1680,
+        208
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.brightdata.com/datasets/v3/snapshot/{{ $json.snapshot_id }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 66c9376f49d121d2b30f47741bab32fb29839601a701be86863fce69bf6dbf0e"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3eac868f-c958-4eae-9f9a-15213197c7fe",
+      "name": "Get snapshot + data",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1040,
+        128
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "6281983c-62cb-4694-a9fc-d1fc623bd4b8",
+      "name": "Aggregate",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        -720,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
+        "options": {}
+      },
+      "id": "55f225cb-bc58-475c-8b2d-0ded49ec31f1",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -416,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n\n## 📤 SYSTEM PROMPT: Daily Stock Summary Email Generator (for n8n AI Agent)\n\n````markdown\n## 🎯 ROLE\nYou are a financial summary agent integrated in an n8n workflow. Your role is to:\n- Analyze incoming JSON data of top 10 U.S. stocks.\n- Identify meaningful insights: trends, outliers, sentiment, sector behavior.\n- Format this into a **clear, styled HTML email body** for professional users.\n- Return the **HTML content only** – ready to send via n8n’s email nodes.\n\n---\n\n## 📥 INPUT FORMAT (JSON)\n\nYou will receive daily JSON input structured like this:\n\n\nThe day and date today is {{ $now.format('cccc yyyy-MM-dd t ') }}\n\nHere is today’s data: =\n\n```\n\n{{ $json.data.toJsonString() }}\n\n```\n\n---\n\n## ✅ TASKS\n\n1. **Analyze market trends** based on price movements and sentiment.\n2. **Highlight top 2 gainers and losers**, including reasoning from news or change %.\n3. **Generate a stock table** (Ticker, Name, Price Change, Sentiment Icon).\n4. **Include 3–5 key takeaways**, insights, or investor watch notes.\n5. **Add upcoming events** if mentioned in news or based on date.\n6. Format everything as **HTML only**, ready for use in an email body.\n\n---\n\n## ✨ OUTPUT FORMAT (HTML Only)\n\n* Include inline styles (no external CSS).\n* Use semantic structure:\n\n  * `<h2>` for main title\n  * `<ul>` for movers and insights\n  * `<table>` for stock data\n* Use icons or colors for sentiment: 🟢 Positive, 🟡 Neutral, 🔴 Negative\n* Footer: “Generated automatically by your AI-powered stock monitor”\n\n---\n\n## ⚠️ CONSTRAINTS\n\n* DO NOT include subject or email headers\n* DO NOT output plaintext explanations or markdown\n* Output **HTML only**, clean and professional\n\n---\n\n## 📬 GOAL\n\nDeliver a polished, mobile-friendly, and insightful daily stock market summary email that can be sent directly by n8n. Final output should require zero manual edits.\n\n",
+        "options": {}
+      },
+      "id": "0ad5d1f9-5807-43c8-9942-36542c0f9d0c",
+      "name": "create summary",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -416,
+        128
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "f44dc946-c8b2-4681-8522-21e562726593",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -2592,
+        32
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## Add stock to track\n\nYou will add a list of the stocks you need to track here",
+        "height": 420,
+        "width": 220,
+        "color": 5
+      },
+      "id": "14652866-cb81-41ef-97ff-1b9f34bb23b7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2368,
+        16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Split and set the field names\nThe field name MUST be keyword to match the bright data API",
+        "height": 420,
+        "width": 340,
+        "color": 4
+      },
+      "id": "f529069b-11ec-452c-a0c1-f98af2ffd23c",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2096,
+        16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Financial Times scraper\nScrap the latest trends in our selected Stock. \n\nSet it to run once",
+        "height": 420,
+        "color": 2
+      },
+      "id": "addcd9c9-684f-441b-8032-ae307f47c7de",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1744,
+        16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Check the status of the progress and Get results\n\nIf `running` we make it loop until done",
+        "height": 520,
+        "width": 620,
+        "color": 4
+      },
+      "id": "01161f66-c68c-4033-aca9-98b48bd22dd7",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1456,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Get scraping results",
+        "height": 260,
+        "width": 260,
+        "color": 7
+      },
+      "id": "fa4a1af8-fada-41a9-9b5b-2e45557abde3",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1120,
+        48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Aggregate results to pass to AI for our email summary",
+        "height": 280,
+        "width": 280
+      },
+      "id": "52c521be-0d70-4103-aed8-3d0464b103e5",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -800,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Create Draft email and notify admin\n\n\n\nCreate an email summary and notify the user",
+        "height": 600,
+        "width": 520,
+        "color": 3
+      },
+      "id": "e96a089b-24d2-41a1-95aa-676ced32c698",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        -112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Save results to G sheets",
+        "height": 240,
+        "width": 280,
+        "color": 6
+      },
+      "id": "1bc4659b-625f-4032-8725-412456519e86",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -800,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1YPXhBtkU0CEj6nvqL9zAW7UhghWu_UNl-K75QJ2RFSc",
+          "mode": "list",
+          "cachedResultName": "Stock Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YPXhBtkU0CEj6nvqL9zAW7UhghWu_UNl-K75QJ2RFSc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YPXhBtkU0CEj6nvqL9zAW7UhghWu_UNl-K75QJ2RFSc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "4a23a91b-0faa-43c4-8633-d6f4789036ef",
+      "name": "Append row in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -736,
+        -16
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/o4-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        336
+      ],
+      "id": "daee8595-83d2-4e63-b534-17cbd4cae93d",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "PhcWOUod8OUw29Ob",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "bobbydionido@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Daily Stock report for {date today}`, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `A detailed summary of the stock performance today. Must Look good`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "472b99c1-b818-42f1-bbd6-d497bc6b1ffa",
+      "name": "Send a message in Gmail",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        -176,
+        336
+      ],
+      "webhookId": "fe4a416a-43f3-4ad1-80c8-51f1de4c2343",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kOuICRwPbTV0wYJ3",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2576,
+        208
+      ],
+      "id": "db18419c-f5dd-40d9-963c-456178352a0e",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-08-18T13:16:09.915Z",
+      "createdAt": "2025-08-18T13:16:09.915Z",
+      "role": "workflow:owner",
+      "workflowId": "IzsQMWva1ZvZhfxo",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-18T13:51:38.000Z",
+  "versionId": "f591c4e1-8d92-4022-9e5b-27ba6779fd93"
+}
