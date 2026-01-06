@@ -1,0 +1,1052 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Mistral Upload1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mistral Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Upload": {
+      "main": [
+        [
+          {
+            "node": "Mistral Signed URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract schema": {
+      "main": [
+        [
+          {
+            "node": "Get already processed rows from Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Field Extractor": {
+      "main": [
+        [
+          {
+            "node": "Add google drive Id back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral DOC OCR": {
+      "main": [
+        [
+          {
+            "node": "Join OCR Pages and remove id field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Upload1": {
+      "main": [
+        [
+          {
+            "node": "Mistral Signed URL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Fields Schema": {
+      "main": [
+        [
+          {
+            "node": "extract schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral IMAGE OCR": {
+      "main": [
+        [
+          {
+            "node": "Join OCR Pages and remove id field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Signed URL": {
+      "main": [
+        [
+          {
+            "node": "Mistral DOC OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Signed URL1": {
+      "main": [
+        [
+          {
+            "node": "Mistral IMAGE OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file for OCR": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter processed files": {
+      "main": [
+        [
+          {
+            "node": "Download file for OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add google drive Id back": {
+      "main": [
+        [
+          {
+            "node": "Save data to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On new file in Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Load files from Google Drive folder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Fields Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Load files from Google Drive folder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Fields Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Join OCR Pages and remove id field": {
+      "main": [
+        [
+          {
+            "node": "Field Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load files from Google Drive folder": {
+      "main": [
+        [
+          {
+            "node": "Filter processed files",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get already processed rows from Sheets": {
+      "main": [
+        [
+          {
+            "node": "Filter processed files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Field Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-23T15:09:02.264Z",
+  "id": "sINWurxlnxGw8vAN",
+  "isArchived": true,
+  "meta": null,
+  "name": "chatgpt modified",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ea14e6a3-45be-460a-9d5d-61532044644f",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -256,
+        304
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "hour": 0,
+              "minute": 5
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1e6iBJp5M7biLz1s_oq9_v6QOf6x1Nbih",
+          "mode": "list",
+          "cachedResultName": "Ardept_invoices",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1e6iBJp5M7biLz1s_oq9_v6QOf6x1Nbih"
+        },
+        "event": "fileCreated",
+        "options": {
+          "fileType": "all"
+        }
+      },
+      "id": "aa832740-ef21-4089-9368-04b6598d3aa8",
+      "name": "On new file in Google Drive",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "position": [
+        -256,
+        640
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DrurgX9EkT88ZrxF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1e6iBJp5M7biLz1s_oq9_v6QOf6x1Nbih",
+            "mode": "list",
+            "cachedResultName": "Ardept_invoices",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1e6iBJp5M7biLz1s_oq9_v6QOf6x1Nbih"
+          }
+        },
+        "options": {}
+      },
+      "id": "48984370-1e8f-443e-a6ca-f30342790ff5",
+      "name": "Load files from Google Drive folder",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        304,
+        640
+      ],
+      "executeOnce": true,
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DrurgX9EkT88ZrxF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id",
+        "joinMode": "keepNonMatches",
+        "outputDataFrom": "input2",
+        "options": {}
+      },
+      "id": "9fac745c-053b-42b2-a3b3-0482f81dcb61",
+      "name": "Filter processed files",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        784,
+        528
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {}
+      },
+      "id": "382372ea-02e7-464f-ab44-282055b71e43",
+      "name": "Download file for OCR",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        992,
+        528
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DrurgX9EkT88ZrxF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ",
+          "mode": "list",
+          "cachedResultName": "Ardept_invoices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "146712ec-6625-414b-aa6c-0df84d89076d",
+      "name": "Get already processed rows from Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        592,
+        304
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.3,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ",
+          "mode": "list",
+          "cachedResultName": "Ardept_invoices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Id": "={{ $json.Id }}",
+            "receipt_number": "={{ $json.receipt_number }}",
+            "amount_paid": "={{ $json.amount_paid }}",
+            "date_paid": "={{ $json.date_paid }}",
+            "payment_method": "={{ $json.payment_method }}",
+            "summary": "={{ $json.summary }}",
+            "line_items": "={{ $json.line_items }}",
+            "processed": "={{ $json.processed }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "receipt_number",
+              "displayName": "receipt_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "amount_paid",
+              "displayName": "amount_paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date_paid",
+              "displayName": "date_paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "payment_method",
+              "displayName": "payment_method",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "line_items",
+              "displayName": "line_items",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "8c9a0d46-46c2-405e-bedb-099f19af46dc",
+      "name": "Save data to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        3376,
+        448
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "purpose",
+              "value": "ocr"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a7fa4e1d-255f-4675-9053-30db13365330",
+      "name": "Mistral Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1488,
+        512
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.mistral.ai/v1/files/{{ $json.id }}/url",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expiry",
+              "value": "24"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d198daef-ca2e-41a6-907f-1e021f8e5935",
+      "name": "Mistral Signed URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1680,
+        512
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/ocr",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral-ocr-latest\",\n  \"document\": {\n    \"type\": \"document_url\",\n    \"document_url\": \"{{ $json.url }}\"\n  },\n  \"include_image_base64\": true\n}",
+        "options": {}
+      },
+      "id": "250f7a4b-34eb-4ec3-876f-5228e8b942da",
+      "name": "Mistral DOC OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1888,
+        480
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab the keys from the first row\nconst schema = Object.keys($input.all()[0].json);\n\n// Return a single item whose JSON is just that schema array\nreturn [\n  { json: { schema } }\n];"
+      },
+      "id": "85f4f483-2447-4c19-9b8a-c2ee77ac4b8a",
+      "name": "extract schema",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        352,
+        304
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Node name: Join Pages\n// 1. Grab all incoming documents\nconst docs = $input.all();\n\n// 2. REMOVED schema extraction (not present in input)\n// 3. Build one output per document\nconst results = docs.map(doc => {\n  // Handle case where pages might be missing\n  const pages = doc.json.pages || [];\n  \n  // Join only that doc's pages\n  const fullText = pages\n    .map(p => p.markdown || '')  // Handle missing markdown\n    .join('\\n\\n');\n    \n  return {\n    json: {\n      ocr_text: fullText\n      // Removed schema since it's not in input\n    }\n  };\n});\n\nreturn results;"
+      },
+      "id": "b93c757b-2262-4990-a915-57bbd9b77df3",
+      "name": "Join OCR Pages and remove id field",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2272,
+        480
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get the array of processed files (with id & name)\nconst processed = $('Filter processed files').all();\n\n// 2. Take each LLM output in turn, parse it, inject the matching ID, and return\nreturn $input.all().map((item, index) => {\n  // parse the JSON string your chat node returned\n  const data = JSON.parse(item.json.output);\n\n  // look up the corresponding Drive file ID by array index\n  data.Id   = processed[index]?.json.id ?? null;\n\n\n  // emit for your Sheets node\n  return { json: data };\n});"
+      },
+      "id": "1d387dda-e40a-4878-aaef-97e676988243",
+      "name": "Add google drive Id back",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2800,
+        448
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "purpose",
+              "value": "ocr"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "60325714-a303-422c-a5cf-1b831f429c22",
+      "name": "Mistral Upload1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1504,
+        720
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.mistral.ai/v1/files/{{ $json.id }}/url",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expiry",
+              "value": "24"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "970aae72-7c6a-401a-975d-91d69232ffcd",
+      "name": "Mistral Signed URL1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1680,
+        720
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/ocr",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mistralCloudApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral-ocr-latest\",\n  \"document\": {\n    \"type\": \"image_url\",\n    \"image_url\": \"{{ $json.url }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "6f63320b-262c-4020-aab9-a1b15e58b30a",
+      "name": "Mistral IMAGE OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1888,
+        704
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "O3PJoGrjJ6ylmli2",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "54e4c552-cdf0-4707-8723-65bcf41d8a96",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              },
+              "leftValue": "={{$binary.data.mimeType}}",
+              "rightValue": "image/"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a14f27a-51c7-402e-b6b7-b12aacb7d1c2",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1200,
+        528
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "### Modify Folder source",
+        "height": 80,
+        "width": 220,
+        "color": 4
+      },
+      "id": "4c0b2de8-6668-4f09-a29e-9a7ec5a1a703",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        848
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### File Ids\nYou can view the files using Id from the first column. replace the <Id> below\nhttps://drive.google.com/file/d/<Id>/view",
+        "height": 100,
+        "width": 320
+      },
+      "id": "243c8135-4dda-405a-adc3-8dddfe6f94cf",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2992,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract the following fields from the invoice text:\n\n{{ JSON.stringify($json.schema) }}\n\nImportant: Double-check that all line items are extracted without omission.\n\n- You must respond ONLY with valid raw rendered JSON.\n- Do NOT include the word \"json\".\n- Do NOT include the word \"```json\".\n- Do NOT use triple backticks or markdown formatting.\n- Do NOT wrap the response in any key like \"output\".\n- Do NOT write anything starting at output directly start with valid root-level JSON.\n- Only respond with a valid, root-level JSON object.\n\nText to extract data from: {{ $json.ocr_text }}",
+        "options": {
+          "systemMessage": "=You are a document parsing assistant designed to extract structured data from invoice PDFs for automated uploading and validation in a financial system."
+        }
+      },
+      "id": "0c78beb5-6387-4f32-bc41-3fe6dcd49d24",
+      "name": "Field Extractor",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        2448,
+        448
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "content": "### Set interval for checking drive folder and pull new files",
+        "height": 80,
+        "width": 220,
+        "color": 4
+      },
+      "id": "fd4635d7-dbfb-4b90-bcc3-63886dc3c094",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        864
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Select Sheet\n  \nAdd column headers in the sheet to which you save data on row one to specify which fields you are interested in extracting. ",
+        "height": 140,
+        "width": 300,
+        "color": 4
+      },
+      "id": "6248a731-e0be-4f68-955d-5662446ca86c",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Select sheet",
+        "height": 80,
+        "width": 200,
+        "color": 4
+      },
+      "id": "5e7b9bc6-35cf-49e8-a427-4ea87523a431",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Select sheet to save data (same as at the start)",
+        "height": 80,
+        "width": 200,
+        "color": 4
+      },
+      "id": "4fa31249-8173-4345-a9c7-07358a1a677e",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3024,
+        352
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ",
+          "mode": "list",
+          "cachedResultName": "Ardept_invoices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZLbTTCHmnpSiYxLGN6sbyE3lHImvofEpBnSM3WsbPWQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "adcfcead-5624-4e18-8eca-7c71bacfd2b1",
+      "name": "Get Fields Schema",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        112,
+        304
+      ],
+      "typeVersion": 4.6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": ">> ### First column header in cell A1 MUST BE \"Id\". Id tracks the google drive Id and ensures the workflow is not processing previously processed files",
+        "height": 120,
+        "width": 300,
+        "color": 3
+      },
+      "id": "6b99d2ad-fdd9-471d-a1af-310aa0d01591",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Uses drive ID - no need to modify",
+        "height": 80,
+        "width": 160,
+        "color": 2
+      },
+      "id": "40ea6927-0cd5-4385-92a9-9982975e30d3",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        960,
+        432
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Requires Mistral API Key for La Platforme\nhttps://mistral.ai/products/la-plateforme",
+        "height": 80,
+        "width": 520,
+        "color": 2
+      },
+      "id": "ec4c366e-1fa9-4c22-8c91-5d4520e8bdba",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1472,
+        368
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        752
+      ],
+      "id": "ff988ec3-55ab-4959-81ac-195b65f49452",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "PhcWOUod8OUw29Ob",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "deepseek-reasoner",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        736
+      ],
+      "id": "37249dec-da5b-4799-9aa9-18fc03417c36",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "rJNl10I7vUu1LcTH",
+          "name": "DeepSeek account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-07-23T15:09:02.272Z",
+      "createdAt": "2025-07-23T15:09:02.272Z",
+      "role": "workflow:owner",
+      "workflowId": "sINWurxlnxGw8vAN",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-23T15:57:55.000Z",
+  "versionId": "28950a2d-fa8c-4414-b321-37481614a279"
+}
