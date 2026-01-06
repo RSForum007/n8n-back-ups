@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Gmail Trigger": {
       "main": [
@@ -672,6 +674,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:19.257Z",
+      "createdAt": "2025-07-14T14:03:19.257Z",
+      "role": "workflow:owner",
+      "workflowId": "9TgZngcpSwac4Fx3",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": {
     "node:Gmail Trigger": {
       "lastTimeChecked": 1751024847,
