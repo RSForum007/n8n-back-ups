@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -250,7 +252,7 @@
   },
   "createdAt": "2025-07-14T14:03:14.314Z",
   "id": "K5dqAFV4xjGYekDu",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "POV Faceless Youtube",
   "nodes": [
@@ -980,9 +982,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:14.317Z",
+      "createdAt": "2025-07-14T14:03:14.317Z",
+      "role": "workflow:owner",
+      "workflowId": "K5dqAFV4xjGYekDu",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:03:14.314Z",
-  "versionId": "053d52ef-c30b-45d0-a44a-8acf045c01f1"
+  "updatedAt": "2025-07-14T15:21:40.000Z",
+  "versionId": "5040d007-7bac-4b61-8bc5-4b3b884bb1f3"
 }
