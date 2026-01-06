@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Chat Trigger": {
       "main": [
@@ -78,6 +80,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:33.589Z",
+      "createdAt": "2025-07-14T14:03:33.589Z",
+      "role": "workflow:owner",
+      "workflowId": "eyfcRVMCSIT8g5p4",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
