@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "S3": {
       "main": [
@@ -857,6 +859,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:27.807Z",
+      "createdAt": "2025-07-14T14:03:27.807Z",
+      "role": "workflow:owner",
+      "workflowId": "ghpvIxHLN2E5TmTw",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
