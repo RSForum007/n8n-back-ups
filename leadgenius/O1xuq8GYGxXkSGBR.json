@@ -1,0 +1,500 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-15T04:45:38.332Z",
+    "createdAt": "2025-12-15T04:45:38.332Z",
+    "versionId": "e32386f6-e905-4c11-ad6a-ecea1002189b",
+    "workflowId": "O1xuq8GYGxXkSGBR",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -144,
+          -16
+        ],
+        "id": "92d88175-3e01-43fb-bb77-5b7affe9afe4",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "717d214d-0a8b-4fe9-937a-97c31130a6d3",
+                "name": "ticker",
+                "value": "={{ $json.query }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          32,
+          224
+        ],
+        "id": "54c8a6e2-db58-405b-9f2e-34bcab440f70",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.chart-img.com/v2/tradingview/advanced-chart/storage",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-api-key",
+                "value": "eXzeWybmYz7o4WG5dMs0d1Ju4qVed9B86mpGIzTT"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"theme\": \"dark\",\n  \"interval\": \"1D\",\n  \"symbol\": \"NASDAQ:{{ $json.ticker }}\",\n  \"override\": {\n    \"showStudyLastValue\": false\n  },\n  \"studies\": [\n    {\n      \"name\": \"Volume\",\n      \"forceOverlay\": true\n    },\n    {\n      \"name\": \"MACD\",\n      \"override\": {\n        \"Signal.linewidth\": 2,\n        \"Signal.color\": \"rgb(255,65,129)\"\n      }\n    }\n  ]\n}",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          240,
+          0
+        ],
+        "id": "a83136f3-e327-4ad7-abdc-c804de773f72",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          400,
+          224
+        ],
+        "id": "b133dac6-08fc-464a-a0da-f12b7cec8045",
+        "name": "HTTP Request1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are an expert technical analyst specializing in the MACD (Moving Average Convergence Divergence) indicator. Analyze the provided MACD chart image meticulously. Identify and interpret the following elements:\n\n1.  **MACD Line and Signal Line:**\n    * Describe the current positions and trajectory of the MACD line and the signal line.\n    * Identify the most recent crossover: Was it a bullish (MACD line crossing above signal line) or bearish (MACD line crossing below signal line) crossover? Note its approximate timing or location on the chart.\n    * Assess the strength or weakness implied by the spread between the MACD line and the signal line.\n\n2.  **Histogram:**\n    * Describe the current state of the histogram (e.g., positive and increasing, positive and decreasing, negative and increasing, negative and decreasing).\n    * What does the histogram indicate about the momentum of the price movement (accelerating or decelerating)?\n    * Note any recent histogram crossovers of the zero line.\n\n3.  **Centerline (Zero Line) Crossovers:**\n    * Has the MACD line recently crossed the zero line?\n    * If so, was it a bullish (crossing above zero) or bearish (crossing below zero) signal? What does this imply about the longer-term momentum?\n\n4.  **Potential Divergences (Crucial, but hardest for LLMs with image only):**\n    * Carefully examine the MACD's peaks and troughs in relation to what might be inferred as corresponding price action (even if the price chart isn't directly visible, describe any *visual patterns* in the MACD that would typically indicate bullish or bearish divergence if correlated with price).\n    * Specifically look for:\n        * **Bullish Divergence:** Lower lows on the MACD while the (inferred) price makes higher lows, or lower lows on the MACD while (inferred) price makes equal lows.\n        * **Bearish Divergence:** Higher highs on the MACD while the (inferred) price makes lower highs, or higher highs on the MACD while (inferred) price makes equal highs.\n    * Describe any such patterns observed *within the MACD itself* that suggest potential divergence.\n\n5.  **Overall Momentum and Signal Interpretation:**\n    * Synthesize the observations above to provide an overall assessment of the current momentum (bullish, bearish, neutral, strengthening, waning).\n    * What is the primary signal the MACD is currently generating?\n\n**Important Considerations to Add to Your n8n Setup or Prompt (if feasible):**\n\n* **Timeframe Context (if known):** If you know the timeframe of the chart (e.g., \"1-hour,\" \"Daily,\" \"Weekly\"), adding this context can be helpful: \"Analyze the provided [Timeframe, e.g., Daily] MACD chart image...\" This helps the LLM understand the significance of certain movements.\n* **Asset Context (if known):** \"Analyze the provided MACD chart image for [Asset, e.g., BTC/USD]...\"\n* **Clarity of Image:** Ensure the image you pass is very clear, with distinct lines and histogram bars.\n\n**Example Prompt to paste into your n8n \"User Message\" field:**\n\n```text\nYou are an expert technical analyst specializing in the MACD indicator. Analyze the provided MACD chart image meticulously. Identify and interpret the following elements:\n\n1.  **MACD Line and Signal Line:** Describe their current positions, trajectory, the most recent crossover (bullish/bearish and approximate location), and the implied strength from their spread.\n2.  **Histogram:** Describe its current state (e.g., positive/negative, increasing/decreasing), what it indicates about momentum, and any recent zero line crossovers.\n3.  **Centerline (Zero Line) Crossovers:** Note any recent MACD line crossovers of the zero line (bullish/bearish) and their implication for longer-term momentum.\n4.  **Potential Divergences:** Describe any visual patterns within the MACD itself (peaks and troughs) that suggest potential bullish or bearish divergence.\n5.  **Overall Momentum and Signal Interpretation:** Synthesize these findings into an assessment of the current momentum and the primary signal the MACD is currently generating.\n\nProvide a concise, structured analysis.",
+          "messages": {
+            "messageValues": [
+              {
+                "type": "HumanMessagePromptTemplate",
+                "messageType": "imageBinary"
+              }
+            ]
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.6,
+        "position": [
+          560,
+          32
+        ],
+        "id": "fa1a8e3a-02ec-4909-8b75-f9f6937a218b",
+        "name": "Basic LLM Chain"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "openai/gpt-4o-mini",
+            "mode": "list",
+            "cachedResultName": "openai/gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          656,
+          208
+        ],
+        "id": "f8fe4f74-9134-4880-8c25-8ecc4da9d200",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "wHtAFQchrCHITGkK",
+            "name": "OpenRouter"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a411ecd1-b642-4816-b007-15a7f4feee51",
+                "name": "response",
+                "value": "={{ $json.text }}\n\n{{ $('HTTP Request1').item.json.url }}\n",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          928,
+          32
+        ],
+        "id": "17330e67-8de2-4d4a-8ebb-f5046fdaf8df",
+        "name": "Edit Fields1"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "e32386f6-e905-4c11-ad6a-ecea1002189b",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-19T14:47:38.650Z",
+  "id": "O1xuq8GYGxXkSGBR",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Bobby's Stock Tool",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        -16
+      ],
+      "id": "92d88175-3e01-43fb-bb77-5b7affe9afe4",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "717d214d-0a8b-4fe9-937a-97c31130a6d3",
+              "name": "ticker",
+              "value": "={{ $json.query }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        224
+      ],
+      "id": "54c8a6e2-db58-405b-9f2e-34bcab440f70",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.chart-img.com/v2/tradingview/advanced-chart/storage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "eXzeWybmYz7o4WG5dMs0d1Ju4qVed9B86mpGIzTT"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"theme\": \"dark\",\n  \"interval\": \"1D\",\n  \"symbol\": \"NASDAQ:{{ $json.ticker }}\",\n  \"override\": {\n    \"showStudyLastValue\": false\n  },\n  \"studies\": [\n    {\n      \"name\": \"Volume\",\n      \"forceOverlay\": true\n    },\n    {\n      \"name\": \"MACD\",\n      \"override\": {\n        \"Signal.linewidth\": 2,\n        \"Signal.color\": \"rgb(255,65,129)\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "a83136f3-e327-4ad7-abdc-c804de773f72",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        224
+      ],
+      "id": "b133dac6-08fc-464a-a0da-f12b7cec8045",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert technical analyst specializing in the MACD (Moving Average Convergence Divergence) indicator. Analyze the provided MACD chart image meticulously. Identify and interpret the following elements:\n\n1.  **MACD Line and Signal Line:**\n    * Describe the current positions and trajectory of the MACD line and the signal line.\n    * Identify the most recent crossover: Was it a bullish (MACD line crossing above signal line) or bearish (MACD line crossing below signal line) crossover? Note its approximate timing or location on the chart.\n    * Assess the strength or weakness implied by the spread between the MACD line and the signal line.\n\n2.  **Histogram:**\n    * Describe the current state of the histogram (e.g., positive and increasing, positive and decreasing, negative and increasing, negative and decreasing).\n    * What does the histogram indicate about the momentum of the price movement (accelerating or decelerating)?\n    * Note any recent histogram crossovers of the zero line.\n\n3.  **Centerline (Zero Line) Crossovers:**\n    * Has the MACD line recently crossed the zero line?\n    * If so, was it a bullish (crossing above zero) or bearish (crossing below zero) signal? What does this imply about the longer-term momentum?\n\n4.  **Potential Divergences (Crucial, but hardest for LLMs with image only):**\n    * Carefully examine the MACD's peaks and troughs in relation to what might be inferred as corresponding price action (even if the price chart isn't directly visible, describe any *visual patterns* in the MACD that would typically indicate bullish or bearish divergence if correlated with price).\n    * Specifically look for:\n        * **Bullish Divergence:** Lower lows on the MACD while the (inferred) price makes higher lows, or lower lows on the MACD while (inferred) price makes equal lows.\n        * **Bearish Divergence:** Higher highs on the MACD while the (inferred) price makes lower highs, or higher highs on the MACD while (inferred) price makes equal highs.\n    * Describe any such patterns observed *within the MACD itself* that suggest potential divergence.\n\n5.  **Overall Momentum and Signal Interpretation:**\n    * Synthesize the observations above to provide an overall assessment of the current momentum (bullish, bearish, neutral, strengthening, waning).\n    * What is the primary signal the MACD is currently generating?\n\n**Important Considerations to Add to Your n8n Setup or Prompt (if feasible):**\n\n* **Timeframe Context (if known):** If you know the timeframe of the chart (e.g., \"1-hour,\" \"Daily,\" \"Weekly\"), adding this context can be helpful: \"Analyze the provided [Timeframe, e.g., Daily] MACD chart image...\" This helps the LLM understand the significance of certain movements.\n* **Asset Context (if known):** \"Analyze the provided MACD chart image for [Asset, e.g., BTC/USD]...\"\n* **Clarity of Image:** Ensure the image you pass is very clear, with distinct lines and histogram bars.\n\n**Example Prompt to paste into your n8n \"User Message\" field:**\n\n```text\nYou are an expert technical analyst specializing in the MACD indicator. Analyze the provided MACD chart image meticulously. Identify and interpret the following elements:\n\n1.  **MACD Line and Signal Line:** Describe their current positions, trajectory, the most recent crossover (bullish/bearish and approximate location), and the implied strength from their spread.\n2.  **Histogram:** Describe its current state (e.g., positive/negative, increasing/decreasing), what it indicates about momentum, and any recent zero line crossovers.\n3.  **Centerline (Zero Line) Crossovers:** Note any recent MACD line crossovers of the zero line (bullish/bearish) and their implication for longer-term momentum.\n4.  **Potential Divergences:** Describe any visual patterns within the MACD itself (peaks and troughs) that suggest potential bullish or bearish divergence.\n5.  **Overall Momentum and Signal Interpretation:** Synthesize these findings into an assessment of the current momentum and the primary signal the MACD is currently generating.\n\nProvide a concise, structured analysis.",
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageBinary"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        560,
+        32
+      ],
+      "id": "fa1a8e3a-02ec-4909-8b75-f9f6937a218b",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "openai/gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "openai/gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        656,
+        208
+      ],
+      "id": "f8fe4f74-9134-4880-8c25-8ecc4da9d200",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a411ecd1-b642-4816-b007-15a7f4feee51",
+              "name": "response",
+              "value": "={{ $json.text }}\n\n{{ $('HTTP Request1').item.json.url }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        32
+      ],
+      "id": "17330e67-8de2-4d4a-8ebb-f5046fdaf8df",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "DOGE"
+        }
+      }
+    ],
+    "Edit Fields": [
+      {
+        "json": {
+          "ticker": "TSLA"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-08-19T14:47:38.658Z",
+      "createdAt": "2025-08-19T14:47:38.658Z",
+      "role": "workflow:owner",
+      "workflowId": "O1xuq8GYGxXkSGBR",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-19T14:54:10.000Z",
+  "versionId": "e32386f6-e905-4c11-ad6a-ecea1002189b"
+}
