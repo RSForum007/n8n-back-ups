@@ -1,0 +1,519 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Internet Research Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voice Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-15T09:38:46.326Z",
+  "id": "5J9vlsFndbvp96bG",
+  "isArchived": false,
+  "meta": null,
+  "name": "Personal Assistant AI",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=You are a highly proficient AI Personal Assistant. Your primary goal is to understand user requests, efficiently determine the best course of action, and utilize the available tools to fulfill these requests accurately and helpfully. Maintain a friendly, proactive, and professional tone at all times.\n\nThe Calendar tool and Email tool have the ability to access emails, you only need to pass the contacts name to them.\n\nYour Available Tools:\n\nCalendar Tool:\n\nCapabilities: Access, create, modify, delete, and search calendar events. Understand and process natural language requests related to scheduling, availability, reminders, and appointments.\nUsage: When the user's request involves managing their schedule, checking for conflicts, setting up meetings, or inquiring about past or future events, you should route to this tool.\nInformation Needed: To use this tool effectively, ensure you have necessary details like event titles, dates, times, attendees (if any), location, and description. If crucial information is missing, politely ask the user for it.\nEmail Tool:\n\nCapabilities: Read, search, compose, send, reply to, forward, and manage emails. Summarize email threads and extract key information.\nUsage: Route to this tool when the user's request involves any interaction with their email inbox or requires email communication. This includes drafting new emails, checking for specific messages, summarizing correspondence, or managing email organization (e.g., marking as read/unread, moving to folders, if supported).\nInformation Needed: For composing or sending emails, you'll need the recipient(s), subject, and body content. For searching or reading, clear keywords, sender/recipient information, or date ranges are helpful. Always confirm before sending an email drafted by you.\nInternet Research Tool:\n\nCapabilities: Browse the internet, search for information, retrieve web pages, and extract relevant data from online sources.\nUsage: When the user asks for information that is likely publicly available on the internet, such as facts, news, definitions, how-to guides, product information, or general knowledge, route to this tool.\nInformation Needed: Clear and concise search queries will yield the best results. Try to identify the key entities and concepts in the user's request to form effective search terms. Be mindful of providing concise and relevant summaries of the information found.\nThink Tool:\n\nCapabilities: This tool is for internal processing, planning, and clarification. It allows you to break down complex requests, decide on a sequence of actions (potentially involving multiple tools), or formulate clarifying questions for the user.\nUsage:\nComplex Requests: If a user's request is multi-faceted or requires multiple steps (e.g., \"Research restaurants and then book a table for two tonight\"), use the Think tool to plan the sequence of tool usage.\nAmbiguity: If the user's intent is unclear, or if crucial information is missing for any of the other tools, use the Think tool to formulate a polite and specific clarifying question.\nNo Direct Tool Match: If the request doesn't immediately map to the Calendar, Email, or Internet Research tool, use the Think tool to analyze the request and determine if a combination of tools or a clarifying question is needed.\nSelf-Correction/Refinement: If an initial approach doesn't yield the desired outcome, use the Think tool to re-evaluate and try a different strategy.\nCore Operating Principles:\n\nUnderstand Intent: Your first step is always to accurately understand what the user is asking for. Analyze the language, keywords, and context of the request.\nRoute to Correct Tool: Based on your understanding, determine which tool (or sequence of tools) is most appropriate to fulfill the request.\nPrioritize specific tools: If the request clearly matches the capabilities of the Calendar, Email, or Internet Research tool, route directly to that tool.\nUse Think Tool for planning/clarification: If the request is complex, ambiguous, or doesn't have an immediate tool match, use the Think tool to decide on the next steps or to ask the user for more information.\nGather Necessary Information: Before executing a tool, ensure you have all the required information. If not, use the Think tool to formulate a request for the missing details from the user.\nExecute and Provide Results: Once the tool has been executed, present the results to the user in a clear, concise, and helpful manner.\nConfirmation (for actions): For actions that modify data or send communications (e.g., creating a calendar event, sending an email), always confirm with the user before finalizing the action, unless explicitly told not to.\nError Handling: If a tool encounters an error or fails to produce the desired outcome, inform the user clearly and, if possible, suggest alternative approaches or use the Think tool to try a different strategy.\nProactive Assistance (Optional but Encouraged): If appropriate, anticipate related needs. For example, if the user asks to schedule a meeting, you might ask if they'd like to send an agenda as well.\nEfficiency: Aim to fulfill requests in the fewest steps possible without sacrificing accuracy or clarity.\nIterative Refinement: If the user provides feedback or corrects you, learn from it to improve future interactions.\nExample Workflow (Conceptual):\n\nUser: \"Can you find out what the weather will be like tomorrow and remind me to bring an umbrella if it's raining?\"\nAI (Thinking Process - internal, using Think Tool if needed):\n\"The user has two requests: get weather information and set a conditional reminder.\"\n\"First, I need to use the Internet Research Tool to find tomorrow's weather forecast.\"\n\"Then, based on that information, I need to use the Calendar Tool to set a reminder.\"\n\"I need to make sure the reminder is conditional on rain.\"\nAI (to Internet Research Tool): \"Search: weather forecast for [user's location] tomorrow.\"\nAI (after getting results): \"Tomorrow's forecast is [forecast details].\"\nAI (to Calendar Tool, if rain is forecasted): \"Create reminder: 'Bring umbrella - rain forecasted' for tomorrow morning.\"\nAI (to User): \"Okay, I've checked the weather for tomorrow. It looks like [forecast summary]. I've also set a reminder for you to bring an umbrella if rain is expected.\"\nYour Goal is to be an indispensable assistant. Think critically, act efficiently, and communicate clearly.\n\ncurrent date / time is {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        -720,
+        260
+      ],
+      "id": "a2f6fd4c-d675-4661-bd4f-e1eff9c38636",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        540
+      ],
+      "id": "f612838d-bfe8-4f66-aa88-2d8d87ccaca9",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "wHtAFQchrCHITGkK",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json.UUID }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -880,
+        540
+      ],
+      "id": "875aa6e7-8b9c-47d6-a486-f768c08e485f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool for all email related tasks",
+        "workflowId": {
+          "__rl": true,
+          "value": "zeJ9nvBEeHd26nOW",
+          "mode": "list",
+          "cachedResultName": "Email-Agent-Demo"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -580,
+        540
+      ],
+      "id": "1d47aac4-4adb-4a76-ace0-d78036db445c",
+      "name": "Email Tool"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to execute calendar related tasks",
+        "workflowId": {
+          "__rl": true,
+          "value": "9Gk3i65dgIhkL7lR",
+          "mode": "list",
+          "cachedResultName": "Calendar-Agent-Demo"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -300,
+        540
+      ],
+      "id": "9abf0195-b50d-4ffd-bab3-23ba44b80872",
+      "name": "Calendar Tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Call this tool to conduct internet research",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "search_depth",
+              "value": "advanced"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -440,
+        540
+      ],
+      "id": "98801aa6-cc00-4f72-aab9-b8a8cb4e09fd",
+      "name": "Internet Research Tool"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        540
+      ],
+      "id": "bbfc2687-8eff-44fe-a52b-e747048b0ac5",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        260
+      ],
+      "id": "1abae092-33c2-4425-96bc-ae1e222fe3ef",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "19117fb0-6886-40a6-8dc9-ff769f85bd5b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1140,
+        120
+      ],
+      "id": "e69583ae-3e39-45bf-890e-0607d1e46ef6",
+      "name": "Voice Webhook",
+      "webhookId": "19117fb0-6886-40a6-8dc9-ff769f85bd5b"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "10e72752-a454-420b-8cb8-8d62f76d8140",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1140,
+        300
+      ],
+      "id": "75c94b3a-a686-4bc0-9393-c51a1a741d7a",
+      "name": "Text Webhook",
+      "webhookId": "10e72752-a454-420b-8cb8-8d62f76d8140"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d38eef5a-3024-47f1-8735-d72113e461ef",
+              "name": "UUID",
+              "value": "={{ $json.body.UUID }}",
+              "type": "string"
+            },
+            {
+              "id": "87c73824-f086-4458-9b3d-fbe9bd023030",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "22d16416-4cda-46d1-97d5-99daeb34d4fc",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "6336ee98-a1a1-48a0-a996-220d56057e06",
+              "name": "UUID",
+              "value": "={{ $json.body.uuid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -880,
+        260
+      ],
+      "id": "6b2634a8-a2bc-4e07-883f-a7d8c2550be6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "content": "## Tools",
+        "height": 200,
+        "width": 620,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        500
+      ],
+      "id": "a99c017b-706a-4b9f-8c20-fc44df9675b7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Inputs\n- ElevenLabs\n- Lovable",
+        "height": 440,
+        "width": 220,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        20
+      ],
+      "id": "b46bf993-783c-4278-a072-b09f6c5a2ede",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## LLM + Memory\n- GPT 4.1",
+        "height": 200,
+        "width": 500,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1240,
+        500
+      ],
+      "id": "e1322570-6dab-4491-a44e-288d7f7de598",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Personal Assistant AI Agent\n### - ElevenLabs Voice Agent\n### - Lovable Front End\n### - Email, Calendar, Web Search Functionality",
+        "width": 440,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        60
+      ],
+      "id": "dc81abea-4e63-476b-b912-cff219383a8e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "voice": {
+          "__rl": true,
+          "value": "aMSt68OGf4xUZAnLpTU8",
+          "mode": "list",
+          "cachedResultName": "Juniper"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "da6f4f0b-37fb-4c4f-a159-237b3b30124c",
+      "name": "ElevenLabs"
+    }
+  ],
+  "pinData": {
+    "Text Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "chaseai.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "content-length": "72",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "accept-language": "en-US,en;q=0.9",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "162.255.56.125",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "94e48f86d5e9cca4-ORD",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "origin": "https://e2b177ae-6fd9-43e0-bcea-3b114fcfb0e5.lovableproject.com",
+            "priority": "u=1, i",
+            "referer": "https://e2b177ae-6fd9-43e0-bcea-3b114fcfb0e5.lovableproject.com/",
+            "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "162.255.56.125, 172.69.59.125",
+            "x-forwarded-host": "chaseai.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-8-86454fd949-b5x2m",
+            "x-is-trusted": "yes",
+            "x-real-ip": "162.255.56.125"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "hey whats up",
+            "uuid": "52f28fb2-a293-4054-bb2f-924f9ce9f575"
+          },
+          "webhookUrl": "https://chaseai.app.n8n.cloud/webhook/10e72752-a454-420b-8cb8-8d62f76d8140",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-07-15T09:38:46.333Z",
+      "createdAt": "2025-07-15T09:38:46.333Z",
+      "role": "workflow:owner",
+      "workflowId": "5J9vlsFndbvp96bG",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-15T09:58:22.000Z",
+  "versionId": "82e4276d-3263-4ba6-bf8c-0d9077919c77"
+}
