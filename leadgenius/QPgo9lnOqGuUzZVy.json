@@ -1,11 +1,13 @@
 {
-  "active": true,
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Telegram": {
       "main": [
         [
           {
-            "node": "Transcribe audio or video",
+            "node": "11labs Transcriber audio or video",
             "type": "main",
             "index": 0
           }
@@ -21,11 +23,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "OpenAI": {
-      "main": [
-        []
       ]
     },
     "DeepSeek Chat Model": {
@@ -84,17 +81,6 @@
         ]
       ]
     },
-    "Ardept Projects": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Send a message in Gmail": {
       "ai_tool": [
         [
@@ -106,7 +92,18 @@
         ]
       ]
     },
-    "OpenRouter Chat Model": {
+    "Internet Researcher Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter OpenAI Model": {
       "ai_languageModel": [
         [
           {
@@ -117,7 +114,7 @@
         ]
       ]
     },
-    "Transcribe audio or video": {
+    "11labs Transcriber audio or video": {
       "main": [
         [
           {
@@ -145,8 +142,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1460,
-        -300
+        -1780,
+        -280
       ],
       "id": "d3f8086d-a86d-4775-b9bd-49117108da38",
       "name": "Telegram",
@@ -155,27 +152,6 @@
         "telegramApi": {
           "id": "32yQqC2qF6jaGldc",
           "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "audio",
-        "operation": "transcribe",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 1.8,
-      "position": [
-        -1140,
-        -80
-      ],
-      "id": "77642d27-8944-4537-8f21-08a68d032bc5",
-      "name": "OpenAI",
-      "credentials": {
-        "openAiApi": {
-          "id": "wHtAFQchrCHITGkK",
-          "name": "OpenRouter"
         }
       }
     },
@@ -196,7 +172,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1380,
+        -1640,
         -540
       ],
       "id": "0dfb0016-6690-4713-83e4-b93ea500dfe2",
@@ -207,27 +183,28 @@
         "promptType": "define",
         "text": "=Users Prompt: {{ $json.text }}",
         "options": {
-          "systemMessage": "Role: You are a helpful assistant with access to CRM and email of user.\n\nGoal: Fulfill user's queries and tasks. User respective tools.\n\nTools:\n1. SearchCRM - to find people in CRM\n2. Ardept Projects - to search for Ardept projects on Project Name, Projected Total, Actual Total, Variance, Contingency percentage, Budget with Contingency, Variance with Contingency, Current paid total, Amount Due total.\n"
+          "systemMessage": "# System Role\nYou are the highly capable and professional personal AI assistant of Bobby Dionido. You represent Bobby in all digital communications and act on his behalf with clarity, intelligence, and discretion. You assist Bobby by researching information online, drafting emails, and responding to questions with accurate and context-aware answers.\n\n# Task Specification\nYour primary tasks include:\n1. Answering any question or request Bobby has by researching online (when browsing is enabled).\n2. Composing professional and context-appropriate emails with proper structure: subject line, greeting, body, and sign-off — as if written by Bobby himself.\n3. conduct research using the Internet Research Tool\n\n# Specifics and Context\nYou are entrusted with managing Bobby Dionido’s digital productivity. Your assistance allows Bobby to save time, make informed decisions, and communicate effectively. Your tone should be professional, warm, and concise — mirroring Bobby's communication style. When writing emails, always maintain correct grammar, proper tone (based on the recipient and context), and include a standard Bobby signature.\n\n**Signature Example:**\n> Best regards,  \n> Bobby Dionido\n\nWhen answering queries:\n- Use clear and structured responses.\n- Be proactive — include relevant links or suggestions if appropriate.\n- If uncertain or information is not available, politely explain and offer alternative solutions.\n\n# Examples\n\n## Example 1 – Research Task\n**Input:** \"Can you find the latest news about electric vehicle tax credits in California?\"\n**Output:** \"Sure, Bobby. As of July 2025, California offers up to $7,500 in EV tax credits depending on the model and income eligibility. Here’s a summary from the California Air Resources Board: [link]. Let me know if you’d like me to dig deeper into eligibility or application steps.\"\n\n---\n\n## Example 2 – Email Draft\n**Input:** \"Write an email to my accountant requesting a summary of Q2 expenses.\"\n**Output:**\n**Subject:** Request for Q2 Expense Summary  \n**To:** [Accountant's Email]  \n**Body:**  \nHi [Accountant's Name],  \n\nI hope you're doing well. Could you please send over a summary of my Q2 expenses at your earliest convenience? I’m reviewing my financials and would appreciate having that breakdown this week.  \n\nBest regards,  \nBobby Dionido\n\n---\n\n# Reminders\n- When writing emails, always include: **Subject, Greeting, Body, and Sign-off**.\n- Keep responses clear, concise, and aligned with Bobby’s tone: **professional, thoughtful, and efficient**.\n- If information requires browsing and it's not available, state that clearly and offer a helpful next step.\n- Never respond in the first person (e.g., \"I think...\") — always act as Bobby's assistant or on Bobby's behalf.\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -780,
-        -400
+        -1340,
+        -480
       ],
       "id": "0869b815-8a8c-4618-8da8-1a763b359433",
       "name": "AI Agent"
     },
     {
       "parameters": {
+        "model": "deepseek-reasoner",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -500,
-        -140
+        -1200,
+        -200
       ],
       "id": "47ac38ba-6fc8-424c-955f-ba52fc5f425c",
       "name": "DeepSeek Chat Model",
@@ -249,8 +226,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -20,
-        -100
+        -640,
+        -540
       ],
       "id": "71c2548d-2ec2-49bc-9ee4-f219dbc56490",
       "name": "Telegram1",
@@ -323,8 +300,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -1620,
-        -400
+        -2000,
+        -440
       ],
       "id": "08e2e0c1-9290-4ca7-a23a-057401890960",
       "name": "Switch"
@@ -339,8 +316,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1760,
-        -400
+        -2220,
+        -440
       ],
       "id": "60e5156a-857b-4ac6-87a3-165b88cc476f",
       "name": "Telegram Trigger",
@@ -375,46 +352,11 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -300,
-        -660
+        -820,
+        -120
       ],
       "id": "6e2cf2ad-2d22-4271-9f00-edef2af353cf",
       "name": "SearchCRM",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "VnYUNWu00t6X0Qvr",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "descriptionType": "manual",
-        "toolDescription": "Columns: Project Name, Projected Total, Actual Total, Variance, Contingency percentage, Budget with Contingency, Variance with Contingency, Current paid total, Amount Due total.",
-        "documentId": {
-          "__rl": true,
-          "value": "1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40",
-          "mode": "list",
-          "cachedResultName": "ArDept Construction-Budget-Simplified",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 48757204,
-          "mode": "list",
-          "cachedResultName": "Construction Budget Totals",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1C-MSRuRmJ85ppr2YySb8Th_J1QvMG10zaq6CcBTod40/edit#gid=48757204"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheetsTool",
-      "typeVersion": 4.6,
-      "position": [
-        -480,
-        -640
-      ],
-      "id": "a5040dc6-b632-4801-a7e8-3dfe2b2f02be",
-      "name": "Ardept Projects",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "VnYUNWu00t6X0Qvr",
@@ -432,8 +374,8 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        -80,
-        -640
+        -600,
+        -160
       ],
       "id": "fb4ecbc2-f2ae-453c-aca8-94ab12b2a33f",
       "name": "Send a message in Gmail",
@@ -447,17 +389,55 @@
     },
     {
       "parameters": {
+        "toolDescription": "Call this tool to conduct internet research",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "search_depth",
+              "value": "advanced"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -1000,
+        -120
+      ],
+      "id": "092c3779-d94f-43ec-b419-951ec6d4a67e",
+      "name": "Internet Researcher Tool"
+    },
+    {
+      "parameters": {
         "model": "openai/gpt-4o-mini",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -800,
-        -180
+        -1360,
+        -200
       ],
-      "id": "6f8b6a2f-25c0-4281-bb2f-99b1beb98e11",
-      "name": "OpenRouter Chat Model",
+      "id": "8146cc10-f924-48f8-85e8-18a4e4ba8299",
+      "name": "OpenRouter OpenAI Model",
       "credentials": {
         "openRouterApi": {
           "id": "PhcWOUod8OUw29Ob",
@@ -475,14 +455,14 @@
       "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
       "typeVersion": 1,
       "position": [
-        -1100,
-        -300
+        -1600,
+        -260
       ],
-      "id": "c5b1e1c7-f811-49df-ab94-f603a824748c",
-      "name": "Transcribe audio or video",
+      "id": "1e7fceb6-8d02-4b6b-b61f-ecdfd21f68c4",
+      "name": "11labs Transcriber audio or video",
       "credentials": {
         "elevenLabsApi": {
-          "id": "QplPNJGZRBhKLNPF",
+          "id": "VyVi0c3igqAjzHaI",
           "name": "ElevenLabs account"
         }
       }
@@ -492,9 +472,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:35.814Z",
+      "createdAt": "2025-07-14T14:03:35.814Z",
+      "role": "workflow:owner",
+      "workflowId": "QPgo9lnOqGuUzZVy",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-07-14T14:39:28.000Z",
-  "versionId": "3ba80df9-0230-4c1d-900c-f08a27ad8b3b"
+  "updatedAt": "2025-07-21T07:57:51.000Z",
+  "versionId": "bb184137-089e-4364-9210-3f48258515f0"
 }
