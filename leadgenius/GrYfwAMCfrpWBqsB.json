@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Get Contruction template": {
       "main": [
@@ -188,6 +190,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:26.050Z",
+      "createdAt": "2025-07-14T14:03:26.050Z",
+      "role": "workflow:owner",
+      "workflowId": "GrYfwAMCfrpWBqsB",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
