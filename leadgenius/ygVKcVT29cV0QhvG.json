@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Telegram": {
       "main": [
@@ -99,7 +101,7 @@
   },
   "createdAt": "2025-07-14T14:03:23.628Z",
   "id": "ygVKcVT29cV0QhvG",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "telegram chatbot",
   "nodes": [
@@ -366,9 +368,18 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:23.630Z",
+      "createdAt": "2025-07-14T14:03:23.630Z",
+      "role": "workflow:owner",
+      "workflowId": "ygVKcVT29cV0QhvG",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-07-14T14:03:23.628Z",
-  "versionId": "85bc7217-f978-43dc-9f73-d2a0c52a1059"
+  "updatedAt": "2025-07-21T14:47:32.000Z",
+  "versionId": "d8048dbb-fec9-48c5-9897-ca1e2ea1db62"
 }
