@@ -1,0 +1,442 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Github Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub - get all files": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub - get each file": {
+      "main": [
+        [
+          {
+            "node": "Decode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decode": {
+      "main": [
+        [
+          {
+            "node": "n8n - create workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "GitHub - get each file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "n8n - create workflow": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Github Variables": {
+      "main": [
+        [
+          {
+            "node": "GitHub - get all files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T15:24:26.615Z",
+  "id": "fzoc5Dh16S6YciZF",
+  "isArchived": false,
+  "meta": null,
+  "name": "Restore workflow from github",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "fd6cfcac-ba40-411b-b4e4-4fa6a6c07506",
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        1600,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{$node[\"Github Variables\"].json[\"repo\"][\"owner\"]}}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{$node[\"Github Variables\"].json[\"repo\"][\"name\"]}}"
+        },
+        "filePath": "={{$node[\"Github Variables\"].json[\"repo\"][\"path\"]}}"
+      },
+      "id": "27189280-b17d-4fb1-8a23-bdbf2d0580fe",
+      "name": "GitHub - get all files",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        2100,
+        200
+      ],
+      "typeVersion": 1,
+      "webhookId": "953e8384-5811-4a02-ade6-cd19c835d13f",
+      "credentials": {
+        "githubApi": {
+          "id": "WozTNtlgIPOyyZyD",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "={{ $('Github Variables').item.json.repo.owner }}",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $('Github Variables').item.json.repo.name }}",
+          "mode": "name"
+        },
+        "filePath": "={{ $json.path }}",
+        "asBinaryProperty": false,
+        "additionalParameters": {}
+      },
+      "id": "d84bf248-d514-4b22-a791-ec3bbc9bd11f",
+      "name": "GitHub - get each file",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        1820,
+        520
+      ],
+      "typeVersion": 1,
+      "webhookId": "045fb629-19da-429b-9ccf-8735f6391947",
+      "credentials": {
+        "githubApi": {
+          "id": "WozTNtlgIPOyyZyD",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "workflowObject": "={{ $('Decode').item.json.content }}",
+        "requestOptions": {}
+      },
+      "id": "be9215a7-a464-49f2-98bd-0b6b801d6b6a",
+      "name": "n8n - create workflow",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        2200,
+        600
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "n8nApi": {
+          "id": "71WSI6IGv9KEFhdu",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "714b0cfd-9f06-4e2f-b73d-30ef39dc40e3",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.content.base64Decode() }}"
+            },
+            {
+              "id": "6f48ed58-d55a-4ee4-8cf2-373941aaa341",
+              "name": "name",
+              "type": "string",
+              "value": "={{ $json.name.replace(\".json\", \"\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3e0f4fba-49b4-4345-b364-5f737150d70e",
+      "name": "Decode",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2020,
+        520
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        480
+      ],
+      "id": "38192b61-de21-403a-8e0c-74a1c48acd9e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cf546c5-5737-4dbd-851b-17d68e0a3780",
+              "name": "repo.owner",
+              "type": "string",
+              "value": "RSForum007"
+            },
+            {
+              "id": "452efa28-2dc6-4ea3-a7a2-c35d100d0382",
+              "name": "repo.name",
+              "type": "string",
+              "value": "n8n-back-ups"
+            },
+            {
+              "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
+              "name": "repo.path",
+              "type": "string",
+              "value": "leadgenius"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "75b53490-83be-4670-831e-d344bf9709cf",
+      "name": "Github Variables",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1860,
+        200
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Setup\n1. **Github repo**: Ensure you have a Github repo of n8n workflows\n\n2. **Github API**: Get a personal \"classic\" access token for your Github account and create your n8n github credential\n\n3. **n8n API access**: Create a n8n api key under n8n access settings and use that to create a n8n credential",
+        "height": 260,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1020,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "070b737f-2c9d-42a4-920a-4502ece6392d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## What this workflow does\n\nThis workflow is designed to read JSON files from a specific path within a designated GitHub repository and then create new n8n workflows based on the content of these JSON files.\n\nHere's a breakdown of the steps:\n\n1.  **Trigger:** The workflow begins when a user manually clicks the 'Execute' button.\n2.  **Set GitHub Variables:** This step defines variables that specify the owner, repository name, and path within the repository where the JSON files are located. In this case, it's set to the 'lai' folder in the 'n8n-back-ups' repository owned by 'Robmobius'.\n3.  **GitHub - get all files:** Using the provided GitHub credentials, this step connects to the specified repository and retrieves a list of all files found in the defined path ('lai').\n4.  **Loop Over Items:** This step takes the list of files obtained in the previous step and iterates through each one individually, allowing the subsequent steps to process each file.\n5.  **GitHub - get each file:** For each file identified in the loop, this step fetches the actual content of that file from the GitHub repository.\n6.  **Decode:** This step processes the content of each retrieved file. It decodes the content, assuming it's base64 encoded, and removes the \".json\" extension from the filename.\n7.  **n8n - create workflow:** Finally, using the provided n8n API credentials, this step takes the decoded content of each JSON file and uses it to create a new n8n workflow.",
+        "height": 740,
+        "width": 360,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        620,
+        40
+      ],
+      "typeVersion": 1,
+      "id": "bf140406-0526-4974-903d-12e6f7d7e7c7",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Retrieve workflows stored in a Github repository\nBuilt for the [**Let's Automate It Community**](https://letsautomateit.biz/community/) by [Robin Tindall](https://za.linkedin.com/in/robin-tindall) & [Darryn Balanco](https://uk.linkedin.com/in/darrynbalanco)",
+        "height": 1180,
+        "width": 820,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        600,
+        -60
+      ],
+      "typeVersion": 1,
+      "id": "5d2b3775-e8ed-41d6-a140-dc3c78e9e5d9",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "### **Create Access Token for Github:**\nPersonal access tokens grant permission to read and write data via the GitHub API.\n[https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.github/](https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.github/)\n\n### **Create n8n API credential:**\n[https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.n8n/](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.n8n/)",
+        "height": 243,
+        "width": 357,
+        "color": 6
+      },
+      "id": "0854f738-22f4-4b35-88d8-c23b1ce1f868",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        620,
+        800
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Get More Templates Like This 👇\n[**https://letsautomateit.biz/community/**](https://letsautomateit.biz/community/)\n[![Video Thumbnail](https://onlinethinking.io/wp-content/uploads/2024/10/Lets-Automate-It-Community.png)](https://letsautomateit.biz/community/)",
+        "height": 280,
+        "width": 400,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1000,
+        20
+      ],
+      "typeVersion": 1,
+      "id": "3bc2b9fb-872f-4d74-9a3b-4af388a15873",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## How to customize this flow\n- **Open** GitHub Variables and update the values below\n- **repo.owner:** This is your Github username\n- **repo.name:** This is the name of your repository\n- **repo.path:** This is the folder where your workflows are saved, within the repository.\n\nIf your username was `n8n` and your repository was called `n8n-backups` and you wanted retrieve workflows from a folder called `workflows` you would set:\n\n- repo.owner - n8n-io\n- repo.name - n8n-backups\n- repo.path - workflows",
+        "height": 360,
+        "width": 360,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1020,
+        600
+      ],
+      "typeVersion": 1,
+      "id": "aefe9ebe-46a0-4787-92d4-97528f0e2f73",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## WORKFLOW WAS LAST EDITED @ 5/5/25",
+        "height": 80,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1020,
+        1000
+      ],
+      "typeVersion": 1,
+      "id": "b3c8dfa0-5c83-4545-a413-bff90f5b3d89",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## List available workflows",
+        "height": 240,
+        "width": 780,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "03fdb494-9db9-4193-8496-8c3e9c060dff",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "height": 400,
+        "width": 840,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        420
+      ],
+      "typeVersion": 1,
+      "id": "ef821a15-c101-4a36-8c59-23a1fb4ef760",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Write backs up to a new n8n",
+        "height": 100,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1560,
+        660
+      ],
+      "typeVersion": 1,
+      "id": "f37e4358-f325-40dd-b226-8dfdcbbe5059",
+      "name": "Sticky Note6"
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T15:24:26.616Z",
+      "createdAt": "2025-09-04T15:24:26.616Z",
+      "role": "workflow:owner",
+      "workflowId": "fzoc5Dh16S6YciZF",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-04T15:24:26.615Z",
+  "versionId": "f9abc402-5593-43f3-9e1d-06255e7f759a"
+}
