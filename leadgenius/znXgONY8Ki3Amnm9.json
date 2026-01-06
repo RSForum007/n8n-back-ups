@@ -1,0 +1,80 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-04T15:24:04.609Z",
+  "id": "znXgONY8Ki3Amnm9",
+  "isArchived": false,
+  "meta": null,
+  "name": "together.ai",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        -40
+      ],
+      "id": "9a25c129-83b7-4e0a-8f70-c1bd38003211",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.together.xyz/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n \"model\": \"black-forest-labs/FLUX.1-schnell-Free\",\n \"prompt\": \"a dog\",\n \"width\": 576,\n \"height\": 1024,\n \"steps\": 4,\n \"n\": 1,\n \"response_format\": \"b64_json\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -200,
+        -40
+      ],
+      "id": "9d9755d4-a66e-4e77-9f4c-89fc6a93981f",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "qMkGIkNWmPxVPaNe",
+          "name": "together.ai"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T15:24:04.612Z",
+      "createdAt": "2025-09-04T15:24:04.612Z",
+      "role": "workflow:owner",
+      "workflowId": "znXgONY8Ki3Amnm9",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-09-04T15:24:04.609Z",
+  "versionId": "796fa95a-5117-4e79-93b1-11005850ca8a"
+}
