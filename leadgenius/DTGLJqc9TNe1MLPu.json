@@ -1,5 +1,7 @@
 {
   "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
   "connections": {
     "Set Idea": {
       "main": [
@@ -2956,6 +2958,15 @@
   "settings": {
     "executionOrder": "v1"
   },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T14:03:29.115Z",
+      "createdAt": "2025-07-14T14:03:29.115Z",
+      "role": "workflow:owner",
+      "workflowId": "DTGLJqc9TNe1MLPu",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
