@@ -1,0 +1,258 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "9PM SGT Mon–Fri": {
+      "main": [
+        [
+          {
+            "node": "Yahoo Finance Prices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance Prices": {
+      "main": [
+        [
+          {
+            "node": "CoinGecko ETH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CoinGecko ETH": {
+      "main": [
+        [
+          {
+            "node": "Calculate P/L",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate P/L": {
+      "main": [
+        [
+          {
+            "node": "HA Notify Phone",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HA Sensor Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-31T14:38:00.159Z",
+  "id": "3iJu6vXRN511mPQv",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Bobby — Portfolio Daily Check 9PM SGT",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "26590bc5-1c05-4d5b-a8f8-20788a8b92cd",
+      "name": "9PM SGT Mon–Fri",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -736,
+        -32
+      ],
+      "notes": "13:00 UTC = 21:00 SGT"
+    },
+    {
+      "parameters": {
+        "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ticker",
+              "value": "AJBU.SI,C38U.SI,HYDD.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,TSLA,USDSGD=X"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "9b85c3310cmsh81adce8b9339afbp1badacjsnf0f8c97caf79"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "yahoo-finance15.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "344fafcf-4f72-4658-b410-cd915dd6121f",
+      "name": "Yahoo Finance Prices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -496,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.coingecko.com/api/v3/simple/price",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "ethereum"
+            },
+            {
+              "name": "vs_currencies",
+              "value": "sgd,usd"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "02d12fb4-6e1b-48b1-ace8-1c5c6694db1b",
+      "name": "CoinGecko ETH",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -256,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const yfData = $('Yahoo Finance Prices').first().json;\nconst quotes = yfData.quoteResponse?.result || [];\nconst ethData = $('CoinGecko ETH').first().json;\nconst ethSGD = ethData.ethereum?.sgd || 2700;\nconst fxQuote = quotes.find(q => q.symbol === 'USDSGD=X');\nconst usdsgd = fxQuote?.regularMarketPrice || 1.35;\nconst prices = {};\nquotes.forEach(q => { prices[q.symbol] = q.regularMarketPrice || 0; });\n\n// ── Bobby's positions & cost bases (update if you add more) ──\nconst positions = [\n  { symbol: 'AJBU.SI', name: 'Keppel DC REIT',  qty: 500,       cost: 1.9562,  ccy: 'SGD' },\n  { symbol: 'C38U.SI', name: 'CICT',             qty: 500,       cost: 1.9842,  ccy: 'SGD' },\n  { symbol: 'HYDD.SI', name: 'BYD HK SDR',       qty: 1600,      cost: 1.9794,  ccy: 'SGD' },\n  { symbol: 'J69U.SI', name: 'Frasers Cpt Tr',   qty: 800,       cost: 2.1579,  ccy: 'SGD' },\n  { symbol: 'JYEU.SI', name: 'Lendlease REIT',   qty: 900,       cost: 0.595,   ccy: 'SGD' },\n  { symbol: 'NVDA',    name: 'NVIDIA',            qty: 3,         cost: 173.99,  ccy: 'USD' },\n  { symbol: 'O5RU.SI', name: 'AIMS APAC REIT',   qty: 500,       cost: 1.2775,  ccy: 'SGD' },\n  { symbol: 'TSLA',    name: 'Tesla',             qty: 0.3549,    cost: 318.683, ccy: 'USD' }\n];\n\nlet totalValue = 0, totalPL = 0;\nconst results = [];\n\nfor (const p of positions) {\n  const raw      = prices[p.symbol] || 0;\n  const priceSGD = p.ccy === 'USD' ? raw * usdsgd : raw;\n  const costSGD  = p.ccy === 'USD' ? p.cost * usdsgd : p.cost;\n  const value    = p.qty * priceSGD;\n  const costTot  = p.qty * costSGD;\n  const pl       = value - costTot;\n  const plPct    = costTot > 0 ? (pl / costTot) * 100 : 0;\n  totalValue += value;\n  totalPL    += pl;\n  results.push({\n    name: p.name, symbol: p.symbol,\n    price:    Math.round(raw * 1000) / 1000,\n    priceSGD: Math.round(priceSGD * 1000) / 1000,\n    value:    Math.round(value * 100) / 100,\n    pl:       Math.round(pl * 100) / 100,\n    plPct:    Math.round(plPct * 100) / 100\n  });\n}\n\n// ── ETH ──────────────────────────────────────────────────────\nconst ethQty     = 0.38935156;\nconst ethCostSGD = 2560;\nconst ethValue   = ethQty * ethSGD;\nconst ethPL      = ethValue - (ethQty * ethCostSGD);\nconst ethPLPct   = ((ethSGD - ethCostSGD) / ethCostSGD) * 100;\ntotalValue += ethValue;\ntotalPL    += ethPL;\n\n// ── BGF World Mining (weekly NAV — hardcoded, update periodically) ──\nconst bgfUnits    = 1.1624;\nconst bgfNAV      = 100.16;\nconst bgfCostUnit = 108.40;\nconst bgfValSGD   = bgfUnits * bgfNAV * usdsgd;\nconst bgfPL       = bgfValSGD - (bgfUnits * bgfCostUnit * usdsgd);\nconst bgfPLPct    = ((bgfNAV - bgfCostUnit) / bgfCostUnit) * 100;\ntotalValue += bgfValSGD;\ntotalPL    += bgfPL;\n\n// ── Fullerton SGD Cash (stable money market ~S$1.226/unit) ───\nconst fulVal  = 95.6727 * 1.226;\nconst fulPL   = fulVal - 117.00;\ntotalValue += fulVal;\ntotalPL    += fulPL;\n\n// ── Build notification message ────────────────────────────────\nconst plEmoji = totalPL >= 0 ? '📈' : '📉';\nconst plSign  = totalPL >= 0 ? '+' : '';\nconst sgTime  = new Date().toLocaleString('en-SG', {\n  timeZone: 'Asia/Singapore',\n  day: '2-digit', month: 'short', year: 'numeric',\n  hour: '2-digit', minute: '2-digit'\n});\n\nconst lines = results.map(p => {\n  const e = p.pl >= 0 ? '🟢' : '🔴';\n  const s = p.pl >= 0 ? '+' : '';\n  return `${e} ${p.name}: S$${p.value.toFixed(0)} (${s}${p.plPct.toFixed(1)}%)`;\n});\nlines.push(`${ethPL >= 0 ? '🟢' : '🔴'} ETH: S$${ethValue.toFixed(0)} (${ethPL >= 0 ? '+' : ''}${ethPLPct.toFixed(1)}%)`);\nlines.push(`${bgfPL >= 0 ? '🟢' : '🔴'} BGF Mining: S$${bgfValSGD.toFixed(0)} (${bgfPL >= 0 ? '+' : ''}${bgfPLPct.toFixed(1)}%)`);\nlines.push(`🔵 Fullerton Cash: S$${fulVal.toFixed(0)}`);\n\n// ── Alerts ────────────────────────────────────────────────────\nconst alerts = [];\nfor (const p of results) {\n  if (p.plPct <= -10) alerts.push(`🚨 ${p.name} at ${p.plPct.toFixed(1)}%`);\n}\nif (ethPLPct <= -15) alerts.push(`🚨 ETH at ${ethPLPct.toFixed(1)}%`);\nconst byd = results.find(r => r.symbol === 'HYDD.SI');\nif (byd && (byd.value / totalValue * 100) > 25) {\n  alerts.push(`⚠️ BYD is ${(byd.value / totalValue * 100).toFixed(1)}% of portfolio — trim needed`);\n}\nconst alertText = alerts.length > 0\n  ? '\\n\\n🚨 ALERTS:\\n' + alerts.join('\\n')\n  : '\\n\\n✅ No alerts';\n\nconst message = [\n  `${plEmoji} Bobby Portfolio • ${sgTime}`,\n  `💰 Total: S$${Math.round(totalValue).toLocaleString()}`,\n  `${plEmoji} P/L: ${plSign}S$${Math.round(totalPL)}`,\n  `💱 USD/SGD: ${usdsgd.toFixed(4)}`,\n  '',\n  lines.join('\\n') + alertText\n].join('\\n');\n\nreturn [{ json: {\n  message,\n  title: `${plEmoji} S$${Math.round(totalValue).toLocaleString()} (${plSign}S$${Math.round(totalPL)})`,\n  total_value:  Math.round(totalValue * 100) / 100,\n  total_pl:     Math.round(totalPL * 100) / 100,\n  usdsgd:       Math.round(usdsgd * 10000) / 10000,\n  eth_sgd:      ethSGD,\n  alert_count:  alerts.length,\n  has_alerts:   alerts.length > 0,\n  positions:    results,\n  timestamp:    new Date().toISOString()\n}}];"
+      },
+      "id": "d8ac6792-cab9-4f2b-97b9-ea3b30285dce",
+      "name": "Calculate P/L",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ha921tampines.bobbydionido.com/api/services/notify/mobile_app_bobbys_iphone15",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkNDg4NmM2ZTk2NzQ0MGZhODhmYWRlNjc1MTc4MWJiZSIsImlhdCI6MTc3NTEzMjU3NiwiZXhwIjoyMDkwNDkyNTc2fQ.2g4mfJrxwBdLIyiatA04-FAE84pP-Ro0ZNHDEedWYUo"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ title: $json.title, message: $json.message, data: { push: { presentation_options: [\"alert\", \"sound\"] } } }) }}",
+        "options": {}
+      },
+      "id": "d68e68b3-0cce-4556-bc78-04b23acedf34",
+      "name": "HA Notify Phone",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        -256
+      ],
+      "notes": "Replace YOUR_NOTIFY_SERVICE with e.g. mobile_app_bobbys_phone and YOUR_HA_LONG_LIVED_TOKEN"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ha921tampines.bobbydionido.com/api/states/sensor.portfolio_total_value",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkNDg4NmM2ZTk2NzQ0MGZhODhmYWRlNjc1MTc4MWJiZSIsImlhdCI6MTc3NTEzMjU3NiwiZXhwIjoyMDkwNDkyNTc2fQ.2g4mfJrxwBdLIyiatA04-FAE84pP-Ro0ZNHDEedWYUo"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={ \"state\": \"{{ $json.total_value }}\", \"attributes\": { \"unit_of_measurement\": \"SGD\", \"friendly_name\": \"Portfolio Total Value\", \"total_pl\": {{ $json.total_pl }}, \"usdsgd\": {{ $json.usdsgd }}, \"eth_sgd\": {{ $json.eth_sgd }}, \"alert_count\": {{ $json.alert_count }}, \"last_updated\": \"{{ $json.timestamp }}\" } }",
+        "options": {}
+      },
+      "id": "e78d1f96-9900-49fb-becd-91df789ae118",
+      "name": "HA Sensor Update",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        0
+      ],
+      "notes": "Creates sensor.portfolio_total_value in HA — visible on your dashboards"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-31T14:38:00.167Z",
+      "createdAt": "2026-03-31T14:38:00.167Z",
+      "role": "workflow:owner",
+      "workflowId": "3iJu6vXRN511mPQv",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-03T05:35:30.062Z",
+  "versionId": "0cf7923e-392b-4213-8b00-158255bbf739"
+}
