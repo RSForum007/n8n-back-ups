@@ -66,6 +66,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Google Calendar Reminder System",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
