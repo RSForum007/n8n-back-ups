@@ -3089,6 +3089,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Expense Tracker",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
