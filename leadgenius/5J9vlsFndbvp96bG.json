@@ -119,6 +119,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Personal Assistant AI",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
