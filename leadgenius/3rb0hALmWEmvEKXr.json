@@ -248,6 +248,7 @@
   "isArchived": false,
   "meta": null,
   "name": "chatterbox tts",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
