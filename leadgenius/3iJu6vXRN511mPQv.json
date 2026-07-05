@@ -60,6 +60,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby — Portfolio Daily Check 9PM SGT",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
