@@ -304,6 +304,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "V4-Bobby's Personal Assistant - WORKING copy",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
