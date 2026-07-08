@@ -131,6 +131,7 @@
   "isArchived": false,
   "meta": null,
   "name": "ARDEPT Automation",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
