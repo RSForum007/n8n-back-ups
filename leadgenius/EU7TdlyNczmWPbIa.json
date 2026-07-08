@@ -242,6 +242,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Extract Invoice Data from Google Drive to Sheets with Mistral OCR and Gemini",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
