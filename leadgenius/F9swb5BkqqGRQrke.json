@@ -188,6 +188,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -258,6 +259,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby's Email Agent V2",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
