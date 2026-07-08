@@ -87,6 +87,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Restore workflow from github",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
