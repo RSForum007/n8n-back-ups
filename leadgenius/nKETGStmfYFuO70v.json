@@ -131,16 +131,18 @@
   "isArchived": false,
   "meta": null,
   "name": "ARDEPT Automation",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
         "resource": "file",
-        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}",
+        "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1460,
+        -1456,
         -320
       ],
       "id": "09d98f1e-9dc2-42a9-bc28-79de08b78be5",
@@ -162,8 +164,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -1320,
-        -300
+        -1280,
+        -304
       ],
       "id": "1c5597b5-9a5f-43fb-ae0d-33e739d3c500",
       "name": "OpenAI",
@@ -191,8 +193,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1460,
-        -540
+        -1456,
+        -544
       ],
       "id": "3b9b8aeb-86fb-42ea-ae0d-5a24e4789fe6",
       "name": "Edit Fields"
@@ -208,8 +210,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -1000,
-        -620
+        -1008,
+        -624
       ],
       "id": "92df9942-44f6-446e-819c-10ff9f7ef7b1",
       "name": "AI Agent"
@@ -221,8 +223,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -1080,
-        -300
+        -1088,
+        -304
       ],
       "id": "6b4b3f26-e039-48ef-97e5-7b2b5a4d0166",
       "name": "DeepSeek Chat Model",
@@ -244,8 +246,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -360,
-        -540
+        -368,
+        -544
       ],
       "id": "d9572bf3-6d89-4209-80b8-035e0bda051f",
       "name": "Telegram1",
@@ -318,8 +320,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -1620,
-        -440
+        -1616,
+        -448
       ],
       "id": "d706e0b8-f350-401a-ad8b-981325dbb15e",
       "name": "Switch"
@@ -335,7 +337,7 @@
       "typeVersion": 1.2,
       "position": [
         -1760,
-        -440
+        -448
       ],
       "id": "5f7c630e-d592-4d12-bfb3-ecac58f2d820",
       "name": "Telegram Trigger",
@@ -370,8 +372,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -540,
-        -340
+        -544,
+        -336
       ],
       "id": "9f532832-c59b-4bca-b318-7d50a414480f",
       "name": "SearchCRM",
@@ -394,7 +396,7 @@
       "type": "n8n-nodes-base.gmailTool",
       "typeVersion": 2.1,
       "position": [
-        -340,
+        -336,
         -320
       ],
       "id": "032b7087-3a86-4642-8ce7-7f2f6fb58416",
@@ -415,14 +417,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -780,
-        -40
+        -784,
+        -48
       ],
       "id": "077d45b7-01f1-4951-8e34-e048da128ae1",
       "name": "OpenRouter Chat Model",
       "credentials": {
         "openRouterApi": {
-          "id": "PhcWOUod8OUw29Ob",
+          "id": "xWau8OzoqDR7FaG3",
           "name": "OpenRouter account"
         }
       }
@@ -448,8 +450,8 @@
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
       "position": [
-        -660,
-        -340
+        -736,
+        -320
       ],
       "id": "b7d6545a-9d98-47e7-ae44-4d89ba89f6c8",
       "name": "Ardept Automation",
@@ -461,9 +463,10 @@
       }
     }
   ],
-  "pinData": null,
+  "pinData": {},
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -477,6 +480,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-09-04T15:24:34.679Z",
-  "versionId": "8aac4e36-2836-41e1-abd2-a3011edcfe7c"
+  "updatedAt": "2026-07-05T17:44:11.195Z",
+  "versionId": "78821569-c4c1-4404-9dac-c33a63c9242a"
 }
