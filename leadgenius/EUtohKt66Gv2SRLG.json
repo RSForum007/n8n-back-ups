@@ -1047,6 +1047,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -1304,6 +1305,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Extract Invoice Data from Google Drive to Sheets with Mistral OCR - deepseek modified",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
@@ -2117,7 +2119,7 @@
   ],
   "staticData": {
     "node:On new file in Google Drive": {
-      "lastTimeChecked": "2025-08-02T13:04:47Z"
+      "lastTimeChecked": "2026-06-27T02:39:51Z"
     }
   },
   "tags": [],
