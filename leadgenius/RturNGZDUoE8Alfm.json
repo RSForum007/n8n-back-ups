@@ -746,6 +746,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Brain Rotter v2",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
