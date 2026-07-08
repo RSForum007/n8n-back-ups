@@ -1,0 +1,1104 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Daily 9AM SGT": {
+      "main": [
+        [
+          {
+            "node": "API Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Config": {
+      "main": [
+        [
+          {
+            "node": "Get Next Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Next Topic": {
+      "main": [
+        [
+          {
+            "node": "Prepare Claude Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Claude Request": {
+      "main": [
+        [
+          {
+            "node": "Call Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Claude API": {
+      "main": [
+        [
+          {
+            "node": "Parse Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Script": {
+      "main": [
+        [
+          {
+            "node": "Fetch Scene Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Scene Videos": {
+      "main": [
+        [
+          {
+            "node": "Build Creatomate Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Creatomate Payload": {
+      "main": [
+        [
+          {
+            "node": "Submit Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Render": {
+      "main": [
+        [
+          {
+            "node": "Extract Render Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Render Data": {
+      "main": [
+        [
+          {
+            "node": "Mark Rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Rendering": {
+      "main": [
+        [
+          {
+            "node": "Wait 12 Minutes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 12 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Poll Render Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Render Status": {
+      "main": [
+        [
+          {
+            "node": "Merge Poll Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Poll Data": {
+      "main": [
+        [
+          {
+            "node": "Render Complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render Complete?": {
+      "main": [
+        [
+          {
+            "node": "Download Video Binary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 5 More Minutes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 More Minutes": {
+      "main": [
+        [
+          {
+            "node": "Poll Render Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video Binary": {
+      "main": [
+        [
+          {
+            "node": "Attach Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Metadata": {
+      "main": [
+        [
+          {
+            "node": "Upload to YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to YouTube": {
+      "main": [
+        [
+          {
+            "node": "Build Shorts Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Shorts Payload": {
+      "main": [
+        [
+          {
+            "node": "Submit Shorts Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Shorts Render": {
+      "main": [
+        [
+          {
+            "node": "Extract Shorts Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Shorts Render": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 Minutes Shorts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 Minutes Shorts": {
+      "main": [
+        [
+          {
+            "node": "Poll Shorts Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Shorts Status": {
+      "main": [
+        [
+          {
+            "node": "Merge Shorts Poll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Shorts Poll": {
+      "main": [
+        [
+          {
+            "node": "Shorts Complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shorts Complete?": {
+      "main": [
+        [
+          {
+            "node": "Download Shorts Binary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Shorts Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Shorts Retry": {
+      "main": [
+        [
+          {
+            "node": "Poll Shorts Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Shorts Binary": {
+      "main": [
+        [
+          {
+            "node": "Attach Shorts Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Shorts Metadata": {
+      "main": [
+        [
+          {
+            "node": "Upload Shorts to YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Shorts to YouTube": {
+      "main": [
+        [
+          {
+            "node": "Mark Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Published": {
+      "main": [
+        [
+          {
+            "node": "Notify Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-23T11:01:51.817Z",
+  "id": "PLs42f9Z8ooFLQKN",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "YT Auto - Betrayal & Revenge Stories",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 1 * * *"
+            }
+          ]
+        }
+      },
+      "id": "579ddb99-6d67-4ac8-8ad2-55d86ca3ecfc",
+      "name": "Daily 9AM SGT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        14816,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfg-001",
+              "name": "ANTHROPIC_API_KEY",
+              "value": "[REDACTED_ANTHROPIC_KEY]",
+              "type": "string"
+            },
+            {
+              "id": "cfg-002",
+              "name": "PEXELS_API_KEY",
+              "value": "[REDACTED_PEXELS_KEY]",
+              "type": "string"
+            },
+            {
+              "id": "cfg-003",
+              "name": "CREATOMATE_API_KEY",
+              "value": "[REDACTED_CREATOMATE_KEY]",
+              "type": "string"
+            },
+            {
+              "id": "cfg-004",
+              "name": "ELEVENLABS_VOICE_ID",
+              "value": "TxGEqnHWrfWFTfGW9XjX",
+              "type": "string"
+            },
+            {
+              "id": "cfg-005",
+              "name": "TELEGRAM_CHAT_ID",
+              "value": "5811640282",
+              "type": "string"
+            },
+            {
+              "id": "cfg-006",
+              "name": "GOOGLE_SHEET_ID",
+              "value": "1kuluOzCs4X9p1wnXfrqQMb-6dGM5pHnCOC0IWmu6lXM",
+              "type": "string"
+            },
+            {
+              "id": "cfg-007",
+              "name": "CHANNEL_NAME",
+              "value": "Karma Dropped",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6d98f28f-548f-42bb-afd1-a69c8b53b713",
+      "name": "API Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        15040,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kuluOzCs4X9p1wnXfrqQMb-6dGM5pHnCOC0IWmu6lXM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "pending"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnFirstMatch"
+        }
+      },
+      "id": "e29abe7b-3b7d-46bb-886a-3b0fa59f4bba",
+      "name": "Get Next Topic",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        15264,
+        -2720
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// NODE: Build Creatomate Payload\n// Assembles the full Creatomate render source JSON.\n// ElevenLabs TTS is handled natively by Creatomate —\n// just configure your ElevenLabs API key in Creatomate Settings.\n// ============================================================\n\nconst data = $input.first().json;\n// Use ElevenLabs voice NAME (more reliable than ID in Creatomate)\n// Change 'Josh' to your preferred ElevenLabs voice name\nconst VOICE_ID = ($input.first().json.voice_id || 'Josh').trim();\n\n// Background music (royalty-free — replace with your preferred track)\n// Recommended: find a dramatic/suspenseful track from Pixabay or Incompetech\n// const BG_MUSIC_URL = 'YOUR_MUSIC_URL_HERE';\n\nconst elements = [];\nlet currentTime = 0;\n\n// Calculate total story duration\nconst storyDuration = data.scenes.reduce((sum, s) => sum + (s.duration_seconds || 20), 0);\nconst totalDuration = storyDuration + 10; // +10 for outro\n\n// ── BACKGROUND MUSIC (entire video) ──────────────────────────\n// bg-music element removed - add your own URL\n\n// ── SCENES ───────────────────────────────────────────────────\nfor (let i = 0; i < data.scenes.length; i++) {\n  const scene = data.scenes[i];\n  const dur = scene.duration_seconds || 20;\n  const t = `${currentTime} s`;\n  const sceneId = `s${i + 1}`;\n\n  // Background video clip\n  elements.push({\n    id: `${sceneId}-video`,\n    type: 'video',\n    source: scene.video_url,\n    time: t,\n    duration: `${dur} s`,\n    fit: 'cover',\n    volume: '0%'\n  });\n\n  // Subtle dark overlay for caption readability\n  elements.push({\n    id: `${sceneId}-overlay`,\n    type: 'shape',\n    shape: 'rect',\n    fill_color: 'rgba(0,0,0,0.40)',\n    time: t,\n    duration: `${dur} s`,\n    width: '100%',\n    height: '100%'\n  });\n\n  // ElevenLabs voiceover (Creatomate calls ElevenLabs directly)\n  // Requires: ElevenLabs API key configured in Creatomate Settings > Integrations\n  elements.push({\n    id: `${sceneId}-voice`,\n    type: 'audio',\n    provider: 'elevenlabs',\n    text: scene.narration,\n    voice: 'Josh',\n    time: t\n  });\n\n  // Caption text (styled like modern storytelling channels)\n  elements.push({\n    id: `${sceneId}-caption`,\n    type: 'text',\n    text: (() => { const s = scene.narration.match(/[^.!?]+[.!?]+/); return s ? s[0].trim() : scene.narration.substring(0, 120); })(),\n    time: t,\n    duration: `${dur} s`,\n    x_alignment: '50%',\n    y_alignment: '85%',\n    width: '88%',\n    font_family: 'Montserrat',\n    font_weight: '700',\n    font_size: '38',\n    max_font_size: '38',\n    min_font_size: '20',\n    fit: 'contain',\n    fill_color: '#FFFFFF',\n    stroke_color: '#000000',\n    stroke_width: '3',\n    line_height: '1.4',\n    background_color: 'rgba(0,0,0,0.55)',\n    background_x_padding: '2%',\n    background_y_padding: '1.5%',\n    background_border_radius: '6',\n    text_clip_start: '0.3 s',\n    text_clip_end: `${dur - 0.3} s`\n  });\n\n  // Scene number pill (top-left, subtle)\n  elements.push({\n    id: `${sceneId}-num`,\n    type: 'text',\n    text: `${i + 1} / ${data.scenes.length}`,\n    time: t,\n    duration: `${dur} s`,\n    x: '3%',\n    y: '4%',\n    font_family: 'Montserrat',\n    font_weight: '500',\n    font_size: '18',\n    fill_color: 'rgba(255,255,255,0.6)'\n  });\n\n  currentTime += dur;\n}\n\n// ── OUTRO CARD ───────────────────────────────────────────────\nelements.push({\n  id: 'outro-bg',\n  type: 'shape',\n  shape: 'rect',\n  fill_color: '#0d0d1a',\n  time: `${currentTime} s`,\n  duration: '10 s',\n  width: '100%',\n  height: '100%'\n});\n\nelements.push({\n  id: 'outro-moral',\n  type: 'text',\n  text: data.moral_question,\n  time: `${currentTime} s`,\n  duration: '10 s',\n  x_alignment: '50%',\n  y_alignment: '42%',\n  width: '80%',\n  font_family: 'Montserrat',\n  font_weight: '700',\n  font_size: '44',\n  fill_color: '#FFFFFF',\n  line_height: '1.3'\n});\n\nelements.push({\n  id: 'outro-cta',\n  type: 'text',\n  text: '💬 Drop your thoughts in the comments!',\n  time: `${currentTime + 2} s`,\n  duration: '8 s',\n  x_alignment: '50%',\n  y_alignment: '62%',\n  width: '80%',\n  font_family: 'Montserrat',\n  font_weight: '600',\n  font_size: '28',\n  fill_color: '#FFD700'\n});\n\nelements.push({\n  id: 'outro-subscribe',\n  type: 'text',\n  text: '👆 Subscribe for more stories',\n  time: `${currentTime + 3} s`,\n  duration: '7 s',\n  x_alignment: '50%',\n  y_alignment: '72%',\n  width: '80%',\n  font_family: 'Montserrat',\n  font_weight: '500',\n  font_size: '22',\n  fill_color: 'rgba(255,255,255,0.75)'\n});\n\nconst creatomatePayload = {\n  output_format: 'mp4',\n  width: 1920,\n  height: 1080,\n  fps: 30,\n  elements: elements\n};\n\nconst renderRequestStr = JSON.stringify([{ source: creatomatePayload }]);\nconst renderRequest = [{ source: creatomatePayload }];\n\nreturn [{\n  json: {\n    topic: data.topic,\n    title: data.title,\n    description: data.description,\n    tags: data.tags,\n    tags_string: Array.isArray(data.tags) ? data.tags.join(',') : data.tags,\n    thumbnail_text: data.thumbnail_text,\n    moral_question: data.moral_question,\n    total_duration_seconds: totalDuration,\n    creatomate_payload: creatomatePayload,\n    render_request_str: renderRequestStr,\n    render_request: renderRequest\n  }\n}];"
+      },
+      "id": "b2634311-8ae7-4e1b-883b-c8df934b2327",
+      "name": "Build Creatomate Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        15920,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('API Config').first().json.GOOGLE_SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Topic": "={{ $json.topic }}",
+            "Status": "rendering",
+            "row_number": 0
+          },
+          "matchingColumns": [
+            "Topic"
+          ],
+          "schema": [
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Video_URL",
+              "displayName": "Video_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Shorts_URL",
+              "displayName": "Shorts_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Created_Date",
+              "displayName": "Created_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "e2c97338-e624-494b-b417-761681c295b3",
+      "name": "Mark Rendering",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        16368,
+        -2720
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 12,
+        "unit": "minutes"
+      },
+      "id": "fb4fe0bb-c0b3-4a54-b9de-b8b45c02eaaa",
+      "name": "Wait 12 Minutes",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        16576,
+        -2720
+      ],
+      "webhookId": "wait-webhook-001"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-render-done",
+              "leftValue": "={{ $json.render_status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0073641a-1d85-497e-8f07-33d4b1bbdcfc",
+      "name": "Render Complete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        17024,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "id": "9bed75ce-c9a5-4a78-a837-f2d643e36884",
+      "name": "Wait 5 More Minutes",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        17024,
+        -2496
+      ],
+      "webhookId": "wait-webhook-002"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.render_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "71d5e5c3-e990-4a22-b3c3-eea94f4a7434",
+      "name": "Download Video Binary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        17248,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// NODE: Attach Metadata\n// Bridges the binary download with the video metadata.\n// Passes both JSON metadata and binary video to YouTube node.\n// ============================================================\n\nconst binary = $input.first().binary;\nconst meta = $('Poll Render Status').first().json;\n\nif (!binary || !binary.data) {\n  throw new Error('No binary video data found from download step.');\n}\n\nreturn [{\n  json: {\n    title: meta.title,\n    description: meta.description,\n    tags_string: meta.tags_string || 'betrayal,revenge,story',\n    topic: meta.topic,\n    moral_question: meta.moral_question\n  },\n  binary: {\n    data: binary.data\n  }\n}];"
+      },
+      "id": "86f58820-6be6-4d99-b085-be36df0e9fdf",
+      "name": "Attach Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        17456,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $json.title }}",
+        "categoryId": "24",
+        "options": {
+          "privacyStatus": "unlisted",
+          "tags": "={{ $json.tags_string }}"
+        }
+      },
+      "id": "846f9e51-c65a-4cc2-bea5-74ab1e38d9d9",
+      "name": "Upload to YouTube",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        17680,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// NODE: Build Shorts Payload\n// Creates a vertical 9:16 Creatomate render using Scene 1 only.\n// The hook ends with a CTA directing viewers to the full video.\n// ============================================================\n\nconst longFormVideoId = $('Upload to YouTube').first().json.id;\nconst data = $('Fetch Scene Videos').first().json;\nconst VOICE_ID = $('Fetch Scene Videos').first().json.voice_id;\n\nconst hookScene = data.scenes[0];\nconst hookDuration = Math.min(hookScene.duration_seconds || 20, 50);\nconst ctaDuration = 8;\nconst totalDuration = hookDuration + ctaDuration;\n\nconst elements = [];\n\n// ── HOOK SCENE (vertical crop of scene 1) ────────────────────\nelements.push({\n  id: 'hook-video',\n  type: 'video',\n  source: hookScene.video_url,\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  fit: 'cover',\n  volume: '0%'\n});\n\nelements.push({\n  id: 'hook-overlay',\n  type: 'shape',\n  shape: 'rect',\n  fill_color: 'rgba(0,0,0,0.42)',\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  width: '100%',\n  height: '100%'\n});\n\n// ElevenLabs voice (Creatomate handles TTS natively)\nelements.push({\n  id: 'hook-voice',\n  type: 'audio',\n  provider: 'elevenlabs',\n  text: hookScene.narration,\n  voice: VOICE_ID,\n  time: '0 s'\n});\n\n// Caption\nelements.push({\n  id: 'hook-caption',\n  type: 'text',\n  text: hookScene.narration,\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  x_alignment: '50%',\n  y_alignment: '74%',\n  width: '88%',\n  font_family: 'Montserrat',\n  font_weight: '700',\n  font_size: '34',\n  fill_color: '#FFFFFF',\n  stroke_color: '#000000',\n  stroke_width: '2.5',\n  line_height: '1.4'\n});\n\n// 'STORY CONTINUES' badge fades in at 70% through narration\nelements.push({\n  id: 'teaser-badge',\n  type: 'text',\n  text: '🔴 STORY CONTINUES...',\n  time: `${(hookDuration * 0.65).toFixed(1)} s`,\n  duration: `${(hookDuration * 0.35).toFixed(1)} s`,\n  x_alignment: '50%',\n  y_alignment: '18%',\n  width: '90%',\n  font_family: 'Montserrat',\n  font_weight: '800',\n  font_size: '30',\n  fill_color: '#FF3B3B',\n  text_clip_start: '0.4 s'\n});\n\n// ── CTA CARD ─────────────────────────────────────────────────\nelements.push({\n  id: 'cta-bg',\n  type: 'shape',\n  shape: 'rect',\n  fill_color: '#0d0d1a',\n  time: `${hookDuration} s`,\n  duration: `${ctaDuration} s`,\n  width: '100%',\n  height: '100%'\n});\n\nelements.push({\n  id: 'cta-main',\n  type: 'text',\n  text: 'Watch what happens next 👆',\n  time: `${hookDuration} s`,\n  duration: `${ctaDuration} s`,\n  x_alignment: '50%',\n  y_alignment: '38%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '800',\n  font_size: '52',\n  fill_color: '#FFFFFF',\n  line_height: '1.2'\n});\n\nelements.push({\n  id: 'cta-sub',\n  type: 'text',\n  text: 'Full story on channel ⬆️',\n  time: `${hookDuration + 1} s`,\n  duration: `${ctaDuration - 1} s`,\n  x_alignment: '50%',\n  y_alignment: '56%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '600',\n  font_size: '34',\n  fill_color: '#FFD700'\n});\n\nelements.push({\n  id: 'cta-subscribe',\n  type: 'text',\n  text: '🔔 Subscribe for more stories',\n  time: `${hookDuration + 2} s`,\n  duration: `${ctaDuration - 2} s`,\n  x_alignment: '50%',\n  y_alignment: '68%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '500',\n  font_size: '26',\n  fill_color: 'rgba(255,255,255,0.75)'\n});\n\n// ── SHORTS METADATA ──────────────────────────────────────────\nconst fullTitle = $('Fetch Scene Videos').first().json.title || '';\n// Keep under 60 chars, must contain #Shorts for YouTube to classify it\nconst rawShortTitle = fullTitle.length > 48\n  ? fullTitle.substring(0, 45) + '...'\n  : fullTitle;\nconst shortsTitle = `${rawShortTitle} #Shorts`;\n\nconst shortsDesc = [\n  hookScene.narration.substring(0, 120) + '...',\n  '',\n  `👉 Full story: https://youtu.be/${longFormVideoId}`,\n  '',\n  '#Shorts #betrayal #revenge #story #aita #drama #ofw'\n].join('\\n');\n\nconst shortsPayload = {\n  output_format: 'mp4',\n  width: 1080,\n  height: 1920,\n  fps: 30,\n  elements: elements\n};\n\nconst shortsRenderRequestStr = JSON.stringify([{ source: shortsPayload }]);\n\nreturn [{\n  json: {\n    shorts_payload: shortsPayload,\n    shorts_title: shortsTitle,\n    shorts_description: shortsDesc,\n    shorts_tags: 'shorts,betrayal,revenge,aita,drama,story time,youtube shorts,ofw',\n    long_form_video_id: longFormVideoId,\n    topic: data.topic,\n    full_title: fullTitle,\n    shorts_render_request_str: shortsRenderRequestStr\n  }\n}];"
+      },
+      "id": "2ad5d1f7-a798-4445-987f-0c32b777725b",
+      "name": "Build Shorts Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        17904,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "id": "1fe52e5b-cb2c-4f34-93f5-9a2dca308954",
+      "name": "Wait 5 Minutes Shorts",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        18336,
+        -2720
+      ],
+      "webhookId": "wait-webhook-003"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-shorts-done",
+              "leftValue": "={{ $json.shorts_render_status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5750ec24-df49-4595-a6a0-b329f0f07d8f",
+      "name": "Shorts Complete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        18784,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "minutes"
+      },
+      "id": "9f4395c6-8d0a-4756-a792-519a990a6d84",
+      "name": "Wait Shorts Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        18784,
+        -2496
+      ],
+      "webhookId": "wait-webhook-004"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.shorts_render_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "90f80acf-1157-4c55-9c21-0ba817cafee8",
+      "name": "Download Shorts Binary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        19008,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// NODE: Attach Shorts Metadata\n// Bridges the Shorts binary download with its metadata.\n// ============================================================\n\nconst binary = $input.first().binary;\nconst meta = $('Poll Shorts Status').first().json;\n\nif (!binary || !binary.data) {\n  throw new Error('No binary data found for Shorts video.');\n}\n\nreturn [{\n  json: {\n    shorts_title: meta.shorts_title,\n    shorts_description: meta.shorts_description,\n    shorts_tags: meta.shorts_tags || 'shorts,betrayal,revenge,story',\n    long_form_video_id: meta.long_form_video_id,\n    topic: meta.topic,\n    full_title: meta.full_title\n  },\n  binary: { data: binary.data }\n}];"
+      },
+      "id": "e5659e40-2135-4642-8aa6-847de0ab4eaa",
+      "name": "Attach Shorts Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        19216,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{ $json.shorts_title }}",
+        "categoryId": "24",
+        "options": {
+          "privacyStatus": "unlisted",
+          "tags": "={{ $json.shorts_tags }}"
+        }
+      },
+      "id": "48abfce4-4e90-45c7-aa0c-ea19786c1784",
+      "name": "Upload Shorts to YouTube",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        19440,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('API Config').first().json.GOOGLE_SHEET_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Topic": "={{ $('Poll Shorts Status').first().json.topic }}",
+            "Status": "published",
+            "Video_URL": "=https://youtu.be/{{ $('Upload to YouTube').first().json.id }}",
+            "Shorts_URL": "=https://youtube.com/shorts/{{ $('Upload Shorts to YouTube').first().json.id }}"
+          },
+          "matchingColumns": [
+            "Topic"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "b46c1b52-db47-47e9-be6e-2c4b289afcba",
+      "name": "Mark Published",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        19664,
+        -2720
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('API Config').first().json.TELEGRAM_CHAT_ID }}",
+        "text": "=🎬 *New video pipeline complete!*\n\n📌 *Topic:* {{ $('Poll Shorts Status').first().json.topic }}\n🎯 *Title:* {{ $('Poll Shorts Status').first().json.full_title }}\n\n▶️ *Long-form (unlisted):*\nhttps://youtu.be/{{ $('Upload to YouTube').first().json.id }}\n\n#️⃣ *Short (unlisted):*\nhttps://youtube.com/shorts/{{ $('Upload Shorts to YouTube').first().json.id }}\n\n✅ Review both → set to *Public* when ready\n_(Shorts will auto-funnel viewers to long-form)_",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "563f6a7a-2c94-4366-a2ba-3458b0694565",
+      "name": "Notify Success",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        19888,
+        -2720
+      ],
+      "webhookId": "70021b90-4531-43d4-85e4-da30030cf3b5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const topic = $input.first().json.Topic;\nif (!topic) throw new Error('No topic found.');\n\nreturn [{\n  json: {\n    topic,\n    request_body: {\n      model: 'claude-sonnet-4-6',\n      max_tokens: 2500,\n      system: \"You are a professional YouTube scriptwriter for a faceless channel called Betrayal & Revenge Stories. Your audience is both American and Filipino. You write emotionally gripping suspenseful anonymous first-person stories. RETURN ONLY a valid JSON object no markdown no backticks no explanation. Use this exact structure: { \\\"title\\\": \\\"YouTube title max 60 chars emotional power words\\\", \\\"description\\\": \\\"150-200 words hook first sentence story summary moral question end with #betrayal #revenge #story #aita #drama #ofw\\\", \\\"tags\\\": [\\\"betrayal\\\",\\\"revenge story\\\",\\\"aita\\\",\\\"reddit story\\\",\\\"relationship drama\\\",\\\"story time\\\",\\\"ofw story\\\"], \\\"thumbnail_text\\\": \\\"5-7 dramatic words for thumbnail\\\", \\\"scenes\\\": [ { \\\"scene_number\\\": 1, \\\"narration\\\": \\\"2-4 sentences first-person conversational builds suspense never use character names\\\", \\\"visual_keyword\\\": \\\"3-word Pexels search keyword specific emotions and settings\\\", \\\"duration_seconds\\\": 20 } ], \\\"moral_question\\\": \\\"One punchy question for comment engagement\\\" } STORY RULES: Exactly 9 scenes. Scene 1 hook start with most shocking moment in medias res. Scenes 2-4 background who betrayed who and why. Scenes 5-7 confrontation and escalation. Scenes 8-9 resolution and aftermath end with moral ambiguity. Stories must feel authentic to both US and Filipino culture.\",\n      messages: [{ role: 'user', content: 'Write a betrayal and revenge YouTube video script about: ' + topic }]\n    }\n  }\n}];"
+      },
+      "id": "7fd4608d-1072-4066-8905-fb352a7219a1",
+      "name": "Prepare Claude Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        15488,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('API Config').first().json.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.request_body }}",
+        "options": {}
+      },
+      "id": "e8d071b0-6cda-432e-afa6-cb33e7864078",
+      "name": "Call Claude API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        15696,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst PEXELS_API_KEY = ($('API Config').first().json.PEXELS_API_KEY || '').trim();\nconst VOICE_ID = ($('API Config').first().json.ELEVENLABS_VOICE_ID || '').trim();\n\n// Creatomate's own demo assets — 100% confirmed accessible from Creatomate's servers\n// Google CDN videos (commondatastorage) are inconsistent — removed\n// Upgrade path: subscribe to Storyblocks or host your own videos on S3/Cloudflare R2\nconst GUARANTEED_FALLBACKS = [\n  'https://creatomate-static.s3.amazonaws.com/demo/video1.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video2.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video3.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video4.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video5.mp4'\n];\n\n// Search Pexels and try to find a Vimeo-hosted URL (accessible from any server)\n// Vimeo-external URLs from Pexels look like: https://player.vimeo.com/external/...\n// These bypass Pexels hotlink protection\nasync function searchPexelsVimeoUrl(keyword) {\n  return new Promise((resolve) => {\n    const req = https.request({\n      hostname: 'api.pexels.com',\n      path: '/videos/search?query=' + encodeURIComponent(keyword) + '&per_page=15&orientation=landscape&size=medium',\n      headers: { 'Authorization': PEXELS_API_KEY }\n    }, (res) => {\n      let body = '';\n      res.on('data', c => body += c);\n      res.on('end', () => {\n        try {\n          const result = JSON.parse(body);\n          for (const video of (result.videos || [])) {\n            for (const file of (video.video_files || [])) {\n              // Vimeo-external URLs work with Creatomate\n              if (file.link && file.link.includes('player.vimeo.com')) {\n                if (file.width && file.width <= 1280) {\n                  resolve(file.link);\n                  return;\n                }\n              }\n            }\n          }\n          // Second pass: any Vimeo URL regardless of quality\n          for (const video of (result.videos || [])) {\n            for (const file of (video.video_files || [])) {\n              if (file.link && file.link.includes('player.vimeo.com')) {\n                resolve(file.link);\n                return;\n              }\n            }\n          }\n          resolve(null);\n        } catch(e) { resolve(null); }\n      });\n    });\n    req.on('error', () => resolve(null));\n    req.end();\n  });\n}\n\nconst scenesWithVideos = [];\n\nfor (let i = 0; i < data.scenes.length; i++) {\n  const scene = data.scenes[i];\n  let videoUrl = GUARANTEED_FALLBACKS[i % GUARANTEED_FALLBACKS.length];\n\n  if (PEXELS_API_KEY) {\n    try {\n      const vimeoUrl = await searchPexelsVimeoUrl(scene.visual_keyword);\n      if (vimeoUrl) {\n        videoUrl = vimeoUrl;\n      }\n    } catch(e) {}\n  }\n\n  scenesWithVideos.push({ ...scene, video_url: videoUrl });\n\n  // Rate limit protection (200 req/hour on free Pexels)\n  if (i < data.scenes.length - 1) {\n    await new Promise(r => setTimeout(r, 400));\n  }\n}\n\nreturn [{ json: { ...data, scenes: scenesWithVideos, voice_id: VOICE_ID } }];"
+      },
+      "id": "473b605f-4fe3-4098-b88e-b26c2c4079b3",
+      "name": "Fetch Scene Videos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16144,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\n\nif (!data.creatomate_payload) {\n  throw new Error('creatomate_payload missing. Run Execute previous nodes first.');\n}\n\n// ✅ FIXED: Send a plain OBJECT { source: {...} }\n// NOT an array [{ source: {...} }]\nconst requestBody = JSON.stringify({ source: data.creatomate_payload });\n\nconst bodyBuffer = Buffer.from(requestBody, 'utf8');\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders',\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Bearer ' + apiKey,\n      'Content-Length': bodyBuffer.length\n    }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.write(bodyBuffer);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate ' + result.statusCode + ': ' + result.body);\n}\n\nconst renderData = JSON.parse(result.body);\n// Response is an array of render objects\nconst render = Array.isArray(renderData) ? renderData[0] : renderData;\nif (!render.id) throw new Error('No render ID: ' + result.body.substring(0, 200));\n\nreturn [{\n  json: {\n    render_id: render.id,\n    render_status: render.status,\n    topic: data.topic,\n    title: data.title,\n    description: data.description,\n    tags: data.tags,\n    tags_string: data.tags_string,\n    thumbnail_text: data.thumbnail_text,\n    moral_question: data.moral_question\n  }\n}];"
+      },
+      "id": "8fd7936c-65a0-41e0-9b7a-d57880616025",
+      "name": "Submit Render",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16576,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Submit Render now returns all data directly\nreturn $input.all();"
+      },
+      "id": "3a30c5c7-846c-40eb-9b9f-a4dcba31f5a5",
+      "name": "Extract Render Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16800,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\n// Get render_id from Submit Render node directly — bypasses Google Sheets data loss\nconst renderId = $('Extract Render Data').first().json.render_id;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\nconst meta = $('Extract Render Data').first().json;\n\nif (!renderId) {\n  throw new Error('render_id missing. Check Extract Render Data node output.');\n}\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders/' + renderId,\n    method: 'GET',\n    headers: { 'Authorization': 'Bearer ' + apiKey }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate poll ' + result.statusCode + ': ' + result.body);\n}\n\nconst render = JSON.parse(result.body);\n\nreturn [{\n  json: {\n    ...meta,\n    render_status: render.status,\n    render_url: render.url || null,\n    render_error: render.error_message || null\n  }\n}];"
+      },
+      "id": "d1c07379-b2d8-4172-a334-7e524cd248e9",
+      "name": "Poll Render Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        17248,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pass through but stop if render permanently failed\nconst item = $input.first().json;\nif (item.render_status === 'failed') {\n  throw new Error('Render failed: ' + (item.render_error || 'Unknown'));\n}\nreturn $input.all();"
+      },
+      "id": "b840ad6c-fc7e-4e99-93e5-8a3808010712",
+      "name": "Merge Poll Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        17456,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\n\nif (!data.shorts_payload) {\n  throw new Error('shorts_payload missing from input.');\n}\n\n// ✅ FIXED: Plain object, not array\nconst requestBody = JSON.stringify({ source: data.shorts_payload });\nconst bodyBuffer = Buffer.from(requestBody, 'utf8');\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders',\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Bearer ' + apiKey,\n      'Content-Length': bodyBuffer.length\n    }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.write(bodyBuffer);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate Shorts ' + result.statusCode + ': ' + result.body);\n}\n\nconst renderData = JSON.parse(result.body);\nconst render = Array.isArray(renderData) ? renderData[0] : renderData;\nif (!render.id) throw new Error('No shorts render ID: ' + result.body.substring(0, 200));\n\nreturn [{\n  json: {\n    ...data,\n    shorts_render_id: render.id,\n    shorts_render_status: render.status\n  }\n}];"
+      },
+      "id": "fd5e0eb1-12a4-4f65-8963-62901107cc0c",
+      "name": "Submit Shorts Render",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        18560,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Submit Shorts Render now returns all data directly\nreturn $input.all();"
+      },
+      "id": "85efc564-ba80-4d3f-b09a-812f60bc15e9",
+      "name": "Extract Shorts Render",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        18784,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst shortsRenderId = $('Extract Shorts Render').first().json.shorts_render_id;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\nconst meta = $('Extract Shorts Render').first().json;\n\nif (!shortsRenderId) {\n  throw new Error('shorts_render_id missing. Check Extract Shorts Render node output.');\n}\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders/' + shortsRenderId,\n    method: 'GET',\n    headers: { 'Authorization': 'Bearer ' + apiKey }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate shorts poll ' + result.statusCode + ': ' + result.body);\n}\n\nconst render = JSON.parse(result.body);\n\nreturn [{\n  json: {\n    ...meta,\n    shorts_render_status: render.status,\n    shorts_render_url: render.url || null\n  }\n}];"
+      },
+      "id": "b32f6565-5998-44f6-bf59-827706a3673b",
+      "name": "Poll Shorts Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        19008,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "id": "80095640-dee1-4194-8df8-c896cf6eb988",
+      "name": "Merge Shorts Poll",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        19216,
+        -2720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json;\nconst topic = $('Prepare Claude Request').first().json.topic;\n\nif (!raw.content || !raw.content[0]) {\n  throw new Error('Unexpected Claude response: ' + JSON.stringify(raw).substring(0, 200));\n}\n\nconst rawText = raw.content[0].text.trim();\n\nconst cleaned = rawText\n  .replace(/^```json\\s*/i, '')\n  .replace(/^```\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim();\n\nlet script;\ntry {\n  script = JSON.parse(cleaned);\n} catch (e) {\n  throw new Error('Failed to parse Claude JSON: ' + e.message + ' | Raw: ' + cleaned.substring(0, 300));\n}\n\nif (!script.scenes || !Array.isArray(script.scenes)) {\n  throw new Error('Invalid script: missing scenes array');\n}\n\nscript.scenes = script.scenes.slice(0, 9);\n\nreturn [{\n  json: {\n    topic,\n    title: script.title,\n    description: script.description,\n    tags: script.tags || ['betrayal','revenge','story'],\n    tags_string: (script.tags || ['betrayal','revenge','story']).join(','),\n    thumbnail_text: script.thumbnail_text || script.title.substring(0, 40),\n    moral_question: script.moral_question || 'Was this the right thing to do?',\n    scenes: script.scenes,\n    total_scenes: script.scenes.length\n  }\n}];"
+      },
+      "id": "57b0a262-73d5-4980-a36e-531088771fb8",
+      "name": "Parse Script",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        15920,
+        -2720
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-23T11:01:51.824Z",
+      "createdAt": "2026-06-23T11:01:51.824Z",
+      "role": "workflow:owner",
+      "workflowId": "PLs42f9Z8ooFLQKN",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-26T17:38:11.197Z",
+  "versionId": "27a5e88f-1cb9-4ae6-80bd-38b976bf037a"
+}
