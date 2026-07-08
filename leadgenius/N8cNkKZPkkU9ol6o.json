@@ -82,6 +82,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Workflow Builder",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
