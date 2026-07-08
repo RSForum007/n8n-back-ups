@@ -248,6 +248,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Bree Resume Screener - Deepseek",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
