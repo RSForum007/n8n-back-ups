@@ -89,6 +89,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Restore Workflow from Github",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
