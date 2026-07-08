@@ -552,6 +552,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -718,6 +719,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Github Backup",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
@@ -730,12 +732,12 @@
           ]
         }
       },
-      "id": "066c5867-06f3-4c65-a09d-42ed6bf0d7fc",
+      "id": "fbfb3c85-6f88-4fc0-aeda-cdde38794150",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "position": [
-        240,
-        0
+        3168,
+        240
       ],
       "typeVersion": 1.2
     },
@@ -746,12 +748,12 @@
         "width": 1166,
         "color": 7
       },
-      "id": "425ec49b-e889-4adf-90f9-7e9271d457a6",
+      "id": "0f36e3d0-673d-4e31-8305-e03e47300cd1",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        160,
-        -140
+        3088,
+        96
       ],
       "typeVersion": 1
     },
@@ -760,12 +762,12 @@
         "filters": {},
         "requestOptions": {}
       },
-      "id": "7b184ef4-cf02-409f-9a86-0e260d6a756a",
+      "id": "e6280695-021d-4950-af89-eee15e6a62d7",
       "name": "Get all flows",
       "type": "n8n-nodes-base.n8n",
       "position": [
-        480,
-        0
+        3408,
+        240
       ],
       "typeVersion": 1,
       "credentials": {
@@ -794,23 +796,23 @@
         "mode": "each",
         "options": {}
       },
-      "id": "308b516a-299c-4939-ae70-75cfa4b5e51b",
+      "id": "18e93d4e-db7a-45f6-9e4c-1d2303103dd9",
       "name": "Execute Back Up flow",
       "type": "n8n-nodes-base.executeWorkflow",
       "position": [
-        1040,
-        0
+        3968,
+        240
       ],
       "typeVersion": 1.2
     },
     {
       "parameters": {},
-      "id": "7aed17f7-148a-41b8-a39e-92e66ca0d8ee",
+      "id": "74b637bb-aef4-4910-b637-0b5a2889e50a",
       "name": "Merge Items",
       "type": "n8n-nodes-base.merge",
       "position": [
-        260,
-        600
+        3200,
+        848
       ],
       "typeVersion": 2
     },
@@ -834,12 +836,12 @@
           ]
         }
       },
-      "id": "3ae73ff8-ec8d-42dd-b6a0-766f3b5e24ec",
+      "id": "46825784-a1f3-4389-9926-fe72eb5fb125",
       "name": "Check Status",
       "type": "n8n-nodes-base.switch",
       "position": [
-        760,
-        580
+        3696,
+        832
       ],
       "typeVersion": 1
     },
@@ -860,12 +862,12 @@
         "fileContent": "={{$('Compare Versions').item.json[\"n8n_data_stringy\"]}}",
         "commitMessage": "={{$('Back Up to Git Hub').first().json.name}} ({{$json.github_status}})"
       },
-      "id": "8e36502d-2007-4b9c-821e-ce7a1c892f59",
+      "id": "582586db-9fb0-49b6-b35f-fe41c132858d",
       "name": "Create new file",
       "type": "n8n-nodes-base.github",
       "position": [
-        1080,
-        720
+        4016,
+        960
       ],
       "typeVersion": 1,
       "webhookId": "899c6624-d5f7-4431-8eb7-2f1faa06f9b0",
@@ -894,12 +896,12 @@
         "fileContent": "={{$('Compare Versions').item.json[\"n8n_data_stringy\"]}}",
         "commitMessage": "={{$('Back Up to Git Hub').first().json.name}} ({{$json.github_status}})"
       },
-      "id": "47e48738-cd82-4490-8fcc-151af47d3044",
+      "id": "15f0353f-0364-4142-a5f8-f3bb2885daaf",
       "name": "Edit existing file",
       "type": "n8n-nodes-base.github",
       "position": [
-        1080,
-        540
+        4016,
+        784
       ],
       "typeVersion": 1,
       "webhookId": "b214c3c7-aa3b-4d90-9655-4f52103c04aa",
@@ -936,12 +938,12 @@
         },
         "options": {}
       },
-      "id": "9a1c2404-e319-41b9-a6a3-9262533dbba5",
+      "id": "81d1c649-b211-48be-a832-e92d265df9ab",
       "name": "Set Git Hub Parameters",
       "type": "n8n-nodes-base.set",
       "position": [
-        480,
-        280
+        3408,
+        528
       ],
       "typeVersion": 3.4
     },
@@ -963,12 +965,12 @@
         "asBinaryProperty": false,
         "additionalParameters": {}
       },
-      "id": "8c671832-fc85-49a6-ac83-6d64e47abef1",
+      "id": "d8e98709-2ee6-4100-ab1c-09525bde8f48",
       "name": "Get Current Back Ups",
       "type": "n8n-nodes-base.github",
       "position": [
-        680,
-        280
+        3616,
+        528
       ],
       "typeVersion": 1,
       "alwaysOutputData": true,
@@ -985,10 +987,10 @@
       "parameters": {
         "conditions": {
           "options": {
-            "version": 1,
-            "leftValue": "",
             "caseSensitive": true,
-            "typeValidation": "strict"
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -1016,12 +1018,12 @@
         },
         "options": {}
       },
-      "id": "5fa7d0bc-80de-4c4a-99dc-b7e41257663d",
+      "id": "84a5dcbb-f6b1-4283-b066-1aa4ed0a79b6",
       "name": "If back up file is too large",
       "type": "n8n-nodes-base.if",
       "position": [
-        900,
-        280
+        3840,
+        528
       ],
       "typeVersion": 2
     },
@@ -1030,12 +1032,12 @@
         "url": "={{ $json.download_url }}",
         "options": {}
       },
-      "id": "d24fd77f-dd69-4d80-a803-5d0b39750bdd",
+      "id": "e0c80aca-ec5c-4644-afb0-abd3347b6817",
       "name": "Download File",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        1120,
-        280
+        4048,
+        528
       ],
       "typeVersion": 4.2
     },
@@ -1043,12 +1045,12 @@
       "parameters": {
         "inputSource": "passthrough"
       },
-      "id": "b2b497e3-2e77-4e37-b61c-a7dfb58675c5",
+      "id": "a6ca2b14-7e4f-4c35-a20e-7aae2add8845",
       "name": "Back Up to Git Hub",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        280,
-        280
+        3216,
+        528
       ],
       "typeVersion": 1.1
     },
@@ -1060,11 +1062,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        160,
-        500
+        3088,
+        752
       ],
       "typeVersion": 1,
-      "id": "c1e58d3c-501a-4da8-8d21-d9beacb31470",
+      "id": "2faffafd-9c1a-48ae-9075-81235b095f0c",
       "name": "Sticky Note4"
     },
     {
@@ -1076,23 +1078,23 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        160,
-        220
+        3088,
+        464
       ],
       "typeVersion": 1,
-      "id": "02c0acf3-06d3-49f7-b34c-3d935c763fd5",
+      "id": "75735396-a88a-4c58-8210-5b9a362d4428",
       "name": "Sticky Note"
     },
     {
       "parameters": {
-        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n}\n\n// Check if file returned with content\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  // Decode base64 content and parse JSON\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n// No file returned / new workflow\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else {\n  // Order JSON object\n  const n8nWorkflow = $input.all()[1].json;\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n  \n  // Proper formatting\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\n// Return items\nreturn $input.all();"
+        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n}\n\nconst sanitizeWorkflow = (workflowObj) => {\n  if (!workflowObj) return workflowObj;\n  let str = JSON.stringify(workflowObj);\n  // Redact OpenRouter API keys (sk-or-v1-...)\n  str = str.replace(/sk-or-v1-[a-fA-F0-9]+/g, \"[REDACTED_OPENROUTER_KEY]\");\n  // Redact Anthropic API keys (sk-ant-api03-...)\n  str = str.replace(/sk-ant-api03-[a-zA-Z0-9-_]+/g, \"[REDACTED_ANTHROPIC_KEY]\");\n  // Redact standard OpenAI-like keys (sk-...)\n  str = str.replace(/\\bsk-[a-zA-Z0-9]{32,64}\\b/g, \"[REDACTED_OPENAI_KEY]\");\n  // Redact ElevenLabs and other sk_ API keys\n  str = str.replace(/\\bsk_[a-zA-Z0-9]{32,64}\\b/g, \"[REDACTED_ELEVENLABS_KEY]\");\n  // Redact RapidAPI Key (50 chars alphanumeric containing \"cmsh\", standard pattern)\n  str = str.replace(/\\b[a-zA-Z0-9]{9}cmsh[a-zA-Z0-9]{37}\\b/g, \"[REDACTED_RAPIDAPI_KEY]\");\n  // Redact Telegram bot tokens (e.g. 123456789:ABCdefGh...)\n  str = str.replace(/\\b\\d{8,11}:[a-zA-Z0-9_-]{35}\\b/g, \"[REDACTED_TELEGRAM_TOKEN]\");\n  // Redact Creatomate and other 96-char keys\n  str = str.replace(/\\b[a-zA-Z0-9]{96}\\b/g, \"[REDACTED_CREATOMATE_KEY]\");\n  // Redact Pexels and other 56-char keys\n  str = str.replace(/\\b[a-zA-Z0-9]{56}\\b/g, \"[REDACTED_PEXELS_KEY]\");\n  return JSON.parse(str);\n}\n\n// Check if file returned with content\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  // Decode base64 content and parse JSON\n  const origWorkflow = sanitizeWorkflow(JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString()));\n  const n8nWorkflow = sanitizeWorkflow($input.all()[1].json);\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n// No file returned / new workflow\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = sanitizeWorkflow(JSON.parse($input.all()[0].json.data));\n  const n8nWorkflow = sanitizeWorkflow($input.all()[1].json);\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else {\n  // Order JSON object\n  const n8nWorkflow = sanitizeWorkflow($input.all()[1].json);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n  \n  // Proper formatting\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\n// Return items\nreturn $input.all();"
       },
-      "id": "25bf03e9-9f46-42da-b359-459bac639036",
+      "id": "1c09ebca-89c5-47dd-95fd-0fd9cc60b212",
       "name": "Compare Versions",
       "type": "n8n-nodes-base.code",
       "position": [
-        500,
-        600
+        3440,
+        848
       ],
       "typeVersion": 1
     },
@@ -1103,16 +1105,1272 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        780,
-        -80
+        3712,
+        160
       ],
-      "id": "37ace3b7-8fda-4518-ad47-26d3fef474ba",
+      "id": "45e161f8-ac0a-460b-ad08-b62c300a3a3f",
       "name": "Loop Over Items"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Back Up to Git Hub": [
+      {
+        "json": {
+          "updatedAt": "2026-06-27T04:43:05.504Z",
+          "createdAt": "2026-06-26T17:38:46.932Z",
+          "id": "JtU5yzeRzfpRQphI",
+          "name": "YT Auto - Betrayal & Revenge Stories",
+          "active": false,
+          "isArchived": false,
+          "nodes": [
+            {
+              "parameters": {
+                "rule": {
+                  "interval": [
+                    {
+                      "field": "cronExpression",
+                      "expression": "0 1 * * *"
+                    }
+                  ]
+                }
+              },
+              "id": "4d7d854f-fcc7-4b28-ad9b-1d54cc6b76ad",
+              "name": "Daily 9AM SGT",
+              "type": "n8n-nodes-base.scheduleTrigger",
+              "typeVersion": 1.2,
+              "position": [
+                3536,
+                1104
+              ]
+            },
+            {
+              "parameters": {
+                "assignments": {
+                  "assignments": [
+                    {
+                      "id": "cfg-001",
+                      "name": "ANTHROPIC_API_KEY",
+                      "value": "[REDACTED_ANTHROPIC_KEY]",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-002",
+                      "name": "PEXELS_API_KEY",
+                      "value": "[REDACTED_PEXELS_KEY]",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-003",
+                      "name": "CREATOMATE_API_KEY",
+                      "value": "[REDACTED_CREATOMATE_KEY]",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-004",
+                      "name": "ELEVENLABS_VOICE_ID",
+                      "value": "TxGEqnHWrfWFTfGW9XjXE",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-005",
+                      "name": "TELEGRAM_CHAT_ID",
+                      "value": "5811640282",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-006",
+                      "name": "GOOGLE_SHEET_ID",
+                      "value": "1kuluOzCs4X9p1wnXfrqQMb-6dGM5pHnCOC0IWmu6lXM",
+                      "type": "string"
+                    },
+                    {
+                      "id": "cfg-007",
+                      "name": "CHANNEL_NAME",
+                      "value": "Karma Dropped",
+                      "type": "string"
+                    },
+                    {
+                      "id": "1646f901-52bf-4fdc-a7dd-ccccf800dad2",
+                      "name": "ELEVENLABS_API_KEY",
+                      "type": "string",
+                      "value": "[REDACTED_ELEVENLABS_KEY]"
+                    },
+                    {
+                      "id": "e9388e4d-d80c-4a4e-b33a-dec134e7f572",
+                      "name": "CREATOMATE_TEMPLATE_ID",
+                      "value": "4ffa8f3c-16e1-4410-ae37-4c510d39f95f",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "options": {}
+              },
+              "id": "bad3cfa8-245a-430f-9ea0-6c40e3034e5a",
+              "name": "API Config",
+              "type": "n8n-nodes-base.set",
+              "typeVersion": 3.4,
+              "position": [
+                3888,
+                1104
+              ]
+            },
+            {
+              "parameters": {
+                "documentId": {
+                  "__rl": true,
+                  "value": "={{ $('API Config').first().json.GOOGLE_SHEET_ID }}",
+                  "mode": "id"
+                },
+                "sheetName": {
+                  "__rl": true,
+                  "value": "gid=0",
+                  "mode": "id"
+                },
+                "filtersUI": {
+                  "values": [
+                    {
+                      "lookupColumn": "Status",
+                      "lookupValue": "pending"
+                    }
+                  ]
+                },
+                "options": {}
+              },
+              "id": "c613c65a-e11b-49d0-9820-77ec15977bce",
+              "name": "Get Next Topic",
+              "type": "n8n-nodes-base.googleSheets",
+              "typeVersion": 4.4,
+              "position": [
+                4224,
+                1104
+              ],
+              "credentials": {
+                "googleSheetsOAuth2Api": {
+                  "id": "VnYUNWu00t6X0Qvr",
+                  "name": "Google Sheets account"
+                }
+              }
+            },
+            {
+              "parameters": {
+                "jsCode": "const data = $input.first().json;\nconst VOICE = 'Josh';\nconst TEMPLATE_ID = ($('API Config').first().json.CREATOMATE_TEMPLATE_ID || '').trim();\n\nif (!TEMPLATE_ID) throw new Error('CREATOMATE_TEMPLATE_ID not set in API Config node.');\n\nconst modifications = {};\n\ndata.scenes.forEach((scene, i) => {\n  const n = i + 1;\n\n  modifications[`Narration-${n}.text`]    = scene.narration;\n  modifications[`Narration-${n}.voice`]   = VOICE;\n  modifications[`Background-${n}.source`] = scene.video_url;\n\n  const raw = (scene.narration.match(/[^.!?]+[.!?]+/) || [scene.narration])[0].trim();\n  modifications[`Caption-${n}.text`] = raw.length > 90 ? raw.substring(0, 87) + '...' : raw;\n});\n\nmodifications['Outro-Moral.text'] = data.moral_question;\n\nreturn [{\n  json: {\n    template_id:    TEMPLATE_ID,\n    modifications,\n    topic:          data.topic,\n    title:          data.title,\n    description:    data.description,\n    tags:           data.tags,\n    tags_string:    data.tags_string,\n    thumbnail_text: data.thumbnail_text,\n    moral_question: data.moral_question\n  }\n}];"
+              },
+              "id": "8fb292cb-85f4-42a6-a39e-b297cbb01ec1",
+              "name": "Build Creatomate Payload",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5248,
+                1376
+              ]
+            },
+            {
+              "parameters": {
+                "operation": "update",
+                "documentId": {
+                  "__rl": true,
+                  "value": "={{ $('API Config').first().json.GOOGLE_SHEET_ID }}",
+                  "mode": "id"
+                },
+                "sheetName": {
+                  "__rl": true,
+                  "value": "gid=0",
+                  "mode": "id"
+                },
+                "columns": {
+                  "mappingMode": "defineBelow",
+                  "value": {
+                    "Topic": "={{ $json.topic }}",
+                    "Status": "rendering",
+                    "row_number": 0
+                  },
+                  "matchingColumns": [
+                    "Topic"
+                  ],
+                  "schema": [
+                    {
+                      "id": "Topic",
+                      "displayName": "Topic",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "string",
+                      "canBeUsedToMatch": true
+                    },
+                    {
+                      "id": "Status",
+                      "displayName": "Status",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "string",
+                      "canBeUsedToMatch": true
+                    },
+                    {
+                      "id": "Video_URL",
+                      "displayName": "Video_URL",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "string",
+                      "canBeUsedToMatch": true,
+                      "removed": false
+                    },
+                    {
+                      "id": "Shorts_URL",
+                      "displayName": "Shorts_URL",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "string",
+                      "canBeUsedToMatch": true,
+                      "removed": false
+                    },
+                    {
+                      "id": "Created_Date",
+                      "displayName": "Created_Date",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "string",
+                      "canBeUsedToMatch": true,
+                      "removed": false
+                    },
+                    {
+                      "id": "row_number",
+                      "displayName": "row_number",
+                      "required": false,
+                      "defaultMatch": false,
+                      "display": true,
+                      "type": "number",
+                      "canBeUsedToMatch": true,
+                      "readOnly": true,
+                      "removed": false
+                    }
+                  ],
+                  "attemptToConvertTypes": false,
+                  "convertFieldsToString": false
+                },
+                "options": {}
+              },
+              "id": "bffa9c00-c9b3-47a4-84c4-77f5120e721f",
+              "name": "Mark Rendering",
+              "type": "n8n-nodes-base.googleSheets",
+              "typeVersion": 4.4,
+              "position": [
+                4224,
+                1632
+              ],
+              "credentials": {
+                "googleSheetsOAuth2Api": {
+                  "id": "VnYUNWu00t6X0Qvr",
+                  "name": "Google Sheets account"
+                }
+              }
+            },
+            {
+              "parameters": {
+                "amount": 4,
+                "unit": "minutes"
+              },
+              "id": "f1b1cbd0-8fa4-4343-8dfa-211cd112154b",
+              "name": "Wait 12 Minutes",
+              "type": "n8n-nodes-base.wait",
+              "typeVersion": 1.1,
+              "position": [
+                4560,
+                1632
+              ],
+              "webhookId": "wait-webhook-001"
+            },
+            {
+              "parameters": {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "cond-render-done",
+                      "leftValue": "={{ $json.render_status }}",
+                      "rightValue": "succeeded",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "options": {}
+              },
+              "id": "3ebb2585-a2c8-4a01-bc80-2d94831b56f8",
+              "name": "Render Complete?",
+              "type": "n8n-nodes-base.if",
+              "typeVersion": 2.2,
+              "position": [
+                3536,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "unit": "minutes"
+              },
+              "id": "33f7a15e-1b8e-48d6-8a7d-c7c65c592d09",
+              "name": "Wait 5 More Minutes",
+              "type": "n8n-nodes-base.wait",
+              "typeVersion": 1.1,
+              "position": [
+                3536,
+                2144
+              ],
+              "webhookId": "wait-webhook-002"
+            },
+            {
+              "parameters": {
+                "url": "={{ $json.render_url }}",
+                "options": {
+                  "response": {
+                    "response": {
+                      "responseFormat": "file"
+                    }
+                  }
+                }
+              },
+              "id": "1d9c57d2-4089-436d-b226-cf77d564162e",
+              "name": "Download Video Binary",
+              "type": "n8n-nodes-base.httpRequest",
+              "typeVersion": 4.2,
+              "position": [
+                3888,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// ============================================================\n// NODE: Attach Metadata\n// Bridges the binary download with the video metadata.\n// Passes both JSON metadata and binary video to YouTube node.\n// ============================================================\n\nconst binary = $input.first().binary;\nconst meta = $('Poll Render Status').first().json;\n\nif (!binary || !binary.data) {\n  throw new Error('No binary video data found from download step.');\n}\n\nreturn [{\n  json: {\n    title: meta.title,\n    description: meta.description,\n    tags_string: meta.tags_string || 'betrayal,revenge,story',\n    topic: meta.topic,\n    moral_question: meta.moral_question\n  },\n  binary: {\n    data: binary.data\n  }\n}];"
+              },
+              "id": "e21541f8-eed3-4663-bd4c-0f1272d8b13c",
+              "name": "Attach Metadata",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4224,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "resource": "video",
+                "operation": "upload",
+                "title": "={{ $json.title }}",
+                "categoryId": "24",
+                "options": {
+                  "privacyStatus": "unlisted",
+                  "tags": "={{ $json.tags_string }}"
+                }
+              },
+              "id": "21fc1bf6-60ff-4ed4-bcb1-e51d7cecd1cf",
+              "name": "Upload to YouTube",
+              "type": "n8n-nodes-base.youTube",
+              "typeVersion": 1,
+              "position": [
+                4560,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// ============================================================\n// NODE: Build Shorts Payload\n// Creates a vertical 9:16 Creatomate render using Scene 1 only.\n// The hook ends with a CTA directing viewers to the full video.\n// ============================================================\n\nconst longFormVideoId = $('Upload to YouTube').first().json.id;\nconst data = $('Fetch Scene Videos').first().json;\nconst VOICE_ID = $('Fetch Scene Videos').first().json.voice_id;\n\nconst hookScene = data.scenes[0];\nconst hookDuration = Math.min(hookScene.duration_seconds || 20, 50);\nconst ctaDuration = 8;\nconst totalDuration = hookDuration + ctaDuration;\n\nconst elements = [];\n\n// ── HOOK SCENE (vertical crop of scene 1) ────────────────────\nelements.push({\n  id: 'hook-video',\n  type: 'video',\n  source: hookScene.video_url,\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  fit: 'cover',\n  volume: '0%'\n});\n\nelements.push({\n  id: 'hook-overlay',\n  type: 'shape',\n  shape: 'rect',\n  fill_color: 'rgba(0,0,0,0.42)',\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  width: '100%',\n  height: '100%'\n});\n\n// ElevenLabs voice (Creatomate handles TTS natively)\nelements.push({\n  id: 'hook-voice',\n  type: 'audio',\n  provider: 'elevenlabs',\n  text: hookScene.narration,\n  voice: VOICE_ID,\n  time: '0 s'\n});\n\n// Caption\nelements.push({\n  id: 'hook-caption',\n  type: 'text',\n  text: hookScene.narration,\n  time: '0 s',\n  duration: `${hookDuration} s`,\n  x_alignment: '50%',\n  y_alignment: '74%',\n  width: '88%',\n  font_family: 'Montserrat',\n  font_weight: '700',\n  font_size: '34',\n  fill_color: '#FFFFFF',\n  stroke_color: '#000000',\n  stroke_width: '2.5',\n  line_height: '1.4'\n});\n\n// 'STORY CONTINUES' badge fades in at 70% through narration\nelements.push({\n  id: 'teaser-badge',\n  type: 'text',\n  text: '🔴 STORY CONTINUES...',\n  time: `${(hookDuration * 0.65).toFixed(1)} s`,\n  duration: `${(hookDuration * 0.35).toFixed(1)} s`,\n  x_alignment: '50%',\n  y_alignment: '18%',\n  width: '90%',\n  font_family: 'Montserrat',\n  font_weight: '800',\n  font_size: '30',\n  fill_color: '#FF3B3B',\n  text_clip_start: '0.4 s'\n});\n\n// ── CTA CARD ─────────────────────────────────────────────────\nelements.push({\n  id: 'cta-bg',\n  type: 'shape',\n  shape: 'rect',\n  fill_color: '#0d0d1a',\n  time: `${hookDuration} s`,\n  duration: `${ctaDuration} s`,\n  width: '100%',\n  height: '100%'\n});\n\nelements.push({\n  id: 'cta-main',\n  type: 'text',\n  text: 'Watch what happens next 👆',\n  time: `${hookDuration} s`,\n  duration: `${ctaDuration} s`,\n  x_alignment: '50%',\n  y_alignment: '38%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '800',\n  font_size: '52',\n  fill_color: '#FFFFFF',\n  line_height: '1.2'\n});\n\nelements.push({\n  id: 'cta-sub',\n  type: 'text',\n  text: 'Full story on channel ⬆️',\n  time: `${hookDuration + 1} s`,\n  duration: `${ctaDuration - 1} s`,\n  x_alignment: '50%',\n  y_alignment: '56%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '600',\n  font_size: '34',\n  fill_color: '#FFD700'\n});\n\nelements.push({\n  id: 'cta-subscribe',\n  type: 'text',\n  text: '🔔 Subscribe for more stories',\n  time: `${hookDuration + 2} s`,\n  duration: `${ctaDuration - 2} s`,\n  x_alignment: '50%',\n  y_alignment: '68%',\n  width: '85%',\n  font_family: 'Montserrat',\n  font_weight: '500',\n  font_size: '26',\n  fill_color: 'rgba(255,255,255,0.75)'\n});\n\n// ── SHORTS METADATA ──────────────────────────────────────────\nconst fullTitle = $('Fetch Scene Videos').first().json.title || '';\n// Keep under 60 chars, must contain #Shorts for YouTube to classify it\nconst rawShortTitle = fullTitle.length > 48\n  ? fullTitle.substring(0, 45) + '...'\n  : fullTitle;\nconst shortsTitle = `${rawShortTitle} #Shorts`;\n\nconst shortsDesc = [\n  hookScene.narration.substring(0, 120) + '...',\n  '',\n  `👉 Full story: https://youtu.be/${longFormVideoId}`,\n  '',\n  '#Shorts #betrayal #revenge #story #aita #drama #ofw'\n].join('\\n');\n\nconst shortsPayload = {\n  output_format: 'mp4',\n  width: 1080,\n  height: 1920,\n  fps: 30,\n  elements: elements\n};\n\nconst shortsRenderRequestStr = JSON.stringify([{ source: shortsPayload }]);\n\nreturn [{\n  json: {\n    shorts_payload: shortsPayload,\n    shorts_title: shortsTitle,\n    shorts_description: shortsDesc,\n    shorts_tags: 'shorts,betrayal,revenge,aita,drama,story time,youtube shorts,ofw',\n    long_form_video_id: longFormVideoId,\n    topic: data.topic,\n    full_title: fullTitle,\n    shorts_render_request_str: shortsRenderRequestStr\n  }\n}];"
+              },
+              "id": "64d142d7-792e-478a-9e52-0d64e152941d",
+              "name": "Build Shorts Payload",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4896,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "unit": "minutes"
+              },
+              "id": "79698e88-60b1-4c05-9fce-a67ba48fe91a",
+              "name": "Wait 5 Minutes Shorts",
+              "type": "n8n-nodes-base.wait",
+              "typeVersion": 1.1,
+              "position": [
+                5920,
+                1888
+              ],
+              "webhookId": "wait-webhook-003"
+            },
+            {
+              "parameters": {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "cond-shorts-done",
+                      "leftValue": "={{ $json.shorts_render_status }}",
+                      "rightValue": "succeeded",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "options": {}
+              },
+              "id": "8474c7d5-82b3-4e8d-be63-77844e4c6b9d",
+              "name": "Shorts Complete?",
+              "type": "n8n-nodes-base.if",
+              "typeVersion": 2.2,
+              "position": [
+                6608,
+                2144
+              ]
+            },
+            {
+              "parameters": {
+                "amount": 3,
+                "unit": "minutes"
+              },
+              "id": "e449f27b-c143-4618-8df8-5e3cdb7db052",
+              "name": "Wait Shorts Retry",
+              "type": "n8n-nodes-base.wait",
+              "typeVersion": 1.1,
+              "position": [
+                6608,
+                2416
+              ],
+              "webhookId": "wait-webhook-004"
+            },
+            {
+              "parameters": {
+                "url": "={{ $json.shorts_render_url }}",
+                "options": {
+                  "response": {
+                    "response": {
+                      "responseFormat": "file"
+                    }
+                  }
+                }
+              },
+              "id": "5384d481-b541-4edc-8562-e7dc20815734",
+              "name": "Download Shorts Binary",
+              "type": "n8n-nodes-base.httpRequest",
+              "typeVersion": 4.2,
+              "position": [
+                6256,
+                2144
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// ============================================================\n// NODE: Attach Shorts Metadata\n// Bridges the Shorts binary download with its metadata.\n// ============================================================\n\nconst binary = $input.first().binary;\nconst meta = $('Poll Shorts Status').first().json;\n\nif (!binary || !binary.data) {\n  throw new Error('No binary data found for Shorts video.');\n}\n\nreturn [{\n  json: {\n    shorts_title: meta.shorts_title,\n    shorts_description: meta.shorts_description,\n    shorts_tags: meta.shorts_tags || 'shorts,betrayal,revenge,story',\n    long_form_video_id: meta.long_form_video_id,\n    topic: meta.topic,\n    full_title: meta.full_title\n  },\n  binary: { data: binary.data }\n}];"
+              },
+              "id": "343105c6-527f-484e-9ba8-11b537302c9a",
+              "name": "Attach Shorts Metadata",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5920,
+                2144
+              ]
+            },
+            {
+              "parameters": {
+                "resource": "video",
+                "operation": "upload",
+                "title": "={{ $json.shorts_title }}",
+                "categoryId": "24",
+                "options": {
+                  "privacyStatus": "unlisted",
+                  "tags": "={{ $json.shorts_tags }}"
+                }
+              },
+              "id": "6079df2e-ce25-4e05-b7e0-e8fc3b0919b7",
+              "name": "Upload Shorts to YouTube",
+              "type": "n8n-nodes-base.youTube",
+              "typeVersion": 1,
+              "position": [
+                5584,
+                2144
+              ]
+            },
+            {
+              "parameters": {
+                "operation": "update",
+                "documentId": {
+                  "__rl": true,
+                  "value": "={{ $('API Config').first().json.GOOGLE_SHEET_ID }}",
+                  "mode": "id"
+                },
+                "sheetName": {
+                  "__rl": true,
+                  "value": "gid=0",
+                  "mode": "id"
+                },
+                "columns": {
+                  "mappingMode": "defineBelow",
+                  "value": {
+                    "Topic": "={{ $('Poll Shorts Status').first().json.topic }}",
+                    "Status": "published",
+                    "Video_URL": "=https://youtu.be/{{ $('Upload to YouTube').first().json.id }}",
+                    "Shorts_URL": "=https://youtube.com/shorts/{{ $('Upload Shorts to YouTube').first().json.id }}"
+                  },
+                  "matchingColumns": [
+                    "Topic"
+                  ],
+                  "schema": []
+                },
+                "options": {}
+              },
+              "id": "3b17a3b2-92b8-4039-97ba-e2ccdd3c87a8",
+              "name": "Mark Published",
+              "type": "n8n-nodes-base.googleSheets",
+              "typeVersion": 4.4,
+              "position": [
+                5248,
+                2144
+              ],
+              "credentials": {
+                "googleSheetsOAuth2Api": {
+                  "id": "VnYUNWu00t6X0Qvr",
+                  "name": "Google Sheets account"
+                }
+              }
+            },
+            {
+              "parameters": {
+                "chatId": "={{ $('API Config').first().json.TELEGRAM_CHAT_ID }}",
+                "text": "=🎬 *New video pipeline complete!*\n\n📌 *Topic:* {{ $('Poll Shorts Status').first().json.topic }}\n🎯 *Title:* {{ $('Poll Shorts Status').first().json.full_title }}\n\n▶️ *Long-form (unlisted):*\nhttps://youtu.be/{{ $('Upload to YouTube').first().json.id }}\n\n#️⃣ *Short (unlisted):*\nhttps://youtube.com/shorts/{{ $('Upload Shorts to YouTube').first().json.id }}\n\n✅ Review both → set to *Public* when ready\n_(Shorts will auto-funnel viewers to long-form)_",
+                "additionalFields": {
+                  "parse_mode": "Markdown"
+                }
+              },
+              "id": "4100f49f-54b6-4659-8609-4fcfff1ccd68",
+              "name": "Notify Success",
+              "type": "n8n-nodes-base.telegram",
+              "typeVersion": 1.2,
+              "position": [
+                4896,
+                2144
+              ],
+              "webhookId": "3f5940e4-c5ab-422c-95db-35110b24c23e"
+            },
+            {
+              "parameters": {
+                "jsCode": "const topic = $input.first().json.Topic;\nif (!topic) throw new Error('No topic found.');\n\nreturn [{\n  json: {\n    topic,\n    request_body: {\n      model: 'claude-sonnet-4-6',\n      max_tokens: 2500,\n      system: \"You are a professional YouTube scriptwriter for a faceless channel called Betrayal & Revenge Stories. Your audience is both American and Filipino. You write emotionally gripping suspenseful anonymous first-person stories. RETURN ONLY a valid JSON object no markdown no backticks no explanation. Use this exact structure: { \\\"title\\\": \\\"YouTube title max 60 chars emotional power words\\\", \\\"description\\\": \\\"150-200 words hook first sentence story summary moral question end with #betrayal #revenge #story #aita #drama #ofw\\\", \\\"tags\\\": [\\\"betrayal\\\",\\\"revenge story\\\",\\\"aita\\\",\\\"reddit story\\\",\\\"relationship drama\\\",\\\"story time\\\",\\\"ofw story\\\"], \\\"thumbnail_text\\\": \\\"5-7 dramatic words for thumbnail\\\", \\\"scenes\\\": [ { \\\"scene_number\\\": 1, \\\"narration\\\": \\\"2-4 sentences first-person conversational builds suspense never use character names\\\", \\\"visual_keyword\\\": \\\"3-word Pexels search keyword specific emotions and settings\\\", \\\"duration_seconds\\\": 20 } ], \\\"moral_question\\\": \\\"One punchy question for comment engagement\\\" } STORY RULES: Exactly 9 scenes. Scene 1 hook start with most shocking moment in medias res. Scenes 2-4 background who betrayed who and why. Scenes 5-7 confrontation and escalation. Scenes 8-9 resolution and aftermath end with moral ambiguity. Stories must feel authentic to both US and Filipino culture.\",\n      messages: [{ role: 'user', content: 'Write a betrayal and revenge YouTube video script about: ' + topic }]\n    }\n  }\n}];"
+              },
+              "id": "86ffeaf0-c7ec-4770-9b82-c617bdb8fafb",
+              "name": "Prepare Claude Request",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4560,
+                1104
+              ]
+            },
+            {
+              "parameters": {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "sendHeaders": true,
+                "headerParameters": {
+                  "parameters": [
+                    {
+                      "name": "x-api-key",
+                      "value": "={{ $('API Config').first().json.ANTHROPIC_API_KEY }}"
+                    },
+                    {
+                      "name": "anthropic-version",
+                      "value": "2023-06-01"
+                    }
+                  ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $json.request_body }}",
+                "options": {}
+              },
+              "id": "76276865-9855-4104-8c6d-6109339bb7e9",
+              "name": "Call Claude API",
+              "type": "n8n-nodes-base.httpRequest",
+              "typeVersion": 4.2,
+              "position": [
+                4896,
+                1104
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst PEXELS_API_KEY = ($('API Config').first().json.PEXELS_API_KEY || '').trim();\nconst VOICE_ID = ($('API Config').first().json.ELEVENLABS_VOICE_ID || '').trim();\n\n// Creatomate's own demo assets — 100% confirmed accessible from Creatomate's servers\n// Google CDN videos (commondatastorage) are inconsistent — removed\n// Upgrade path: subscribe to Storyblocks or host your own videos on S3/Cloudflare R2\nconst GUARANTEED_FALLBACKS = [\n  'https://creatomate-static.s3.amazonaws.com/demo/video1.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video2.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video3.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video4.mp4',\n  'https://creatomate-static.s3.amazonaws.com/demo/video5.mp4'\n];\n\n// Search Pexels and try to find a Vimeo-hosted URL (accessible from any server)\n// Vimeo-external URLs from Pexels look like: https://player.vimeo.com/external/...\n// These bypass Pexels hotlink protection\nasync function searchPexelsVimeoUrl(keyword) {\n  return new Promise((resolve) => {\n    const req = https.request({\n      hostname: 'api.pexels.com',\n      path: '/videos/search?query=' + encodeURIComponent(keyword) + '&per_page=15&orientation=landscape&size=medium',\n      headers: { 'Authorization': PEXELS_API_KEY }\n    }, (res) => {\n      let body = '';\n      res.on('data', c => body += c);\n      res.on('end', () => {\n        try {\n          const result = JSON.parse(body);\n          for (const video of (result.videos || [])) {\n            for (const file of (video.video_files || [])) {\n              // Vimeo-external URLs work with Creatomate\n              if (file.link && file.link.includes('player.vimeo.com')) {\n                if (file.width && file.width <= 1280) {\n                  resolve(file.link);\n                  return;\n                }\n              }\n            }\n          }\n          // Second pass: any Vimeo URL regardless of quality\n          for (const video of (result.videos || [])) {\n            for (const file of (video.video_files || [])) {\n              if (file.link && file.link.includes('player.vimeo.com')) {\n                resolve(file.link);\n                return;\n              }\n            }\n          }\n          resolve(null);\n        } catch(e) { resolve(null); }\n      });\n    });\n    req.on('error', () => resolve(null));\n    req.end();\n  });\n}\n\nconst scenesWithVideos = [];\n\nfor (let i = 0; i < data.scenes.length; i++) {\n  const scene = data.scenes[i];\n  let videoUrl = GUARANTEED_FALLBACKS[i % GUARANTEED_FALLBACKS.length];\n\n  if (PEXELS_API_KEY) {\n    try {\n      const vimeoUrl = await searchPexelsVimeoUrl(scene.visual_keyword);\n      if (vimeoUrl) {\n        videoUrl = vimeoUrl;\n      }\n    } catch(e) {}\n  }\n\n  scenesWithVideos.push({ ...scene, video_url: videoUrl });\n\n  // Rate limit protection (200 req/hour on free Pexels)\n  if (i < data.scenes.length - 1) {\n    await new Promise(r => setTimeout(r, 400));\n  }\n}\n\nreturn [{ json: { ...data, scenes: scenesWithVideos, voice_id: VOICE_ID } }];"
+              },
+              "id": "445c22c4-6782-4c9a-822b-0442035847e9",
+              "name": "Fetch Scene Videos",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4896,
+                1376
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\n\n\n// ✅ FIXED: Send a plain OBJECT { source: {...} }\n// NOT an array [{ source: {...} }]\nconst requestBody = JSON.stringify({\n  template_id: data.template_id,\n  modifications: data.modifications\n});\n\nconst bodyBuffer = Buffer.from(requestBody, 'utf8');\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders',\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Bearer ' + apiKey,\n      'Content-Length': bodyBuffer.length\n    }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.write(bodyBuffer);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate ' + result.statusCode + ': ' + result.body);\n}\n\nconst renderData = JSON.parse(result.body);\n// Response is an array of render objects\nconst render = Array.isArray(renderData) ? renderData[0] : renderData;\nif (!render.id) throw new Error('No render ID: ' + result.body.substring(0, 200));\n\nreturn [{\n  json: {\n    render_id: render.id,\n    render_status: render.status,\n    topic: data.topic,\n    title: data.title,\n    description: data.description,\n    tags: data.tags,\n    tags_string: data.tags_string,\n    thumbnail_text: data.thumbnail_text,\n    moral_question: data.moral_question\n  }\n}];"
+              },
+              "id": "3294218f-294f-4095-8613-53c855696154",
+              "name": "Submit Render",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                3536,
+                1632
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// Submit Render now returns all data directly\nreturn $input.all();"
+              },
+              "id": "e5e68dc4-0bc5-4619-8ead-ee4b7410087d",
+              "name": "Extract Render Data",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                3888,
+                1632
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const https = require('https');\n\n// Get render_id from Submit Render node directly — bypasses Google Sheets data loss\nconst renderId = $('Extract Render Data').first().json.render_id;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\nconst meta = $('Extract Render Data').first().json;\n\nif (!renderId) {\n  throw new Error('render_id missing. Check Extract Render Data node output.');\n}\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders/' + renderId,\n    method: 'GET',\n    headers: { 'Authorization': 'Bearer ' + apiKey }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate poll ' + result.statusCode + ': ' + result.body);\n}\n\nconst render = JSON.parse(result.body);\n\nreturn [{\n  json: {\n    ...meta,\n    render_status: render.status,\n    render_url: render.url || null,\n    render_error: render.error_message || null\n  }\n}];"
+              },
+              "id": "5cbb490b-275f-43ba-8c17-f7276394b6c5",
+              "name": "Poll Render Status",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4896,
+                1632
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// Pass through but stop if render permanently failed\nconst item = $input.first().json;\nif (item.render_status === 'failed') {\n  throw new Error('Render failed: ' + (item.render_error || 'Unknown'));\n}\nreturn $input.all();"
+              },
+              "id": "a1eba971-718c-4ee4-a5b6-beff111396d4",
+              "name": "Merge Poll Data",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5248,
+                1632
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const https = require('https');\n\nconst data = $input.first().json;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\n\nif (!data.shorts_payload) {\n  throw new Error('shorts_payload missing from input.');\n}\n\n// ✅ FIXED: Plain object, not array\nconst requestBody = JSON.stringify({ source: data.shorts_payload });\nconst bodyBuffer = Buffer.from(requestBody, 'utf8');\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders',\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Bearer ' + apiKey,\n      'Content-Length': bodyBuffer.length\n    }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.write(bodyBuffer);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate Shorts ' + result.statusCode + ': ' + result.body);\n}\n\nconst renderData = JSON.parse(result.body);\nconst render = Array.isArray(renderData) ? renderData[0] : renderData;\nif (!render.id) throw new Error('No shorts render ID: ' + result.body.substring(0, 200));\n\nreturn [{\n  json: {\n    ...data,\n    shorts_render_id: render.id,\n    shorts_render_status: render.status\n  }\n}];"
+              },
+              "id": "2a81262a-a927-4ad4-9220-b6fe58d50b5e",
+              "name": "Submit Shorts Render",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5248,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// Submit Shorts Render now returns all data directly\nreturn $input.all();"
+              },
+              "id": "cddf9909-0390-430d-bd08-04c5415f2389",
+              "name": "Extract Shorts Render",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5584,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const https = require('https');\n\nconst shortsRenderId = $('Extract Shorts Render').first().json.shorts_render_id;\nconst apiKey = ($('API Config').first().json.CREATOMATE_API_KEY || '').trim();\nconst meta = $('Extract Shorts Render').first().json;\n\nif (!shortsRenderId) {\n  throw new Error('shorts_render_id missing. Check Extract Shorts Render node output.');\n}\n\nconst result = await new Promise((resolve, reject) => {\n  const req = https.request({\n    hostname: 'api.creatomate.com',\n    path: '/v1/renders/' + shortsRenderId,\n    method: 'GET',\n    headers: { 'Authorization': 'Bearer ' + apiKey }\n  }, (res) => {\n    let body = '';\n    res.on('data', chunk => body += chunk);\n    res.on('end', () => resolve({ statusCode: res.statusCode, body }));\n  });\n  req.on('error', reject);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('Creatomate shorts poll ' + result.statusCode + ': ' + result.body);\n}\n\nconst render = JSON.parse(result.body);\n\nreturn [{\n  json: {\n    ...meta,\n    shorts_render_status: render.status,\n    shorts_render_url: render.url || null\n  }\n}];"
+              },
+              "id": "99a40274-9c3f-413d-af2f-6ce2d3e36d41",
+              "name": "Poll Shorts Status",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                6256,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "return $input.all();"
+              },
+              "id": "740f537a-cc91-4fd0-8e72-0834315bd3db",
+              "name": "Merge Shorts Poll",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                6608,
+                1888
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "const raw = $input.first().json;\nconst topic = $('Prepare Claude Request').first().json.topic;\n\nif (!raw.content || !raw.content[0]) {\n  throw new Error('Unexpected Claude response: ' + JSON.stringify(raw).substring(0, 200));\n}\n\nconst rawText = raw.content[0].text.trim();\n\nconst cleaned = rawText\n  .replace(/^```json\\s*/i, '')\n  .replace(/^```\\s*/i, '')\n  .replace(/\\s*```$/, '')\n  .trim();\n\nlet script;\ntry {\n  script = JSON.parse(cleaned);\n} catch (e) {\n  throw new Error('Failed to parse Claude JSON: ' + e.message + ' | Raw: ' + cleaned.substring(0, 300));\n}\n\nif (!script.scenes || !Array.isArray(script.scenes)) {\n  throw new Error('Invalid script: missing scenes array');\n}\n\nscript.scenes = script.scenes.slice(0, 9);\n\nreturn [{\n  json: {\n    topic,\n    title: script.title,\n    description: script.description,\n    tags: script.tags || ['betrayal','revenge','story'],\n    tags_string: (script.tags || ['betrayal','revenge','story']).join(','),\n    thumbnail_text: script.thumbnail_text || script.title.substring(0, 40),\n    moral_question: script.moral_question || 'Was this the right thing to do?',\n    scenes: script.scenes,\n    total_scenes: script.scenes.length\n  }\n}];"
+              },
+              "id": "a3d98c6f-6534-44b7-9a29-e7739dd7fe07",
+              "name": "Parse Script",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                5248,
+                1104
+              ]
+            },
+            {
+              "parameters": {
+                "jsCode": "// ── Generate Voice Audio via ElevenLabs API ──────────────────────────────────\n// Calls ElevenLabs directly, returns binary MP3 + all scene metadata\n// This approach bypasses Creatomate's ElevenLabs integration entirely\n\nconst https = require('https');\nconst data = $input.first().json;\nconst ELEVENLABS_API_KEY = ($('API Config').first().json.ELEVENLABS_API_KEY || '').trim();\nconst VOICE_ID = 'TxGEqnHWrfWFTfGW9XjX'; // Josh — change to your preferred voice ID\n\nif (!ELEVENLABS_API_KEY || ELEVENLABS_API_KEY === 'YOUR_ELEVENLABS_API_KEY_HERE') {\n  throw new Error('ELEVENLABS_API_KEY not set in API Config node.');\n}\n\n// Combine all scene narrations into one continuous story\nconst fullText = data.scenes.map(s => s.narration).join(' ');\n\nconst requestBody = JSON.stringify({\n  text: fullText,\n  model_id: 'eleven_multilingual_v2',\n  voice_settings: {\n    stability: 0.5,\n    similarity_boost: 0.8,\n    style: 0.3,\n    use_speaker_boost: true\n  }\n});\n\nconst bodyBuffer = Buffer.from(requestBody, 'utf8');\n\nconst result = await new Promise((resolve, reject) => {\n  const chunks = [];\n  const req = https.request({\n    hostname: 'api.elevenlabs.io',\n    path: `/v1/text-to-speech/${VOICE_ID}`,\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'xi-api-key': ELEVENLABS_API_KEY,\n      'Content-Length': bodyBuffer.length\n    }\n  }, (res) => {\n    res.on('data', chunk => chunks.push(chunk));\n    res.on('end', () => resolve({\n      statusCode: res.statusCode,\n      contentType: res.headers['content-type'] || 'audio/mpeg',\n      buffer: Buffer.concat(chunks)\n    }));\n  });\n  req.on('error', reject);\n  req.write(bodyBuffer);\n  req.end();\n});\n\nif (result.statusCode >= 400) {\n  throw new Error('ElevenLabs ' + result.statusCode + ': ' + result.buffer.toString().substring(0, 300));\n}\n\nconst filename = 'kd-voice-' + Date.now() + '.mp3';\n\nreturn [{\n  json: {\n    ...data,\n    audio_filename: filename\n  },\n  binary: {\n    audio: {\n      data: result.buffer.toString('base64'),\n      mimeType: 'audio/mpeg',\n      fileName: filename,\n      fileExtension: 'mp3'\n    }\n  }\n}];"
+              },
+              "id": "76ea9ac2-df10-4203-aaf8-3b377324c06c",
+              "name": "Generate Voice Audio",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                3536,
+                1376
+              ]
+            },
+            {
+              "parameters": {
+                "inputDataFieldName": "audio",
+                "name": "={{ $json.audio_filename }}",
+                "driveId": {
+                  "__rl": true,
+                  "mode": "list",
+                  "value": "My Drive"
+                },
+                "folderId": {
+                  "__rl": true,
+                  "value": "1sE5axjkLk2Kn-4I80Lx0_RxmXbVr_TeQ",
+                  "mode": "id"
+                },
+                "options": {}
+              },
+              "id": "21e6c70e-297a-4dbf-8e85-2ac69fb3f033",
+              "name": "Upload Voice to Drive",
+              "type": "n8n-nodes-base.googleDrive",
+              "typeVersion": 3,
+              "position": [
+                3888,
+                1376
+              ],
+              "credentials": {
+                "googleDriveOAuth2Api": {
+                  "id": "DrurgX9EkT88ZrxF",
+                  "name": "Google Drive account"
+                }
+              }
+            },
+            {
+              "parameters": {
+                "method": "POST",
+                "url": "={{ 'https://www.googleapis.com/drive/v3/files/' + $json.id + '/permissions' }}",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "googleDriveOAuth2Api",
+                "sendHeaders": true,
+                "headerParameters": {
+                  "parameters": []
+                },
+                "sendBody": true,
+                "contentType": "raw",
+                "rawContentType": "application/json",
+                "body": "{\"role\":\"reader\",\"type\":\"anyone\"}",
+                "options": {}
+              },
+              "id": "b820e127-0d9f-4969-a242-501a5c4a10f1",
+              "name": "Set Audio Public",
+              "type": "n8n-nodes-base.httpRequest",
+              "typeVersion": 4.2,
+              "position": [
+                4224,
+                1376
+              ],
+              "credentials": {
+                "googleDriveOAuth2Api": {
+                  "id": "DrurgX9EkT88ZrxF",
+                  "name": "Google Drive account"
+                }
+              }
+            },
+            {
+              "parameters": {
+                "jsCode": "// Merge Drive file ID with scene data, construct public audio URL\nconst driveResult = $input.first().json;\nconst sceneData = $('Generate Voice Audio').first().json;\n\nconst fileId = $('Upload Voice to Drive').first().json.id;\nif (!fileId) throw new Error('No Drive file ID returned: ' + JSON.stringify(driveResult).substring(0, 200));\n\n// Public direct-download URL format for Google Drive\nconst audioUrl = 'https://drive.google.com/uc?export=download&id=' + fileId;\n\nreturn [{\n  json: {\n    ...sceneData,\n    audio_url: audioUrl,\n    audio_file_id: fileId\n  }\n}];"
+              },
+              "id": "7c62bed5-5ff6-432e-99fa-9506ce804c3d",
+              "name": "Merge Audio URL",
+              "type": "n8n-nodes-base.code",
+              "typeVersion": 2,
+              "position": [
+                4560,
+                1376
+              ]
+            }
+          ],
+          "connections": {
+            "Daily 9AM SGT": {
+              "main": [
+                [
+                  {
+                    "node": "API Config",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "API Config": {
+              "main": [
+                [
+                  {
+                    "node": "Get Next Topic",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Get Next Topic": {
+              "main": [
+                [
+                  {
+                    "node": "Prepare Claude Request",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Prepare Claude Request": {
+              "main": [
+                [
+                  {
+                    "node": "Call Claude API",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Call Claude API": {
+              "main": [
+                [
+                  {
+                    "node": "Parse Script",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Parse Script": {
+              "main": [
+                [
+                  {
+                    "node": "Fetch Scene Videos",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Fetch Scene Videos": {
+              "main": [
+                [
+                  {
+                    "node": "Build Creatomate Payload",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Build Creatomate Payload": {
+              "main": [
+                [
+                  {
+                    "node": "Submit Render",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Submit Render": {
+              "main": [
+                [
+                  {
+                    "node": "Extract Render Data",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Extract Render Data": {
+              "main": [
+                [
+                  {
+                    "node": "Mark Rendering",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Mark Rendering": {
+              "main": [
+                [
+                  {
+                    "node": "Wait 12 Minutes",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Wait 12 Minutes": {
+              "main": [
+                [
+                  {
+                    "node": "Poll Render Status",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Poll Render Status": {
+              "main": [
+                [
+                  {
+                    "node": "Merge Poll Data",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Merge Poll Data": {
+              "main": [
+                [
+                  {
+                    "node": "Render Complete?",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Render Complete?": {
+              "main": [
+                [
+                  {
+                    "node": "Download Video Binary",
+                    "type": "main",
+                    "index": 0
+                  }
+                ],
+                [
+                  {
+                    "node": "Wait 5 More Minutes",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Wait 5 More Minutes": {
+              "main": [
+                [
+                  {
+                    "node": "Poll Render Status",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Download Video Binary": {
+              "main": [
+                [
+                  {
+                    "node": "Attach Metadata",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Attach Metadata": {
+              "main": [
+                [
+                  {
+                    "node": "Upload to YouTube",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Upload to YouTube": {
+              "main": [
+                [
+                  {
+                    "node": "Build Shorts Payload",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Build Shorts Payload": {
+              "main": [
+                [
+                  {
+                    "node": "Submit Shorts Render",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Submit Shorts Render": {
+              "main": [
+                [
+                  {
+                    "node": "Extract Shorts Render",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Extract Shorts Render": {
+              "main": [
+                [
+                  {
+                    "node": "Wait 5 Minutes Shorts",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Wait 5 Minutes Shorts": {
+              "main": [
+                [
+                  {
+                    "node": "Poll Shorts Status",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Poll Shorts Status": {
+              "main": [
+                [
+                  {
+                    "node": "Merge Shorts Poll",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Merge Shorts Poll": {
+              "main": [
+                [
+                  {
+                    "node": "Shorts Complete?",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Shorts Complete?": {
+              "main": [
+                [
+                  {
+                    "node": "Download Shorts Binary",
+                    "type": "main",
+                    "index": 0
+                  }
+                ],
+                [
+                  {
+                    "node": "Wait Shorts Retry",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Wait Shorts Retry": {
+              "main": [
+                [
+                  {
+                    "node": "Poll Shorts Status",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Download Shorts Binary": {
+              "main": [
+                [
+                  {
+                    "node": "Attach Shorts Metadata",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Attach Shorts Metadata": {
+              "main": [
+                [
+                  {
+                    "node": "Upload Shorts to YouTube",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Upload Shorts to YouTube": {
+              "main": [
+                [
+                  {
+                    "node": "Mark Published",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Mark Published": {
+              "main": [
+                [
+                  {
+                    "node": "Notify Success",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Generate Voice Audio": {
+              "main": [
+                [
+                  {
+                    "node": "Upload Voice to Drive",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Upload Voice to Drive": {
+              "main": [
+                [
+                  {
+                    "node": "Set Audio Public",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Set Audio Public": {
+              "main": [
+                [
+                  {
+                    "node": "Merge Audio URL",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            },
+            "Merge Audio URL": {
+              "main": [
+                [
+                  {
+                    "node": "Fetch Scene Videos",
+                    "type": "main",
+                    "index": 0
+                  }
+                ]
+              ]
+            }
+          },
+          "settings": {
+            "executionOrder": "v1",
+            "binaryMode": "separate",
+            "availableInMCP": false
+          },
+          "staticData": null,
+          "meta": {
+            "templateCredsSetupCompleted": true
+          },
+          "nodeGroups": [],
+          "pinData": {},
+          "versionId": "425eec8a-9ab0-4489-b428-b264ef909bb8",
+          "activeVersionId": null,
+          "triggerCount": 0,
+          "shared": [
+            {
+              "updatedAt": "2026-06-26T17:38:46.937Z",
+              "createdAt": "2026-06-26T17:38:46.937Z",
+              "role": "workflow:owner",
+              "workflowId": "JtU5yzeRzfpRQphI",
+              "projectId": "v7HF504DXHWlRi0I"
+            }
+          ],
+          "activeVersion": null,
+          "tags": []
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -1126,12 +2384,15 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        15
+        18
+      ],
+      "recurrenceRuleSignatures": [
+        "hours:6"
       ]
     }
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-07-14T15:20:45.000Z",
-  "versionId": "e7cb083f-881b-4e51-90d1-26ac77f0e9e6"
+  "updatedAt": "2026-07-08T14:24:19.347Z",
+  "versionId": "308c2916-7842-438f-a8ff-1bb1da382230"
 }
