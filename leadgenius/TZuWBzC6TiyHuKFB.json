@@ -172,6 +172,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -229,6 +230,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Simple site Scraper - Sub Workflow",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
