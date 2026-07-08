@@ -107,6 +107,7 @@
   "isArchived": true,
   "meta": null,
   "name": "Telegram Multi-Media Processing Bot",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
