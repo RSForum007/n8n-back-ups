@@ -1,0 +1,120 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Webhook GET /portfolio": {
+      "main": [
+        [
+          {
+            "node": "Read HTML from Static Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read HTML from Static Data": {
+      "main": [
+        [
+          {
+            "node": "Respond with HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-03T15:35:07.761Z",
+  "id": "vD7lfHvJidfBsy6k",
+  "isArchived": true,
+  "meta": null,
+  "name": "Bobby Portfolio — Dashboard Webhook Server",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "path": "portfolio",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook GET /portfolio",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -304,
+        -64
+      ],
+      "webhookId": "portfolio-dashboard",
+      "id": "2c096a99-62ab-4e29-9bf6-8f35845d5ada",
+      "typeVersion": 2.1,
+      "notes": "This creates the URL: your-n8n-domain/webhook/portfolio. Keep this workflow ACTIVE at all times."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read from Workflow 1's static data\n// In n8n, use the workflow ID as the key\nconst staticData = $getWorkflowStaticData('global');\nconst html = staticData.portfolioHtml;\nconst generatedAt = staticData.generatedAt;\n\nif (!html) {\n  return [{ json: { \n    html: '<html><body style=\"background:#0a0e14;color:#c8d8e8;font-family:monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0\"><div style=\"text-align:center\"><div style=\"color:#3d5a72;margin-bottom:12px\">PORTFOLIO DASHBOARD</div><div style=\"font-size:20px;font-weight:700;margin-bottom:8px\">Bobby Dionido</div><div style=\"color:#3d5a72\">Dashboard not yet generated. Run Workflow 1 first.</div></div></body></html>',\n    status: 'placeholder' \n  }}];\n}\n\nreturn [{ json: { html, generatedAt, status: 'ok' } }];"
+      },
+      "name": "Read HTML from Static Data",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -80,
+        -64
+      ],
+      "id": "ca70486e-6ad1-4a0c-802d-bba54319724d",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=={{ $json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-cache"
+              },
+              {
+                "name": "X-Powered-By",
+                "value": "n8n + Claude"
+              }
+            ]
+          }
+        }
+      },
+      "name": "Respond with HTML",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        144,
+        -64
+      ],
+      "id": "8dd7362f-a486-49c1-9c2d-a61e9098a633",
+      "typeVersion": 1.5
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-03T15:35:07.775Z",
+      "createdAt": "2026-04-03T15:35:07.775Z",
+      "role": "workflow:owner",
+      "workflowId": "vD7lfHvJidfBsy6k",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": {
+    "global": {}
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-03T17:33:51.000Z",
+  "versionId": "35b69934-dea8-4fca-9bd5-f86b69804112"
+}
