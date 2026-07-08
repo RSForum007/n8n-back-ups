@@ -212,6 +212,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -293,6 +294,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby's Research Agent - working copy",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
