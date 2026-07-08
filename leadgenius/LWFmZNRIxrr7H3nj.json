@@ -1,0 +1,704 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule 9PM SGT": {
+      "main": [
+        [
+          {
+            "node": "CoinGecko ETH",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Yahoo Finance1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PSE_AREIT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PSE_CREIT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PSE_MBT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PSE_MREIT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PSE_RCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CoinGecko ETH": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calculate P&L": {
+      "main": [
+        [
+          {
+            "node": "Save Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude AI Analysis": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude + Build HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude + Build HTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Calculate P&L",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Claude Payload": {
+      "main": [
+        [
+          {
+            "node": "Claude AI Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook GET /portfolio": {
+      "main": [
+        [
+          {
+            "node": "Read and Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read and Respond": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Send URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Build Claude Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PSE_AREIT": {
+      "main": [
+        [
+          {
+            "node": "Merge PSE Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PSE_CREIT": {
+      "main": [
+        [
+          {
+            "node": "Merge PSE Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PSE_MBT": {
+      "main": [
+        [
+          {
+            "node": "Merge PSE Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PSE_MREIT": {
+      "main": [
+        [
+          {
+            "node": "Merge PSE Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PSE_RCR": {
+      "main": [
+        [
+          {
+            "node": "Merge PSE Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge PSE Results": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-07T13:58:44.777Z",
+  "id": "LWFmZNRIxrr7H3nj",
+  "isArchived": false,
+  "meta": null,
+  "name": "Bobby Portfolio — Dashboard Generator v2",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 21 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule 9PM SGT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -1328,
+        -400
+      ],
+      "id": "138eb1d5-7340-4816-935d-cdf5414a76d0",
+      "typeVersion": 1.3,
+      "notes": "9PM SGT = 13:00 UTC"
+    },
+    {
+      "parameters": {
+        "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd",
+        "options": {}
+      },
+      "name": "CoinGecko ETH",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -848,
+        -400
+      ],
+      "id": "e46cce85-ae9d-45f4-aba4-a56ed4ea0a6b",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const allInputs = $input.all();\n\n// ── Identify inputs by content ─────────────────────────────\nconst yfInput = allInputs.find(i =>\n  i.json.quoteResponse ||\n  i.json.meta?.status === 200 ||\n  Array.isArray(i.json.body)\n) || allInputs[0];\n\nconst ethInput = allInputs.find(i =>\n  i.json.body?.ethereum ||\n  i.json.ethereum\n) || allInputs[1];\n\nconst pseInput = allInputs.find(i =>\n  i.json.pseData\n) || null;\n\nconst yfRaw = yfInput.json;\nconst ethRaw = ethInput.json.body || ethInput.json;\n\nconst quotes = yfRaw.quoteResponse?.result\n             || yfRaw.body\n             || (Array.isArray(yfRaw) ? yfRaw : []);\nconst yf = {};\nquotes.forEach(q => {\n  const sym   = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw ?? q.regularMarketPrice ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconsole.log('YF prices:', JSON.stringify(yf));\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst phpsgd  = yf['PHPSGD=X'] || 0.023;\nconst ethSGD  = Number(ethRaw?.ethereum?.sgd)\n             || Number(ethInput.json?.ethereum?.sgd)\n             || Number(ethInput.json?.body?.ethereum?.sgd)\n             || 0;\nconst S = v => (v == null || isNaN(v) || !isFinite(v)) ? 0 : Number(v);\n\n// ── PSE prices: live from PSELookup, fallback if unavailable ──\nconst pseLive = pseInput?.json?.pseData || {};\nconst peraFallback = {\n  'AREIT.PS': 39.20,\n  'CREIT.PS': 3.44,\n  'MBT.PS':   64.40,\n  'MREIT.PS': 13.80,\n  'RCR.PS':   6.80\n};\nconst getPSEPrice = sym => S(pseLive[sym]) || S(peraFallback[sym]) || 0;\nconst pseSource   = Object.keys(pseLive).length > 0 ? 'live' : 'fallback';\nconsole.log('PSE source:', pseSource, JSON.stringify(pseLive));\n\n// ── SG + US Positions ─────────────────────────────────────────\nconst pos = [\n  {sym:'AJBU.SI', n:'KepDC', qty:500,    cost:1.9562,  c:'SGD'},\n  {sym:'C38U.SI', n:'CICT',  qty:500,    cost:1.9842,  c:'SGD'},\n  {sym:'HYDD.SI', n:'BYD',   qty:1600,   cost:1.9794,  c:'SGD'},\n  {sym:'J69U.SI', n:'FCT',   qty:800,    cost:2.1579,  c:'SGD'},\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.5898,  c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.99,  c:'USD'},\n  {sym:'O5RU.SI', n:'AIMS',  qty:500,    cost:1.2775,  c:'SGD'},\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal = 0, totPL = 0;\nconst rows = [];\n\nfor (const p of pos) {\n  const rawP = S(yf[p.sym]);\n  const pr   = S(p.c === 'USD' ? rawP * usdsgd : rawP);\n  const co   = S(p.c === 'USD' ? p.cost * usdsgd : p.cost);\n  const val  = S(p.qty * pr);\n  const cst  = S(p.qty * co);\n  const pl   = S(val - cst);\n  const pct  = cst > 0 ? S(pl / cst * 100) : 0;\n  totVal += val; totPL += pl;\n  rows.push({ n:p.n, price:rawP, currency:p.c, qty:p.qty, cost:p.cost, val, pl, pct, noP:!rawP });\n}\n\n// ── ETH ───────────────────────────────────────────────────────\nconst eV   = S(0.38935156 * ethSGD);\nconst ePL  = S(eV - 0.38935156 * 2560);\nconst ePct = S((ethSGD - 2560) / 2560 * 100);\n\n// ── BGF World Mining (USD fund, NAV hardcoded — update monthly) ─\nconst bNAV  = 107.31, bCost = 108.40;\nconst bV    = S(1.1624 * bNAV * usdsgd);\nconst bPL   = S(bV - 1.1624 * bCost * usdsgd);\nconst bPct  = S((bNAV - bCost) / bCost * 100);\n\n// ── Fullerton SGD Cash (stable fund) ──────────────────────────\nconst fUnits = 95.6727, fCostPerUnit = 1.2226, fNavPerUnit = 1.2258;\nconst fV  = S(fUnits * fNavPerUnit);\nconst fPL = S(fV - fUnits * fCostPerUnit);\n\ntotVal += eV + bV + fV;\ntotPL  += ePL + bPL + fPL;\n\nrows.push({ n:'ETH',       price:ethSGD,    currency:'SGD', qty:0.38935156, cost:2560,        val:eV, pl:ePL, pct:ePct, noP:false });\nrows.push({ n:'BGF',       price:bNAV,      currency:'USD', qty:1.1624,     cost:bCost,       val:bV, pl:bPL, pct:bPct, noP:false });\nrows.push({ n:'Fullerton', price:fNavPerUnit,currency:'SGD', qty:fUnits,     cost:fCostPerUnit,val:fV, pl:fPL, pct:S(fPL/(fUnits*fCostPerUnit)*100), noP:false, stable:true });\n\n// ── DragonFi PERA+ Positions (PHP) ────────────────────────────\nconst peraPos = [\n  {sym:'AREIT.PS', n:'AREIT', qty:1200, cost:40.6445},\n  {sym:'CREIT.PS', n:'CREIT', qty:8000, cost:3.4038},\n  {sym:'MBT.PS',   n:'MBT',   qty:430,  cost:67.6711},\n  {sym:'MREIT.PS', n:'MREIT', qty:1900, cost:13.5704},\n  {sym:'RCR.PS',   n:'RCR',   qty:4300, cost:6.79}\n];\n\nlet peraTotVal = 0, peraTotPL = 0;\nconst peraRows = [];\n\nfor (const p of peraPos) {\n  const pricePhp = getPSEPrice(p.sym);\n  const val      = S(p.qty * pricePhp);\n  const cst      = S(p.qty * p.cost);\n  const pl       = S(val - cst);\n  const pct      = cst > 0 ? S(pl / cst * 100) : 0;\n  peraTotVal += val;\n  peraTotPL  += pl;\n  peraRows.push({ n:p.n, sym:p.sym, price:pricePhp, qty:p.qty, cost:p.cost, val, pl, pct, noP:!pricePhp });\n}\n\n// ── Alerts ────────────────────────────────────────────────────\nconst alerts = [];\nrows.forEach(r => {\n  if (r.pct <= -10 && !r.noP && !r.stable) alerts.push(r.n + ' ' + r.pct.toFixed(1) + '%');\n});\nperaRows.forEach(r => {\n  if (r.pct <= -10 && !r.noP) alerts.push('PERA+ ' + r.n + ' ' + r.pct.toFixed(1) + '%');\n});\nconst byd = rows.find(r => r.n === 'BYD');\nif (byd && totVal > 0 && (byd.val / totVal * 100) > 25) {\n  alerts.push('BYD ' + (byd.val / totVal * 100).toFixed(1) + '% of portfolio!');\n}\n\nreturn [{ json: {\n  rows,\n  peraRows,\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  usdsgd,\n  phpsgd,\n  eth_sgd:        ethSGD,\n  pse_source:     pseSource,\n  alerts,\n  alert_count:    alerts.length,\n  timestamp:      new Date().toISOString()\n}}];"
+      },
+      "name": "Calculate P&L",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -464,
+        -240
+      ],
+      "id": "e5c422f9-2ee3-49d8-8a3f-c73912d507a7",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://bobbydionido.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Bobby Portfolio"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "anthropic/claude-sonnet-4-6"
+            },
+            {
+              "name": "max_tokens",
+              "value": "2500"
+            },
+            {
+              "name": "messages[0][role]",
+              "value": "user"
+            },
+            {
+              "name": "messages[0][content]",
+              "value": "={{ $json.claudeContent }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Claude AI Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        32,
+        -240
+      ],
+      "id": "d782036f-60b2-484a-b6ac-f93c83ef5c98",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const calcPL = $('Calculate P&L').first().json;\nconst rawResp = $input.first().json;\n\n// ── Parse Claude response ──────────────────────────────────────\nlet ai;\ntry {\n  const text = rawResp.choices[0].message.content;\n  const clean = text.replace(/```json|```/g, '').trim();\n  ai = JSON.parse(clean);\n} catch(e) {\n  ai = {\n    overall_summary: 'Portfolio update complete. AI analysis unavailable this run.',\n    detailed_analysis: '',\n    watchlist: '',\n    portfolio_status: calcPL.total_pl >= 0 ? 'UP' : 'DOWN',\n    biggest_mover: { name: 'N/A', direction: 'UP', note: '' },\n    positions: calcPL.rows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    pera_positions: calcPL.peraRows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    alerts: calcPL.alerts.length ? [{ level: 'YELLOW', title: 'Alerts', body: calcPL.alerts.join(', ') }] : [],\n    recommendation: 'Review positions manually.',\n    market_context: ''\n  };\n}\n\n// ── Helpers ────────────────────────────────────────────────────\nconst ts = new Date(calcPL.timestamp).toLocaleString('en-SG', {\n  timeZone: 'Asia/Singapore', weekday:'long', day:'2-digit',\n  month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'\n});\nconst fmt    = v => (v >= 0 ? '+' : '') + 'S$' + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPhp = v => (v >= 0 ? '+' : '-') + '₱' + Math.abs(Math.round(v)).toLocaleString();\nconst f1  = v => Number(v).toFixed(1);\nconst plColor    = v => v >= 0 ? '#00c896' : '#e74c3c';\nconst statusColor = s => ({ STRONG:'#00c896', OK:'#6db8a0', WATCH:'#f5a623', ALERT:'#e74c3c' }[s] || '#6db8a0');\nconst alertBg    = l => ({ RED:'rgba(231,76,60,0.12)', YELLOW:'rgba(245,166,35,0.10)', GREEN:'rgba(0,200,150,0.10)' }[l] || 'rgba(255,255,255,0.04)');\nconst alertBorder = l => ({ RED:'#e74c3c', YELLOW:'#f5a623', GREEN:'#00c896' }[l] || '#444');\nconst alertIcon  = l => ({ RED:'&#9940;', YELLOW:'&#9888;', GREEN:'&#9989;' }[l] || '&#8226;');\n\n// ── MooMoo SG Position rows ────────────────────────────────────\nconst posRows = calcPL.rows.map(r => {\n  const aiPos  = (ai.positions || []).find(p => p.name === r.n) || {};\n  const status = r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = 'S$' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+S$<1' : '-S$<1')\n    : (r.pl >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plSGD  = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plSGD};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── DragonFi PERA+ rows ────────────────────────────────────────\nconst peraRows = calcPL.peraRows.map(r => {\n  const aiPos  = (ai.pera_positions || []).find(p => p.name === r.n) || {};\n  const status = r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = '₱' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+₱<1' : '-₱<1')\n    : (r.pl >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plColor2 = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plColor2};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── Alerts HTML ────────────────────────────────────────────────\nconst alertsHtml = (ai.alerts && ai.alerts.length > 0)\n  ? ai.alerts.map(al => `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;margin-bottom:10px;background:${alertBg(al.level)};border-left:3px solid ${alertBorder(al.level)};align-items:flex-start\">\n      <span style=\"font-size:15px;flex-shrink:0;margin-top:1px\">${alertIcon(al.level)}</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8;display:block;margin-bottom:4px\">${al.title}</strong><p style=\"font-size:12px;color:#6b8599;margin:0;line-height:1.5\">${al.body}</p></div>\n    </div>`).join('')\n  : `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;background:rgba(0,200,150,0.08);border-left:3px solid #00c896;align-items:center\">\n      <span style=\"font-size:15px\">&#9989;</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8\">All Clear</strong><p style=\"font-size:12px;color:#6b8599;margin:4px 0 0\">No threshold alerts today.</p></div>\n    </div>`;\n\n// ── Status pill ────────────────────────────────────────────────\nconst pillColor = ai.portfolio_status === 'UP' ? '#00c896' : ai.portfolio_status === 'DOWN' ? '#e74c3c' : '#3d9be9';\nconst pillLabel = ai.portfolio_status === 'UP' ? '&#9650; UP' : ai.portfolio_status === 'DOWN' ? '&#9660; DOWN' : '&#8212; FLAT';\nconst statusPill = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${pillColor}22;color:${pillColor};border:1px solid ${pillColor}44;margin-left:10px\">${pillLabel}</span>`;\n\nconst costBasis = calcPL.total_value - calcPL.total_pl;\nconst plPct     = costBasis > 0 ? (calcPL.total_pl / costBasis * 100).toFixed(1) : '0.0';\nconst peraPlPct = calcPL.pera_total_val > 0 ? ((calcPL.pera_total_pl / (calcPL.pera_total_val - calcPL.pera_total_pl)) * 100).toFixed(1) : '0.0';\n\n// ── Full HTML ──────────────────────────────────────────────────\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Bobby Portfolio &mdash; ${ts}</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#0a0e14;color:#c8d8e8;font-family:'DM Sans',sans-serif;min-height:100vh}\nbody::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0}\n.wrap{max-width:980px;margin:0 auto;padding:36px 20px;position:relative;z-index:1}\ntable{width:100%;border-collapse:collapse}\nthead th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid #1a2636}\ntbody tr{border-bottom:1px solid rgba(26,38,54,0.6);transition:background 0.15s}\ntbody tr:hover{background:#111c28}\n.section-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#3d5a72;text-transform:uppercase;margin-bottom:12px}\n@media(max-width:600px){.hide-mobile{display:none}.stat-grid{grid-template-columns:1fr 1fr!important}.stat-val{font-size:20px!important}}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n\n<div style=\"display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #1a2636;padding-bottom:24px;margin-bottom:32px;flex-wrap:wrap;gap:12px\">\n  <div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#3d5a72;text-transform:uppercase;margin-bottom:8px\">&#128200; Daily Portfolio Report</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#c8d8e8;letter-spacing:0.04em\">Bobby Dionido ${statusPill}</div>\n  </div>\n  <div style=\"text-align:right\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">Generated ${ts}</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;margin-top:5px\">USD/SGD ${calcPL.usdsgd} &nbsp;|&nbsp; PHP/SGD ${calcPL.phpsgd.toFixed(4)} &nbsp;|&nbsp; ETH S$${Math.round(calcPL.eth_sgd).toLocaleString()}</div>\n  </div>\n</div>\n\n<div class=\"stat-grid\" style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px\">\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">MooMoo SG Value</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3d9be9\">S$${Math.round(calcPL.total_value).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmt(calcPL.total_pl)} &nbsp;(${plPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">DragonFi PERA+</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.pera_total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmtPhp(calcPL.pera_total_pl)} &nbsp;(${peraPlPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">Biggest Mover</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:${ai.biggest_mover?.direction==='UP'?'#00c896':'#e74c3c'}\">${ai.biggest_mover?.name || 'N/A'}</div>\n    <div style=\"font-size:11px;color:#3d5a72;margin-top:5px\">${ai.biggest_mover?.note || ''}</div>\n  </div>\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:24px;margin-bottom:20px\">\n  <div class=\"section-label\">AI Analysis</div>\n  <p style=\"font-size:14px;line-height:1.75;color:#c8d8e8\">${ai.overall_summary}</p>\n  ${ai.detailed_analysis ? `<p style=\"margin-top:14px;font-size:13px;line-height:1.8;color:#a0b8cc\">${ai.detailed_analysis}</p>` : ''}\n  ${ai.market_context ? `<p style=\"margin-top:12px;font-size:12px;color:#4a7a9b\">&#128202; ${ai.market_context}</p>` : ''}\n  ${ai.watchlist ? `<div style=\"margin-top:16px;padding:14px 16px;border-radius:6px;background:rgba(61,155,233,0.07);border-left:3px solid #3d9be9\"><div style=\"font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d9be9;text-transform:uppercase;margin-bottom:8px\">&#128270; Watchlist — Potential Adds</div><p style=\"font-size:12px;color:#7a9ab5;line-height:1.7\">${ai.watchlist}</p></div>` : ''}\n  <p style=\"margin-top:16px;padding-top:16px;border-top:1px solid #1a2636;font-size:13px;color:#3d9be9;font-style:italic\">&#128161; ${ai.recommendation}</p>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">Alerts &mdash; What Changed</div>\n  ${alertsHtml}\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">MooMoo SG &mdash; Live Positions</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L S$</th><th>Status</th><th>Value</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${posRows}</tbody>\n    </table>\n  </div>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">DragonFi PERA+ &mdash; Philippine Positions</div>\n  <div style=\"background:#111820;border:1px solid #0d2a1a;border-radius:8px;overflow:hidden;border-top:2px solid #3dcc9b44\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L ₱</th><th>Status</th><th>Value ₱</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${peraRows}</tbody>\n    </table>\n    <div style=\"padding:12px 16px;border-top:1px solid #1a2636;display:flex;justify-content:space-between;align-items:center\">\n      <span style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">TOTAL PERA+</span>\n      <span style=\"font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()} &nbsp;<span style=\"color:${plColor(calcPL.pera_total_pl)}\">${fmtPhp(calcPL.pera_total_pl)}</span></span>\n    </div>\n  </div>\n</div>\n\n<div style=\"margin-top:40px;padding-top:20px;border-top:1px solid #1a2636;font-family:'Space Mono',monospace;font-size:10px;color:#2a3f52;text-align:center;letter-spacing:0.08em\">\n  Generated by n8n + Claude &nbsp;|&nbsp; bobbydionido.com &nbsp;|&nbsp; Yahoo Finance &middot; CoinGecko &middot; DragonFi PERA+\n</div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{ json: { html, generated_at: calcPL.timestamp } }];"
+      },
+      "name": "Parse Claude + Build HTML",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        208,
+        -240
+      ],
+      "id": "7cf9f909-0fd4-467a-8b0d-5e52600ddc2d",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "chatId": "5811640282",
+        "text": "=📊 Portfolio updated\nhttps://portfolio.bobbydionido.com\n\nTotal: S${{ Math.round($('Calculate P&L').first().json.total_value).toLocaleString() }} | P/L: {{ $('Calculate P&L').first().json.total_pl >= 0 ? '+' : '' }}S${{ Math.round($('Calculate P&L').first().json.total_pl) }}\n{{ $('Calculate P&L').first().json.alerts.length > 0 ? '⚠️ ' + $('Calculate P&L').first().json.alerts.join(' | ') : '✅ All clear' }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Telegram — Send URL",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        592,
+        -240
+      ],
+      "id": "33316aa2-c51b-4bbe-b325-0895dce94c41",
+      "typeVersion": 1.2,
+      "webhookId": "109f7728-629a-4a47-8728-d94cf1c1c411",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Replace with your actual Telegram bot credentials and chat ID"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -624,
+        -240
+      ],
+      "id": "2b81aa18-8b05-448b-a602-41df426e51ff",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\n\nconst content = 'Return ONLY raw JSON, no markdown, no backticks. ' +\n  'Portfolio as of ' + d.timestamp + '. ' +\n  'MooMoo SG Total: S$' + d.total_value + ' PL: S$' + d.total_pl + '. ' +\n  'DragonFi PERA+ Total: PHP ' + d.pera_total_val + ' PL: PHP ' + d.pera_total_pl + '. ' +\n  'USDSGD: ' + d.usdsgd + ' PHPSGD: ' + d.phpsgd + ' ETH: S$' + d.eth_sgd + '. ' +\n  'Alerts: ' + (d.alerts.length ? d.alerts.join(', ') : 'None') + '. ' +\n  'MooMoo SG Positions: ' + d.rows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% S$' + Math.round(r.val)).join(', ') + '. ' +\n  'DragonFi PERA+ Positions: ' + d.peraRows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% PHP' + Math.round(r.val)).join(', ') + '. ' +\n  'Context: Bobby is a Singapore-based OFW investor. ' +\n  'MooMoo SG: KepDC (data center REIT), CICT (commercial), FCT/J69U (Frasers suburban retail), JYEU (Lendlease commercial), AIMS (industrial), BYD (HK SDR China EV), NVDA, TSLA, ETH, BGF World Mining Fund, Fullerton stable cash. BYD concentration risk if above 25pct. ' +\n  'DragonFi PERA+: Philippine REITs and stocks held in a tax-advantaged PERA account. AREIT (Ayala Land REIT premier retail/office), CREIT (Citicore renewable energy REIT), MBT (Metrobank largest PH bank), MREIT (Megaworld REIT office), RCR (RL Commercial REIT Robinsons office). PSE market context applies. ' +\n  'Return this JSON: {' +\n  '\"overall_summary\":\"4 to 5 sentences. Cover combined portfolio health across both MooMoo SG and DragonFi PERA+, what is driving todays P/L in each, and overall sentiment.\",' +\n  '\"detailed_analysis\":\"8 to 10 sentences. Analyze each holding individually: each SG REIT, BYD and China macro, NVDA and TSLA in US tech climate, ETH crypto sentiment, BGF Mining and commodity cycle, Fullerton as anchor. Then cover each PERA+ holding: AREIT office/retail outlook, CREIT renewable energy play, MBT banking sector, MREIT office demand, RCR Robinsons commercial. Be specific.\",' +\n  '\"watchlist\":\"3 to 4 sentences. Suggest 2 to 3 specific stocks or REITs Bobby does not currently hold in either portfolio. Include ticker, exchange, reason, and how it complements his existing mix.\",' +\n  '\"portfolio_status\":\"UP or DOWN or FLAT\",' +\n  '\"biggest_mover\":{\"name\":\"\",\"direction\":\"UP or DOWN\",\"note\":\"one line\"},' +\n  '\"positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 12 words\"}],' +\n  '\"pera_positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 12 words\"}],' +\n  '\"alerts\":[{\"level\":\"RED or YELLOW or GREEN\",\"title\":\"\",\"body\":\"1 to 2 sentences\"}],' +\n  '\"recommendation\":\"3 to 4 sentences. Actionable advice across both portfolios — what to trim, hold, or add and why. Most urgent action first.\",' +\n  '\"market_context\":\"2 sentences covering macro relevant to both SG and PH markets — SGD rates, US Fed, China outlook, PSE sentiment, crypto.\"}';\n\nreturn [{ json: { \n  ...d,\n  claudeContent: content,\n  claudeRole: 'user'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        -240
+      ],
+      "id": "d20e68a7-d885-4df6-b1b8-758eba4467bd",
+      "name": "Build Claude Payload"
+    },
+    {
+      "parameters": {
+        "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ticker",
+              "value": "AJBU.SI,C38U.SI,HYDD.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,TSLA,USDSGD=X,PHPSGD=X"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "[REDACTED_RAPIDAPI_KEY]"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "yahoo-finance15.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "f6afacd4-4736-4ebe-9241-ed2b96d52bb1",
+      "name": "Yahoo Finance1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        -560
+      ],
+      "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+    },
+    {
+      "parameters": {
+        "path": "portfolio",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook GET /portfolio",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -448,
+        128
+      ],
+      "webhookId": "portfolio-dashboard",
+      "id": "d6bdf219-671c-49a0-bfab-e1bd90d84bc8",
+      "typeVersion": 2.1,
+      "notes": "This creates the URL: your-n8n-domain/webhook/portfolio. Keep this workflow ACTIVE at all times."
+    },
+    {
+      "parameters": {
+        "jsCode": "const fs = require('fs');\nconst path = '/home/node/.n8n/portfolio-dashboard.html';\n\nlet html;\ntry {\n  html = fs.readFileSync(path, 'utf8');\n} catch(e) {\n  html = '<html><body style=\"background:#0a0e14;color:#c8d8e8;font-family:monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0\"><div style=\"text-align:center\"><div style=\"color:#3d5a72;margin-bottom:12px\">PORTFOLIO DASHBOARD</div><div style=\"font-size:20px;font-weight:700;margin-bottom:8px\">Bobby Dionido</div><div style=\"color:#3d5a72;margin-top:8px\">Dashboard not yet generated.</div></div></body></html>';\n}\n\nreturn [{ json: { html } }];"
+      },
+      "name": "Read and Respond",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -224,
+        128
+      ],
+      "id": "84ce4451-6f2c-44fe-96eb-387a14a9b008",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=={{ $json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-cache"
+              }
+            ]
+          }
+        }
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        -48,
+        128
+      ],
+      "id": "d9fc8f95-0555-4d31-97a7-e007e2265634",
+      "typeVersion": 1.5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8099/update",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ $json.html }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        384,
+        -240
+      ],
+      "id": "0a69268e-0516-4f6c-8030-4183793b5eeb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\n\nconst workflowStaticData = $getWorkflowStaticData('global');\n\nworkflowStaticData.latestSnapshot = {\n  saved_at:       new Date().toISOString(),\n  total_value:    d.total_value,\n  total_pl:       d.total_pl,\n  pera_total_val: d.pera_total_val,\n  pera_total_pl:  d.pera_total_pl,\n  usdsgd:         d.usdsgd,\n  phpsgd:         d.phpsgd,\n  eth_sgd:        d.eth_sgd,\n  rows:           d.rows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct })),\n  peraRows:       d.peraRows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct }))\n};\n\nreturn [{ json: d }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -240
+      ],
+      "id": "0155184d-c707-421b-84cc-435c9fa43c34",
+      "name": "Save Snapshot"
+    },
+    {
+      "parameters": {
+        "url": "https://pselookup.vrymel.com/api/stocks/AREIT",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "name": "PSE_AREIT",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -992,
+        -320
+      ],
+      "id": "561f62c0-3d88-44a0-9e7a-fd12fa4080cf",
+      "typeVersion": 4.4,
+      "notes": "Live PSE price for AREIT from pselookup.vrymel.com"
+    },
+    {
+      "parameters": {
+        "url": "https://pselookup.vrymel.com/api/stocks/CREIT",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "name": "PSE_CREIT",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -992,
+        -160
+      ],
+      "id": "64aa640d-6477-4b5f-ae5f-8b979d6a8a3a",
+      "typeVersion": 4.4,
+      "notes": "Live PSE price for CREIT from pselookup.vrymel.com"
+    },
+    {
+      "parameters": {
+        "url": "https://pselookup.vrymel.com/api/stocks/MBT",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "name": "PSE_MBT",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -992,
+        0
+      ],
+      "id": "aa4c415a-f742-4e0f-9e22-891ff8ca2733",
+      "typeVersion": 4.4,
+      "notes": "Live PSE price for MBT from pselookup.vrymel.com"
+    },
+    {
+      "parameters": {
+        "url": "https://pselookup.vrymel.com/api/stocks/MREIT",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "name": "PSE_MREIT",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -992,
+        160
+      ],
+      "id": "48acee21-0313-4f3a-88c3-7b0555171d0e",
+      "typeVersion": 4.4,
+      "notes": "Live PSE price for MREIT from pselookup.vrymel.com"
+    },
+    {
+      "parameters": {
+        "url": "https://pselookup.vrymel.com/api/stocks/RCR",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "name": "PSE_RCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -992,
+        336
+      ],
+      "id": "7f7604bb-0da5-4b35-8497-e008db724f72",
+      "typeVersion": 4.4,
+      "notes": "Live PSE price for RCR from pselookup.vrymel.com"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect all 5 PSE HTTP responses and build pseData object\nconst allInputs = $input.all();\n\nconst tickerMap = {\n  'AREIT': 'AREIT.PS',\n  'CREIT': 'CREIT.PS',\n  'MBT':   'MBT.PS',\n  'MREIT': 'MREIT.PS',\n  'RCR':   'RCR.PS'\n};\n\nconst fallback = {\n  'AREIT.PS': 39.20,\n  'CREIT.PS': 3.44,\n  'MBT.PS':   64.40,\n  'MREIT.PS': 13.80,\n  'RCR.PS':   6.80\n};\n\nconst pseData = {};\n\nfor (const input of allInputs) {\n  const body = input.json;\n  // pselookup returns { symbol, last_trade_price, ... }\n  const sym    = body?.symbol || body?.stockSymbol || '';\n  const price  = Number(body?.last_trade_price) || Number(body?.price) || Number(body?.close) || 0;\n  const psKey  = tickerMap[sym] || tickerMap[sym?.toUpperCase()];\n  \n  if (psKey && price > 0) {\n    pseData[psKey] = price;\n    console.log(`PSE live: ${sym} = ${price}`);\n  } else if (psKey) {\n    pseData[psKey] = fallback[psKey];\n    console.log(`PSE fallback: ${sym} = ${fallback[psKey]} (API returned: ${JSON.stringify(body).slice(0,100)})`);\n  }\n}\n\n// Fill any missing with fallback\nfor (const [key, val] of Object.entries(fallback)) {\n  if (!pseData[key] || pseData[key] === 0) {\n    pseData[key] = val;\n    console.log(`PSE fallback fill: ${key} = ${val}`);\n  }\n}\n\nconst source = Object.values(pseData).every((v, i) => v === Object.values(fallback)[i])\n  ? 'fallback' : 'live';\n\nconsole.log('PSE final:', JSON.stringify(pseData), 'source:', source);\nreturn [{ json: { pseData, pse_source: source } }];"
+      },
+      "name": "Merge PSE Results",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -832,
+        -224
+      ],
+      "id": "2eb80bbb-5031-4cc8-a9a8-93983396acda",
+      "typeVersion": 2,
+      "notes": "Combines 5 PSE HTTP responses into a single pseData object. Falls back to hardcoded prices if API fails."
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-07T13:58:44.785Z",
+      "createdAt": "2026-04-07T13:58:44.785Z",
+      "role": "workflow:owner",
+      "workflowId": "LWFmZNRIxrr7H3nj",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": {
+    "node:Schedule 9PM SGT": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 2,
+  "updatedAt": "2026-04-07T14:14:25.962Z",
+  "versionId": "30ad079f-fea4-4f39-b177-83903f33ca54"
+}
