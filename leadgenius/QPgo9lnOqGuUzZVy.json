@@ -133,6 +133,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "telegram chatbot + google sheets",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
