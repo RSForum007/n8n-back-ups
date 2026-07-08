@@ -124,6 +124,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "AI Email Drafter",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
