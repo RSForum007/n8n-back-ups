@@ -751,6 +751,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Brain Rotter v2 copy",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
