@@ -80,7 +80,7 @@
               },
               {
                 "name": "X-RapidAPI-Key",
-                "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+                "value": "[REDACTED_RAPIDAPI_KEY]"
               },
               {
                 "name": "X-RapidAPI-Host",
@@ -669,7 +669,7 @@
             },
             {
               "name": "X-RapidAPI-Key",
-              "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+              "value": "[REDACTED_RAPIDAPI_KEY]"
             },
             {
               "name": "X-RapidAPI-Host",
