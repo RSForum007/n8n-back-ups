@@ -566,6 +566,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -734,6 +735,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Backup workflow to github",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
