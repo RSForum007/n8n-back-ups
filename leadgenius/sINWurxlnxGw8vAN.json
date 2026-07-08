@@ -235,6 +235,7 @@
   "isArchived": true,
   "meta": null,
   "name": "chatgpt modified",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
