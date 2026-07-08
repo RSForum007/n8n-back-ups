@@ -220,6 +220,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Bree Resume Screener",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
