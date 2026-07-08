@@ -1,0 +1,289 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "9PM SGT Mon-Fri": {
+      "main": [
+        [
+          {
+            "node": "Yahoo Finance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance": {
+      "main": [
+        [
+          {
+            "node": "CoinGecko ETH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CoinGecko ETH": {
+      "main": [
+        [
+          {
+            "node": "Calculate P/L",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate P/L": {
+      "main": [
+        [
+          {
+            "node": "Telegram Summary",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram Positions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HA Sensor Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-03T05:51:28.235Z",
+  "id": "w0SZFfBYqH1eQYC9",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Bobby — Portfolio Daily Check 9PM SGT v2",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "30189fca-95e0-4055-8c0d-effe0dad62a1",
+      "name": "9PM SGT Mon-Fri",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1808,
+        -496
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ticker",
+              "value": "AJBU.SI,C38U.SI,HYDD.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,TSLA,USDSGD=X"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "[REDACTED_RAPIDAPI_KEY]"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "yahoo-finance15.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "3a6e010b-e93c-4fdd-96c1-8774aac84eae",
+      "name": "Yahoo Finance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1568,
+        -496
+      ],
+      "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+    },
+    {
+      "parameters": {
+        "url": "https://api.coingecko.com/api/v3/simple/price",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "ethereum"
+            },
+            {
+              "name": "vs_currencies",
+              "value": "sgd,usd"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "94559430-4ddc-4336-8c3c-a34daa6ad73b",
+      "name": "CoinGecko ETH",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1328,
+        -496
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── Parse RapidAPI Yahoo Finance response ─────────────────────\n// yahoo-finance15 returns either quoteResponse.result or body[]\nconst raw = $('Yahoo Finance').first().json;\nconst quotes = raw.quoteResponse?.result\n            || raw.body\n            || (Array.isArray(raw) ? raw : []);\n\nconst yf = {};\nquotes.forEach(q => {\n  const sym = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw\n              ?? q.regularMarketPrice\n              ?? q.price?.regularMarketPrice?.raw\n              ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconst ethData = $('CoinGecko ETH').first().json;\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst ethSGD  = Number(ethData?.ethereum?.sgd) || 2700;\n\nconst S  = v => (v==null||isNaN(v)||!isFinite(v)) ? 0 : Number(v);\nconst f0 = v => S(v).toFixed(0);\nconst f1 = v => S(v).toFixed(1);\nconst f4 = v => S(v).toFixed(4);\n\nconst pos = [\n  {sym:'AJBU.SI', n:'KepDC', qty:500,    cost:1.9562,  c:'SGD'},\n  {sym:'C38U.SI', n:'CICT',  qty:500,    cost:1.9842,  c:'SGD'},\n  {sym:'HYDD.SI', n:'BYD',   qty:1600,   cost:1.9794,  c:'SGD'},\n  {sym:'J69U.SI', n:'FCT',   qty:800,    cost:2.1579,  c:'SGD'},\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.595,   c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.99,  c:'USD'},\n  {sym:'O5RU.SI', n:'AIMS',  qty:500,    cost:1.2775,  c:'SGD'},\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal=0, totPL=0;\nconst rows=[];\nfor (const p of pos) {\n  const raw=S(yf[p.sym]);\n  const pr=S(p.c==='USD'?raw*usdsgd:raw);\n  const co=S(p.c==='USD'?p.cost*usdsgd:p.cost);\n  const val=S(p.qty*pr), cst=S(p.qty*co), pl=S(val-cst);\n  const pct=cst>0?S(pl/cst*100):0;\n  totVal+=val; totPL+=pl;\n  rows.push({n:p.n, raw, val, pl, pct, noP:!raw});\n}\n\nconst eV=S(0.38935156*ethSGD), ePL=S(eV-0.38935156*2560), ePct=S((ethSGD-2560)/2560*100);\nconst bV=S(1.1624*100.16*usdsgd), bPL=S(bV-1.1624*108.40*usdsgd), bPct=S((100.16-108.40)/108.40*100);\nconst fV=S(95.6727*1.226);\ntotVal+=eV+bV+fV; totPL+=ePL+bPL+S(fV-117);\n\nconst al=[];\nrows.forEach(r=>{ if(r.pct<=-10&&!r.noP) al.push(r.n+' '+f1(r.pct)+'%'); });\nif(ePct<=-15) al.push('ETH '+f1(ePct)+'%');\nconst byd=rows.find(r=>r.n==='BYD');\nif(byd&&totVal>0&&byd.val/totVal*100>25) al.push('BYD '+f1(byd.val/totVal*100)+'% of port!');\nconst noPriceList=rows.filter(r=>r.noP).map(r=>r.n);\nif(noPriceList.length) al.push('No price: '+noPriceList.join(','));\n\nconst t=new Date().toLocaleString('en-SG',{timeZone:'Asia/Singapore',\n  day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});\nconst em=totPL>=0?'UP':'DN';\nconst sg=totPL>=0?'+':'';\n\n// MSG1 — summary\nconst alertLine = al.length ? 'ALERTS: '+al.join(' | ') : 'All clear';\nconst msg1 = [\n  '['+em+'] Bobby Portfolio '+t,\n  'Total: S$'+Math.round(totVal).toLocaleString()+' | P/L: '+sg+'S$'+Math.round(totPL),\n  'FX: '+f4(usdsgd)+' | ETH: S$'+f0(ethSGD),\n  alertLine\n].join('\\n').substring(0,400);\n\n// MSG2 — positions (pairs per line)\nconst pLines=[];\nfor(let i=0;i<rows.length;i+=2){\n  const a=rows[i], b=rows[i+1];\n  pLines.push(\n    a.n+' '+(a.pl>=0?'+':'')+f1(a.pct)+'%'+\n    (b?' | '+b.n+' '+(b.pl>=0?'+':'')+f1(b.pct)+'%':'')\n  );\n}\npLines.push('ETH '+(ePL>=0?'+':'')+f1(ePct)+'% | BGF '+(bPL>=0?'+':'')+f1(bPct)+'%');\npLines.push('Fullerton S$'+f0(fV)+' (stable)');\nconst msg2 = ('Positions:\\n'+pLines.join('\\n')).substring(0,400);\n\n// Debug: show raw price keys received\nconst priceKeys = Object.keys(yf).join(',');\n\nreturn [{json:{\n  msg1, msg2,\n  msg1_length: msg1.length,\n  msg2_length: msg2.length,\n  prices_received: Object.keys(yf).length,\n  price_keys: priceKeys,\n  total_value: Math.round(totVal*100)/100,\n  total_pl:    Math.round(totPL*100)/100,\n  usdsgd:      Math.round(usdsgd*10000)/10000,\n  eth_sgd:     ethSGD,\n  alert_count: al.length,\n  timestamp:   new Date().toISOString()\n}}];"
+      },
+      "id": "5c1e280c-cb45-44c1-ae81-3bf45ba699a7",
+      "name": "Calculate P/L",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1088,
+        -496
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7671192165:AAFEUC9yBlUGMYtA4XKrwMIOsIyGlESPLOM/sendMessage",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "5811640282"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.msg1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "97998183-0c46-4bb6-b16c-712910648c8e",
+      "name": "Telegram Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        -656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7671192165:AAFEUC9yBlUGMYtA4XKrwMIOsIyGlESPLOM/sendMessage",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "5811640282"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('Calculate P/L').first().json.msg2 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc4143c7-b299-43d2-bf6e-c3f0f3d1b3b7",
+      "name": "Telegram Positions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        -496
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ha921tampines.bobbydionido.com/api/states/sensor.portfolio_total_value",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkNDg4NmM2ZTk2NzQ0MGZhODhmYWRlNjc1MTc4MWJiZSIsImlhdCI6MTc3NTEzMjU3NiwiZXhwIjoyMDkwNDkyNTc2fQ.2g4mfJrxwBdLIyiatA04-FAE84pP-Ro0ZNHDEedWYUo"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={ \"state\": \"{{ $json.total_value }}\", \"attributes\": { \"unit_of_measurement\": \"SGD\", \"friendly_name\": \"Portfolio Total Value\", \"total_pl\": {{ $json.total_pl }}, \"usdsgd\": {{ $json.usdsgd }}, \"eth_sgd\": {{ $json.eth_sgd }}, \"alert_count\": {{ $json.alert_count }}, \"last_updated\": \"{{ $json.timestamp }}\" } }",
+        "options": {}
+      },
+      "id": "3ac99dc8-9e25-4dd9-860b-e8201a88bded",
+      "name": "HA Sensor Update",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        -336
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-03T05:51:28.243Z",
+      "createdAt": "2026-04-03T05:51:28.243Z",
+      "role": "workflow:owner",
+      "workflowId": "w0SZFfBYqH1eQYC9",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-03T14:57:11.898Z",
+  "versionId": "6f60be73-5db3-43b0-a871-be3955014461"
+}
