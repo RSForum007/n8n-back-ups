@@ -283,6 +283,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby's Image Agent",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
