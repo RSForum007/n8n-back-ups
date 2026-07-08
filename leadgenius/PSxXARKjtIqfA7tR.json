@@ -251,6 +251,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -343,6 +344,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby's Research Agent",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
@@ -351,7 +353,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1,
       "position": [
-        352,
+        320,
         -80
       ]
     },
@@ -526,6 +528,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-09-03T14:49:18.000Z",
-  "versionId": "d77742c3-0a3e-4093-b6c7-56aba4ff5cbe"
+  "updatedAt": "2026-01-06T12:31:09.855Z",
+  "versionId": "bb96aee2-f43d-41d1-8fbb-1a28e31c6bd3"
 }
