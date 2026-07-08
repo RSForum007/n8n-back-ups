@@ -2607,6 +2607,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -3088,6 +3089,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Expense Tracker",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
