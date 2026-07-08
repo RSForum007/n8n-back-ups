@@ -177,6 +177,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Bobby's Personal Assistant",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
@@ -412,7 +413,7 @@
           "parameters": [
             {
               "name": "xi-api-key",
-              "value": "sk_72e78f828ff305004b109f1de62f28bf3413a1098c6a7111"
+              "value": "[REDACTED_ELEVENLABS_KEY]"
             },
             {
               "name": "Content-Type",
