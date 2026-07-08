@@ -104,6 +104,7 @@
   "isArchived": false,
   "meta": null,
   "name": "telegram chatbot",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
