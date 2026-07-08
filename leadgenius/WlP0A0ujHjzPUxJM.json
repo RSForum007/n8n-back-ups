@@ -141,6 +141,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Gmail Auto Reply",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
