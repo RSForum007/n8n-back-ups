@@ -136,6 +136,7 @@
   "isArchived": true,
   "meta": null,
   "name": "TTS testing",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {},
