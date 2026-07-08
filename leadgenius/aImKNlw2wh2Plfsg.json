@@ -131,6 +131,7 @@
   "isArchived": true,
   "meta": null,
   "name": "telegram chatbot + google sheets - TESTED WORKIN",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
