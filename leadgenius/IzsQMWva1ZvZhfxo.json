@@ -163,6 +163,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Stock Market Daily Digest with Bright Data",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
