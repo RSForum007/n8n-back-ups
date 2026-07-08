@@ -756,6 +756,7 @@
   "isArchived": false,
   "meta": null,
   "name": "The Brain Rotter 5000",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
