@@ -1,0 +1,1048 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-07T11:23:59.318Z",
+    "createdAt": "2026-07-07T11:23:59.318Z",
+    "versionId": "4699e596-ccab-4d2d-84aa-14f6aa3e32d1",
+    "workflowId": "BvXxSdiBeEZDvRHS",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 0 21 * * 6"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -2976,
+          -400
+        ],
+        "id": "349f09c9-b857-49d0-9a38-5349d68b3f7d",
+        "name": "Schedule Saturday 9PM SGT"
+      },
+      {
+        "parameters": {
+          "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd",
+          "options": {}
+        },
+        "name": "CoinGecko ETH",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          -2736,
+          -288
+        ],
+        "id": "a4301e71-737f-467e-9a8c-297a2eb954cb",
+        "typeVersion": 4.4
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -2496,
+          -384
+        ],
+        "id": "052aa7dc-f81a-46ab-8a6a-cbb1b27ec5b5",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "ticker",
+                "value": "BUOU.SI,A17U.SI,AJBU.SI,C38U.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,ME8U.SI,TSLA,USDSGD=X,PHPSGD=X,AREIT.PS,CREIT.PS,MBT.PS,MREIT.PS,RCR.PS"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "X-RapidAPI-Key",
+                "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+              },
+              {
+                "name": "X-RapidAPI-Host",
+                "value": "yahoo-finance15.p.rapidapi.com"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "id": "6d7b3746-7fe6-4eca-bb05-eca9b5ad48ff",
+        "name": "Yahoo Finance",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -2736,
+          -480
+        ],
+        "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+      },
+      {
+        "parameters": {
+          "jsCode": "const allInputs = $input.all();\n\nconst yfInput = allInputs.find(i =>\n  i.json.quoteResponse ||\n  i.json.meta?.status === 200 ||\n  Array.isArray(i.json.body)\n) || allInputs[0];\n\nconst ethInput = allInputs.find(i =>\n  i.json.body?.ethereum ||\n  i.json.ethereum\n) || allInputs[1];\n\nconst yfRaw = yfInput.json;\nconst quotes = yfRaw.quoteResponse?.result\n             || yfRaw.body\n             || (Array.isArray(yfRaw) ? yfRaw : []);\nconst yf = {};\nquotes.forEach(q => {\n  const sym = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw ?? q.regularMarketPrice ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst phpsgd = yf['PHPSGD=X'] || 0.023;\nconst S = v => (v == null || isNaN(v) || !isFinite(v)) ? 0 : Number(v);\n\n// ── Read ETH & PSE Prices from TradingView nodes ────────────────\nlet ethSGD = 0;\nconst tvPsePrices = {};\n\ntry {\n  const tvEthData = $('TradingView ETHSGD').first().json;\n  ethSGD = S(tvEthData.data?.[0]?.d?.[1]);\n} catch (e) {\n  // Fallback to CoinGecko input if TradingView fails\n  const ethRaw = ethInput.json.body || ethInput.json;\n  ethSGD = Number(ethRaw?.ethereum?.sgd) || Number(ethInput.json?.ethereum?.sgd) || 0;\n}\n\ntry {\n  const tvPseData = $('TradingView PSE').first().json;\n  (tvPseData.data || []).forEach(item => {\n    const name = item.d[0];\n    const close = item.d[1];\n    tvPsePrices[name] = S(close);\n  });\n} catch (e) {\n  // Handled via fallback values in the loop below\n}\n\n// ── Current SG positions (C38U removed, names & costs matched to MooMoo console) ──\nconst pos = [\n  {sym:'A17U.SI', n:'A17U',  qty:400,    cost:2.53,    c:'SGD'},\n  {sym:'AJBU.SI', n:'AJBU',  qty:500,    cost:1.9562,  c:'SGD'}, // Name matched\n  {sym:'BUOU.SI', n:'BUOU',  qty:1500,   cost:0.9398,  c:'SGD'}, // Cost updated\n  {sym:'J69U.SI', n:'J69U',  qty:1000,   cost:2.1109,  c:'SGD'}, // Name matched, cost 2.1109\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.5898,  c:'SGD'},\n  {sym:'ME8U.SI', n:'ME8U',  qty:200,    cost:1.93,    c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.73,  c:'USD'}, // Cost updated\n  {sym:'O5RU.SI', n:'O5RU',  qty:500,    cost:1.2515,  c:'SGD'}, // Name matched, cost updated\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal = 0, totPL = 0;\nconst rows = [];\nfor (const p of pos) {\n  const rawP = S(yf[p.sym]);\n  const pr   = S(p.c === 'USD' ? rawP * usdsgd : rawP);\n  const co   = S(p.c === 'USD' ? p.cost * usdsgd : p.cost);\n  const val  = S(p.qty * pr);\n  const cst  = S(p.qty * co);\n  const pl   = S(val - cst);\n  const pct  = cst > 0 ? S(pl / cst * 100) : 0;\n  totVal += val; totPL += pl;\n  rows.push({ n:p.n, val, pl, pct });\n}\n\n// ── ETH (Blended cost and qty updated, row push corrected) ──\nconst ethQty = 0.6338458;\nconst ethBlendedCost = 2526.13484;\n\nconst eV = S(ethQty * ethSGD);\nconst ePL = S(eV - ethQty * ethBlendedCost);\nconst ePct = S((ethSGD - ethBlendedCost) / ethBlendedCost * 100);\n\ntotVal += eV;\ntotPL  += ePL;\n\nrows.push({ n:'ETH', price:ethSGD, currency:'SGD', qty:ethQty, cost:ethBlendedCost, val:eV, pl:ePL, pct:ePct, noP:false });\n\n\n// ── Current PERA+ positions (Dynamic TV Prices & Fallback) ────────────────\nconst peraFallback = {\n  'AREIT': 38.40,\n  'CREIT': 3.50,\n  'MBT':   63.00,\n  'MREIT': 14.00,\n  'RCR':   6.75\n};\n\nconst peraPos = [\n  {n:'AREIT', qty:1200, cost:40.6445},\n  {n:'CREIT', qty:8000, cost:3.4038},\n  {n:'MBT',   qty:430,  cost:67.6711},\n  {n:'MREIT', qty:1900, cost:13.5704},\n  {n:'RCR',   qty:4300, cost:6.79}\n];\nlet peraTotVal = 0, peraTotPL = 0;\nconst peraRows = [];\nfor (const p of peraPos) {\n  const pricePhp = tvPsePrices[p.n] || peraFallback[p.n] || 0;\n  const val = S(p.qty * pricePhp);\n  const cst = S(p.qty * p.cost);\n  const pl  = S(val - cst);\n  const pct = cst > 0 ? S(pl / cst * 100) : 0;\n  peraTotVal += val; peraTotPL += pl;\n  peraRows.push({ n:p.n, val, pl, pct });\n}\n\n// ── Load previous snapshot from n8n static data ────────────────\nconst workflowStaticData = $getWorkflowStaticData('global');\nconst prev = workflowStaticData.prevSnapshot || null;\n\n// ── Week-on-week diff helpers ──────────────────────────────────\nconst wowVal = (cur, prv) => prv ? cur - prv : null;\nconst wowPct = (cur, prv) => prv && prv !== 0 ? ((cur - prv) / Math.abs(prv) * 100) : null;\n\nconst sgWow   = prev ? wowVal(totVal, prev.total_value) : null;\nconst peraWow = prev ? wowVal(peraTotVal, prev.pera_total_val) : null;\n\nconst rowsWithWow = rows.map(r => {\n  const prevRow = prev?.rows?.find(p => p.n === r.n);\n  return {\n    ...r,\n    prev_val: prevRow?.val || null,\n    wow_val:  prevRow ? wowVal(r.val, prevRow.val) : null,\n    wow_pct:  prevRow ? wowPct(r.val, prevRow.val) : null\n  };\n});\n\nconst peraRowsWithWow = peraRows.map(r => {\n  const prevRow = prev?.peraRows?.find(p => p.n === r.n);\n  return {\n    ...r,\n    prev_val: prevRow?.val || null,\n    wow_val:  prevRow ? wowVal(r.val, prevRow.val) : null,\n    wow_pct:  prevRow ? wowPct(r.val, prevRow.val) : null\n  };\n});\n\nconst allRows = [...rowsWithWow, ...peraRowsWithWow].filter(r => r.wow_val !== null);\nconst top3 = [...allRows].sort((a,b) => Math.abs(b.wow_val) - Math.abs(a.wow_val)).slice(0, 3);\n\n// ── Save current as new snapshot for next week ─────────────────\nworkflowStaticData.prevSnapshot = {\n  saved_at:       new Date().toISOString(),\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  rows:           rows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct })),\n  peraRows:       peraRows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct }))\n};\n\nreturn [{ json: {\n  rows: rowsWithWow,\n  peraRows: peraRowsWithWow,\n  top3,\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  sg_wow:         sgWow !== null ? Math.round(sgWow * 100) / 100 : null,\n  pera_wow:       peraWow !== null ? Math.round(peraWow * 100) / 100 : null,\n  usdsgd, phpsgd, eth_sgd: ethSGD,\n  prev_saved_at:  prev?.saved_at || null,\n  timestamp:      new Date().toISOString()\n}}];"
+        },
+        "name": "Calculate Weekly",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -2352,
+          -384
+        ],
+        "id": "f565bc75-fd42-4e76-8107-5344ca334e7d",
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $input.first().json;\n\n// ── Randomised weekly lens ────────────────────────────────────\nconst lenses = [\n  'Write from a risk management perspective — what threatened the portfolio this week and what needs protecting.',\n  'Write from an income investor perspective — focus on dividend health, yield changes, and cash flow this week.',\n  'Write from a growth perspective — which positions gained most and where is the upside heading into next week.',\n  'Write from a capital preservation perspective — what held up, what eroded, and what needs defending.',\n  'Write from a sector rotation perspective — where did money flow this week across SG REITs, PH stocks, US tech, and crypto.'\n];\n\n// ── Week number for lens rotation (changes every week) ────────\nconst weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));\nconst todayLens = lenses[weekNum % lenses.length];\n\n// ── WoW strings ───────────────────────────────────────────────\nconst wowStr = d.sg_wow !== null\n  ? (d.sg_wow >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(d.sg_wow)) + ' vs last Saturday'\n  : 'no prior snapshot';\nconst peraWowStr = d.pera_wow !== null\n  ? (d.pera_wow >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(d.pera_wow)) + ' vs last Saturday'\n  : 'no prior snapshot';\n\n// ── Top 3 movers summary ──────────────────────────────────────\nconst top3Str = d.top3 && d.top3.length\n  ? 'Top 3 movers this week: ' + d.top3.map(r =>\n      r.n + ' ' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val)\n    ).join(', ') + '. '\n  : '';\n\nconst divStr = d.dividends && d.dividends.length\n  ? '\\nDividends Calendar:\\n' + d.dividends.map(r =>\n      `${r.n}: Ex-Date ${r.exDate}, Amount ${r.currency === 'SGD' ? 'S$' : '₱'}${r.amount.toFixed(4)}, Pay-Date ${r.payDate}`\n    ).join('\\n')\n  : '';\n\nconst content = 'Return ONLY raw JSON, no markdown, no backticks. ' +\n  'This is a WEEKLY portfolio digest for Bobby as of ' + d.timestamp + '. ' +\n  'Weekly analysis lens: ' + todayLens + ' ' +\n  'MooMoo SG: S$' + d.total_value + ' (P/L S$' + d.total_pl + ', week change: ' + wowStr + '). ' +\n  'DragonFi PERA+: PHP' + d.pera_total_val + ' (P/L PHP' + d.pera_total_pl + ', week change: ' + peraWowStr + '). ' +\n  'USDSGD: ' + d.usdsgd + ' PHPSGD: ' + d.phpsgd + divStr + ' ETH: S$' + d.eth_sgd + '. ' +\n  top3Str +\n  'All SG positions this week: ' + d.rows.map(r =>\n    r.n + ' val S$' + Math.round(r.val) +\n    (r.wow_val !== null ? ' wow:' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val) : '') +\n    ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '%'\n  ).join(', ') + '. ' +\n  'All PERA+ positions this week: ' + d.peraRows.map(r =>\n    r.n + ' val PHP' + Math.round(r.val) +\n    (r.wow_val !== null ? ' wow:' + (r.wow_val >= 0 ? '+' : '') + 'PHP' + Math.round(r.wow_val) : '') +\n    ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '%'\n  ).join(', ') + '. ' +\n  'Context: Bobby is Singapore-based OFW investor. Income-first strategy. ' +\n  'MooMoo SG: AJBU (Keppel DC Reit), A17U (CapLand Ascendas industrial/DC REIT), BUOU (Frasers Logistics REIT), J69U (suburban retail REIT), JYEU (Lendlease commercial REIT), ME8U (Mapletree Industrial Trust), O5RU (AIMS APAC industrial REIT), NVDA (tech growth), TSLA (growth), ETH (crypto growth/non-yielding). ' +\n  'DragonFi PERA+: AREIT (Ayala Land REIT), CREIT (Citicore renewable energy), MBT (Metrobank), MREIT (Megaworld REIT), RCR (RL Commercial REIT). ' +\n  'Strategy Context: Portfolio has a bimodal strategy: REITs & Banks (A17U, AJBU, BUOU, J69U, JYEU, ME8U, O5RU, AREIT, CREIT, MREIT, RCR, MBT) are long-term yield assets held for compound distributions — focus on dividend health, gearing, and distribution stability, and do NOT recommend panic-selling them on short-term price drops. US Equities (NVDA, TSLA) and Crypto (ETH) are tactical growth assets — recommend active capital protection triggers (stop-losses) or exit strategies here. ' +\n  'Actionability constraint: Never give vague advice like \"reassess positions\". Always specify exact price-based actions or rebalancing ratios (e.g. \"If ETH drops below S$2000, rotate into AJBU\"). ' +\n  'Return this JSON: {' +\n  '\"weekly_summary\":\"2 sentences max. Apply the weekly lens above. One line on combined portfolio week-on-week change, one line on what drove it. Punchy and fresh — do not sound like last week.\",' +\n  '\"sg_commentary\":\"2 sentences. Apply the weekly lens. Top mover and biggest drag only. Skip flat positions.\",' +\n  '\"pera_commentary\":\"2 sentences. Apply the weekly lens. PSE week in one line, one position to watch next week.\",' +\n  '\"week_verdict\":\"one word: GOOD, MIXED, or TOUGH\",' +\n  '\"next_week_watch\":\"2 sentences max. Apply the weekly lens. Most important thing to act on or monitor next week across both portfolios.\"' +\n  '}';\n\nreturn [{ json: { ...d, claudeContent: content } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2176,
+          -384
+        ],
+        "id": "1809827f-c2ac-4e37-9a98-af5af2675cf9",
+        "name": "Build Weekly Claude Payload"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://openrouter.ai/api/v1/chat/completions",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+              },
+              {
+                "name": "HTTP-Referer",
+                "value": "https://bobbydionido.com"
+              },
+              {
+                "name": "X-Title",
+                "value": "Bobby Portfolio"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "model",
+                "value": "anthropic/claude-sonnet-4-5"
+              },
+              {
+                "name": "max_tokens",
+                "value": "2000"
+              },
+              {
+                "name": "messages[0][role]",
+                "value": "user"
+              },
+              {
+                "name": "messages[0][content]",
+                "value": "={{ $json.claudeContent }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "name": "Claude AI Weekly",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          -2000,
+          -384
+        ],
+        "id": "9fc5839f-34cd-4a05-9800-e85440f459c5",
+        "typeVersion": 4.4
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $('Calculate Dividends').first().json;\nconst rawResp = $input.first().json;\n\nlet ai;\ntry {\n  const text  = rawResp.choices[0].message.content;\n  const clean = text.replace(/```json|```/g, '').trim();\n  ai = JSON.parse(clean);\n} catch(e) {\n  ai = {\n    weekly_summary:   'Weekly digest generated. AI analysis unavailable this run.',\n    sg_commentary:    '',\n    pera_commentary:  '',\n    week_verdict:     'MIXED',\n    next_week_watch:  ''\n  };\n}\n\nconst ts = new Date(d.timestamp).toLocaleString('en-SG', {\n  timeZone:'Asia/Singapore', weekday:'long', day:'2-digit', month:'short', year:'numeric'\n});\nconst prevTs = d.prev_saved_at ? new Date(d.prev_saved_at).toLocaleString('en-SG', {\n  timeZone:'Asia/Singapore', weekday:'long', day:'2-digit', month:'short', year:'numeric'\n}) : 'No prior snapshot';\n\nconst plColor  = v => v >= 0 ? '#00c896' : '#e74c3c';\nconst fmtSgd   = v => v == null ? 'N/A' : (v >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPhp   = v => v == null ? 'N/A' : (v >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPct   = v => v == null ? '' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';\n\nconst verdictColor = {'GOOD':'#00c896','MIXED':'#f5a623','TOUGH':'#e74c3c'}[ai.week_verdict] || '#3d9be9';\n\n// ── SG comparison rows ─────────────────────────────────────────\nconst sgRows = d.rows.map(r => {\n  const wowColor = r.wow_val === null ? '#6b8599' : r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">S$${Math.round(r.prev_val || 0).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#c8d8e8;padding:12px 8px\">S$${Math.round(r.val).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${wowColor};padding:12px 8px\">${r.wow_val !== null ? fmtSgd(r.wow_val) : '—'}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:11px;color:${wowColor};padding:12px 8px\">${r.wow_pct !== null ? fmtPct(r.wow_pct) : '—'}</td>\n  </tr>`;\n}).join('');\n\n// ── PERA+ comparison rows ──────────────────────────────────────\nconst peraRows = d.peraRows.map(r => {\n  const wowColor = r.wow_val === null ? '#6b8599' : r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">₱${Math.round(r.prev_val || 0).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#c8d8e8;padding:12px 8px\">₱${Math.round(r.val).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${wowColor};padding:12px 8px\">${r.wow_val !== null ? fmtPhp(r.wow_val) : '—'}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:11px;color:${wowColor};padding:12px 8px\">${r.wow_pct !== null ? fmtPct(r.wow_pct) : '—'}</td>\n  </tr>`;\n}).join('');\n\n// ── Dividends Section ──────────────────────────────────────────\nconst divRows = (d.dividends || []).map(r => {\n  const amtStr = r.currency === 'SGD' ? 'S$' + r.amount.toFixed(4) : '₱' + r.amount.toFixed(4);\n  const exD = new Date(r.exDate);\n  const payD = new Date(r.payDate);\n  const today = new Date();\n  \n  let status = 'Paid';\n  let color = '#6db8a0';\n  \n  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());\n  const exMidnight = new Date(exD.getFullYear(), exD.getMonth(), exD.getDate());\n  const payMidnight = new Date(payD.getFullYear(), payD.getMonth(), payD.getDate());\n  \n  if (todayMidnight < exMidnight) {\n    status = 'Upcoming';\n    color = '#3d9be9';\n  } else if (todayMidnight >= exMidnight && todayMidnight < payMidnight) {\n    status = 'Pending Pay';\n    color = '#f5a623';\n  }\n  \n  const statusHtml = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${status}</span>`;\n  \n  const fmtDate = dateObj => dateObj.toLocaleDateString('en-SG', {\n    day: '2-digit', month: 'short', year: 'numeric'\n  });\n  \n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">${fmtDate(exD)}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#00c896;padding:12px 8px\">${amtStr}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">${fmtDate(payD)}</td>\n    <td style=\"padding:12px 8px\">${statusHtml}</td>\n  </tr>`;\n}).join('');\n\nconst divTableHtml = `\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">📅 Dividends Calendar (Declared / Recent)</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Asset</th><th>Ex-Date</th><th>Amount</th><th>Payment Date</th><th>Status</th>\n      </tr></thead>\n      <tbody>${divRows}</tbody>\n    </table>\n  </div>\n</div>\n`;\n\n// ── Top 3 movers ───────────────────────────────────────────────\nconst top3Html = d.top3.map(r => {\n  const isPhp  = d.peraRows.some(p => p.n === r.n);\n  const arrow  = r.wow_val >= 0 ? '▲' : '▼';\n  const color  = r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  const change = isPhp ? fmtPhp(r.wow_val) : fmtSgd(r.wow_val);\n  return `<div style=\"display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1a2636\">\n    <span style=\"font-family:'Space Mono',monospace;font-weight:700;color:#c8d8e8\">${r.n}</span>\n    <span style=\"font-family:'Space Mono',monospace;font-size:13px;color:${color}\">${arrow} ${change} (${fmtPct(r.wow_pct)})</span>\n  </div>`;\n}).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Bobby Portfolio — Weekly Digest</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#0a0e14;color:#c8d8e8;font-family:'DM Sans',sans-serif;min-height:100vh}\nbody::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0}\n.wrap{max-width:980px;margin:0 auto;padding:36px 20px;position:relative;z-index:1}\ntable{width:100%;border-collapse:collapse}\nthead th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid #1a2636}\ntbody tr{border-bottom:1px solid rgba(26,38,54,0.6);transition:background 0.15s}\ntbody tr:hover{background:#111c28}\n.label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#3d5a72;text-transform:uppercase;margin-bottom:12px}\na{color:#3d9be9;font-family:'Space Mono',monospace;font-size:11px;text-decoration:none}\na:hover{text-decoration:underline}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n\n<div style=\"display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #1a2636;padding-bottom:24px;margin-bottom:32px;flex-wrap:wrap;gap:12px\">\n  <div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#3d5a72;text-transform:uppercase;margin-bottom:8px\">&#128200; Weekly Portfolio Digest</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#c8d8e8\">Bobby Dionido &nbsp;<span style=\"font-size:14px;padding:3px 12px;border-radius:20px;background:${verdictColor}22;color:${verdictColor};border:1px solid ${verdictColor}44\">${ai.week_verdict}</span></div>\n  </div>\n  <div style=\"text-align:right\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72\">Week ending ${ts}</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;margin-top:4px\">vs ${prevTs}</div>\n    <div style=\"margin-top:8px\"><a href=\"/\">&#8592; Daily Dashboard</a></div>\n  </div>\n</div>\n\n<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px\">\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">MooMoo SG</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#3d9be9\">S$${Math.round(d.total_value).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(d.sg_wow)};margin-top:6px;font-family:'Space Mono',monospace\">${fmtSgd(d.sg_wow)} this week</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">DragonFi PERA+</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(d.pera_total_val).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(d.pera_wow)};margin-top:6px;font-family:'Space Mono',monospace\">${fmtPhp(d.pera_wow)} this week</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">Week Verdict</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:${verdictColor}\">${ai.week_verdict}</div>\n    <div style=\"font-size:11px;color:#3d5a72;margin-top:6px\">Combined portfolio week</div>\n  </div>\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:24px;margin-bottom:20px\">\n  <div class=\"label\">Weekly AI Summary</div>\n  <p style=\"font-size:14px;line-height:1.75;color:#c8d8e8\">${ai.weekly_summary}</p>\n  ${ai.sg_commentary ? `<p style=\"margin-top:14px;font-size:13px;line-height:1.8;color:#a0b8cc\">&#127480;&#127468; ${ai.sg_commentary}</p>` : ''}\n  ${ai.pera_commentary ? `<p style=\"margin-top:12px;font-size:13px;line-height:1.8;color:#a0b8cc\">&#127477;&#127469; ${ai.pera_commentary}</p>` : ''}\n  ${ai.next_week_watch ? `<p style=\"margin-top:16px;padding-top:16px;border-top:1px solid #1a2636;font-size:13px;color:#3d9be9;font-style:italic\">&#128161; ${ai.next_week_watch}</p>` : ''}\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden;margin-bottom:28px\">\n  <div style=\"padding:16px 16px 0;\"><div class=\"label\">Top 3 Movers This Week</div></div>\n  ${top3Html}\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">MooMoo SG — Week Comparison</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr><th>Symbol</th><th>Last Week</th><th>This Week</th><th>Change S$</th><th>Change %</th></tr></thead>\n      <tbody>${sgRows}</tbody>\n    </table>\n  </div>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">DragonFi PERA+ — Week Comparison</div>\n  <div style=\"background:#111820;border:1px solid #0d2a1a;border-radius:8px;overflow:hidden;border-top:2px solid #3dcc9b44\">\n    <table>\n      <thead><tr><th>Symbol</th><th>Last Week</th><th>This Week</th><th>Change ₱</th><th>Change %</th></tr></thead>\n      <tbody>${peraRows}</tbody>\n    </table>\n  </div>\n</div>\n\n${divTableHtml}\n\n<div style=\"margin-top:40px;padding-top:20px;border-top:1px solid #1a2636;font-family:'Space Mono',monospace;font-size:10px;color:#2a3f52;text-align:center;letter-spacing:0.08em\">\n  Generated by n8n + Claude &nbsp;|&nbsp; bobbydionido.com &nbsp;|&nbsp; Yahoo Finance &middot; CoinGecko &middot; DragonFi PERA+\n</div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{ json: { html, generated_at: d.timestamp } }];"
+        },
+        "name": "Build Weekly HTML",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -1824,
+          -384
+        ],
+        "id": "e7e4ba4f-79e9-42bf-9b2d-859ba9c9495f",
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://localhost:8099/update-weekly",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "html",
+                "value": "={{ $json.html }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -1648,
+          -384
+        ],
+        "id": "1c1ed404-a0f1-47ca-8ca4-5183ade146c6",
+        "name": "HTTP Request — Save Weekly"
+      },
+      {
+        "parameters": {
+          "chatId": "5811640282",
+          "text": "==📅 Weekly Portfolio Digest\nhttps://portfolio.bobbydionido.com/weekly\n\nMooMoo SG: S${{ Math.round($('Calculate Weekly').first().json.total_value).toLocaleString() }} ({{ $('Calculate Weekly').first().json.sg_wow >= 0 ? '+S$' : '-S$' }}{{ Math.abs(Math.round($('Calculate Weekly').first().json.sg_wow)) }} this week)\nPERA+: ₱{{ Math.round($('Calculate Weekly').first().json.pera_total_val).toLocaleString() }} ({{ $('Calculate Weekly').first().json.pera_wow >= 0 ? '+₱' : '-₱' }}{{ Math.abs(Math.round($('Calculate Weekly').first().json.pera_wow)) }} this week)\n\n🏆 Top movers:\n{{ $('Calculate Weekly').first().json.top3.map(r => r.n + ' ' + (r.wow_val >= 0 ? '▲' : '▼') + ' ' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val)).join('\\n') }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "name": "Telegram — Weekly",
+        "type": "n8n-nodes-base.telegram",
+        "position": [
+          -1456,
+          -384
+        ],
+        "id": "e87d71a0-4f1a-45ee-b192-b388e05bac74",
+        "typeVersion": 1.2,
+        "webhookId": "109f7728-629a-4a47-8728-d94cf1c1c411",
+        "credentials": {
+          "telegramApi": {
+            "id": "32yQqC2qF6jaGldc",
+            "name": "Telegram account"
+          }
+        },
+        "notes": "Replace with your actual Telegram bot credentials and chat ID"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://scanner.tradingview.com/philippines/scan",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json",
+          "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"in_range\",\n      \"right\": [\"AREIT\", \"CREIT\", \"MBT\", \"MREIT\", \"RCR\"]\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"sort\": {\"sortBy\": \"name\", \"sortOrder\": \"asc\"},\n  \"range\": [0, 10]\n}",
+          "options": {}
+        },
+        "id": "0cc9ba3d-5f49-4182-b701-046ac4b02b13",
+        "name": "TradingView PSE",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -2736,
+          -580
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://scanner.tradingview.com/crypto/scan",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json",
+          "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"equal\",\n      \"right\": \"ETHSGD\"\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"range\": [0, 10]\n}",
+          "options": {}
+        },
+        "id": "e405bc21-2b24-4518-8d29-2422ff6b3538",
+        "name": "TradingView ETHSGD",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -2736,
+          -180
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const https = require('https');\n\nconst fallbackDividends = [\n  { symbol: 'A17U.SI', n: 'A17U', exDate: '2026-03-31', amount: 0.0375, currency: 'SGD', payDate: '2026-04-30' },\n  { symbol: 'AJBU.SI', n: 'AJBU', exDate: '2026-02-06', amount: 0.05248, currency: 'SGD', payDate: '2026-03-19' },\n  { symbol: 'BUOU.SI', n: 'BUOU', exDate: '2026-05-14', amount: 0.0295, currency: 'SGD', payDate: '2026-06-22' },\n  { symbol: 'J69U.SI', n: 'J69U', exDate: '2026-05-04', amount: 0.06136, currency: 'SGD', payDate: '2026-05-29' },\n  { symbol: 'JYEU.SI', n: 'JYEU', exDate: '2026-02-24', amount: 0.005195, currency: 'SGD', payDate: '2026-03-30' },\n  { symbol: 'ME8U.SI', n: 'ME8U', exDate: '2026-05-06', amount: 0.0309, currency: 'SGD', payDate: '2026-06-12' },\n  { symbol: 'O5RU.SI', n: 'O5RU', exDate: '2026-05-15', amount: 0.026, currency: 'SGD', payDate: '2026-06-29' },\n  { symbol: 'AREIT',    n: 'AREIT', exDate: '2026-05-26', amount: 0.62, currency: 'PHP', payDate: '2026-06-11' },\n  { symbol: 'CREIT',    n: 'CREIT', exDate: '2026-06-10', amount: 0.049, currency: 'PHP', payDate: '2026-07-08' },\n  { symbol: 'MBT',      n: 'MBT',   exDate: '2026-03-06', amount: 3.50, currency: 'PHP', payDate: '2026-03-26' },\n  { symbol: 'MREIT',    n: 'MREIT', exDate: '2026-05-14', amount: 0.263, currency: 'PHP', payDate: '2026-05-29' },\n  { symbol: 'RCR',      n: 'RCR',   exDate: '2026-05-18', amount: 0.1115, currency: 'PHP', payDate: '2026-06-01' }\n];\n\nfunction fetchChart(symbol) {\n  return new Promise((resolve) => {\n    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=6mo&events=div`;\n    const options = {\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'\n      },\n      timeout: 5000\n    };\n    https.get(url, options, (res) => {\n      let data = '';\n      res.on('data', chunk => data += chunk);\n      res.on('end', () => {\n        try {\n          resolve(JSON.parse(data));\n        } catch(e) {\n          resolve(null);\n        }\n      });\n    }).on('error', () => resolve(null));\n  });\n}\n\nconst sleep = ms => new Promise(r => setTimeout(r, ms));\n\nconst liveDividends = [];\nconst sgxSymbols = ['A17U.SI', 'AJBU.SI', 'BUOU.SI', 'J69U.SI', 'JYEU.SI', 'ME8U.SI', 'O5RU.SI'];\n\nfor (const sym of sgxSymbols) {\n  try {\n    const data = await fetchChart(sym);\n    await sleep(200);\n    if (data && data.chart && data.chart.result && data.chart.result[0]) {\n      const result = data.chart.result[0];\n      const divEvents = result.events?.dividends;\n      if (divEvents) {\n        const timestamps = Object.keys(divEvents).map(Number).sort((a,b) => b - a);\n        if (timestamps.length > 0) {\n          const latestTs = timestamps[0];\n          const event = divEvents[latestTs];\n          const exDateObj = new Date(latestTs * 1000);\n          const exDateStr = exDateObj.toISOString().split('T')[0];\n          \n          // Estimate payment date as ex-date + 33 days\n          const payDateObj = new Date(exDateObj.getTime() + 33 * 24 * 60 * 60 * 1000);\n          const payDateStr = payDateObj.toISOString().split('T')[0];\n          \n          liveDividends.push({\n            symbol: sym,\n            n: sym.split('.')[0],\n            exDate: exDateStr,\n            amount: event.amount,\n            currency: 'SGD',\n            payDate: payDateStr\n          });\n        }\n      }\n    }\n  } catch(e) {\n    // Keep processing other tickers\n  }\n}\n\nconst finalDividends = [];\nfor (const fb of fallbackDividends) {\n  const live = liveDividends.find(l => l.n === fb.n);\n  if (live) {\n    finalDividends.push(live);\n  } else {\n    finalDividends.push(fb);\n  }\n}\n\n// Sort dividends by ex-date descending\nfinalDividends.sort((a, b) => b.exDate.localeCompare(a.exDate));\n\nconst d = $input.first().json;\nreturn [{ json: { ...d, dividends: finalDividends } }];"
+        },
+        "id": "8b62fda2-cc18-4c28-984d-384950293848",
+        "name": "Calculate Dividends",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -2260,
+          -384
+        ]
+      }
+    ],
+    "connections": {
+      "Schedule Saturday 9PM SGT": {
+        "main": [
+          [
+            {
+              "node": "Yahoo Finance",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "CoinGecko ETH",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "TradingView PSE",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "TradingView ETHSGD",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CoinGecko ETH": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Yahoo Finance": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Calculate Weekly",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Weekly": {
+        "main": [
+          [
+            {
+              "node": "Calculate Dividends",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Weekly Claude Payload": {
+        "main": [
+          [
+            {
+              "node": "Claude AI Weekly",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude AI Weekly": {
+        "main": [
+          [
+            {
+              "node": "Build Weekly HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Weekly HTML": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request — Save Weekly",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request — Save Weekly": {
+        "main": [
+          [
+            {
+              "node": "Telegram — Weekly",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Dividends": {
+        "main": [
+          [
+            {
+              "node": "Build Weekly Claude Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "import",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "4699e596-ccab-4d2d-84aa-14f6aa3e32d1",
+  "connections": {
+    "Schedule Saturday 9PM SGT": {
+      "main": [
+        [
+          {
+            "node": "Yahoo Finance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CoinGecko ETH",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TradingView PSE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TradingView ETHSGD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CoinGecko ETH": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Calculate Weekly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Weekly": {
+      "main": [
+        [
+          {
+            "node": "Calculate Dividends",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Weekly Claude Payload": {
+      "main": [
+        [
+          {
+            "node": "Claude AI Weekly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude AI Weekly": {
+      "main": [
+        [
+          {
+            "node": "Build Weekly HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Weekly HTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request — Save Weekly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request — Save Weekly": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Weekly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Dividends": {
+      "main": [
+        [
+          {
+            "node": "Build Weekly Claude Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-05T05:03:07.210Z",
+  "id": "BvXxSdiBeEZDvRHS",
+  "isArchived": false,
+  "meta": {
+    "instanceId": "b80342c70dedc1cf0d4ca6a5c47c1feeb826f38e808340ee402f5974d7efc5cf"
+  },
+  "name": "Bobby Portfolio — Weekly Digest",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 21 * * 6"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2976,
+        -400
+      ],
+      "id": "349f09c9-b857-49d0-9a38-5349d68b3f7d",
+      "name": "Schedule Saturday 9PM SGT"
+    },
+    {
+      "parameters": {
+        "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd",
+        "options": {}
+      },
+      "name": "CoinGecko ETH",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -2736,
+        -288
+      ],
+      "id": "a4301e71-737f-467e-9a8c-297a2eb954cb",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -2496,
+        -384
+      ],
+      "id": "052aa7dc-f81a-46ab-8a6a-cbb1b27ec5b5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ticker",
+              "value": "BUOU.SI,A17U.SI,AJBU.SI,C38U.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,ME8U.SI,TSLA,USDSGD=X,PHPSGD=X,AREIT.PS,CREIT.PS,MBT.PS,MREIT.PS,RCR.PS"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "yahoo-finance15.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "6d7b3746-7fe6-4eca-bb05-eca9b5ad48ff",
+      "name": "Yahoo Finance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2736,
+        -480
+      ],
+      "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allInputs = $input.all();\n\nconst yfInput = allInputs.find(i =>\n  i.json.quoteResponse ||\n  i.json.meta?.status === 200 ||\n  Array.isArray(i.json.body)\n) || allInputs[0];\n\nconst ethInput = allInputs.find(i =>\n  i.json.body?.ethereum ||\n  i.json.ethereum\n) || allInputs[1];\n\nconst yfRaw = yfInput.json;\nconst quotes = yfRaw.quoteResponse?.result\n             || yfRaw.body\n             || (Array.isArray(yfRaw) ? yfRaw : []);\nconst yf = {};\nquotes.forEach(q => {\n  const sym = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw ?? q.regularMarketPrice ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst phpsgd = yf['PHPSGD=X'] || 0.023;\nconst S = v => (v == null || isNaN(v) || !isFinite(v)) ? 0 : Number(v);\n\n// ── Read ETH & PSE Prices from TradingView nodes ────────────────\nlet ethSGD = 0;\nconst tvPsePrices = {};\n\ntry {\n  const tvEthData = $('TradingView ETHSGD').first().json;\n  ethSGD = S(tvEthData.data?.[0]?.d?.[1]);\n} catch (e) {\n  // Fallback to CoinGecko input if TradingView fails\n  const ethRaw = ethInput.json.body || ethInput.json;\n  ethSGD = Number(ethRaw?.ethereum?.sgd) || Number(ethInput.json?.ethereum?.sgd) || 0;\n}\n\ntry {\n  const tvPseData = $('TradingView PSE').first().json;\n  (tvPseData.data || []).forEach(item => {\n    const name = item.d[0];\n    const close = item.d[1];\n    tvPsePrices[name] = S(close);\n  });\n} catch (e) {\n  // Handled via fallback values in the loop below\n}\n\n// ── Current SG positions (C38U removed, names & costs matched to MooMoo console) ──\nconst pos = [\n  {sym:'A17U.SI', n:'A17U',  qty:400,    cost:2.53,    c:'SGD'},\n  {sym:'AJBU.SI', n:'AJBU',  qty:500,    cost:1.9562,  c:'SGD'}, // Name matched\n  {sym:'BUOU.SI', n:'BUOU',  qty:1500,   cost:0.9398,  c:'SGD'}, // Cost updated\n  {sym:'J69U.SI', n:'J69U',  qty:1000,   cost:2.1109,  c:'SGD'}, // Name matched, cost 2.1109\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.5898,  c:'SGD'},\n  {sym:'ME8U.SI', n:'ME8U',  qty:200,    cost:1.93,    c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.73,  c:'USD'}, // Cost updated\n  {sym:'O5RU.SI', n:'O5RU',  qty:500,    cost:1.2515,  c:'SGD'}, // Name matched, cost updated\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal = 0, totPL = 0;\nconst rows = [];\nfor (const p of pos) {\n  const rawP = S(yf[p.sym]);\n  const pr   = S(p.c === 'USD' ? rawP * usdsgd : rawP);\n  const co   = S(p.c === 'USD' ? p.cost * usdsgd : p.cost);\n  const val  = S(p.qty * pr);\n  const cst  = S(p.qty * co);\n  const pl   = S(val - cst);\n  const pct  = cst > 0 ? S(pl / cst * 100) : 0;\n  totVal += val; totPL += pl;\n  rows.push({ n:p.n, val, pl, pct });\n}\n\n// ── ETH (Blended cost and qty updated, row push corrected) ──\nconst ethQty = 0.6338458;\nconst ethBlendedCost = 2526.13484;\n\nconst eV = S(ethQty * ethSGD);\nconst ePL = S(eV - ethQty * ethBlendedCost);\nconst ePct = S((ethSGD - ethBlendedCost) / ethBlendedCost * 100);\n\ntotVal += eV;\ntotPL  += ePL;\n\nrows.push({ n:'ETH', price:ethSGD, currency:'SGD', qty:ethQty, cost:ethBlendedCost, val:eV, pl:ePL, pct:ePct, noP:false });\n\n\n// ── Current PERA+ positions (Dynamic TV Prices & Fallback) ────────────────\nconst peraFallback = {\n  'AREIT': 38.40,\n  'CREIT': 3.50,\n  'MBT':   63.00,\n  'MREIT': 14.00,\n  'RCR':   6.75\n};\n\nconst peraPos = [\n  {n:'AREIT', qty:1200, cost:40.6445},\n  {n:'CREIT', qty:8000, cost:3.4038},\n  {n:'MBT',   qty:430,  cost:67.6711},\n  {n:'MREIT', qty:1900, cost:13.5704},\n  {n:'RCR',   qty:4300, cost:6.79}\n];\nlet peraTotVal = 0, peraTotPL = 0;\nconst peraRows = [];\nfor (const p of peraPos) {\n  const pricePhp = tvPsePrices[p.n] || peraFallback[p.n] || 0;\n  const val = S(p.qty * pricePhp);\n  const cst = S(p.qty * p.cost);\n  const pl  = S(val - cst);\n  const pct = cst > 0 ? S(pl / cst * 100) : 0;\n  peraTotVal += val; peraTotPL += pl;\n  peraRows.push({ n:p.n, val, pl, pct });\n}\n\n// ── Load previous snapshot from n8n static data ────────────────\nconst workflowStaticData = $getWorkflowStaticData('global');\nconst prev = workflowStaticData.prevSnapshot || null;\n\n// ── Week-on-week diff helpers ──────────────────────────────────\nconst wowVal = (cur, prv) => prv ? cur - prv : null;\nconst wowPct = (cur, prv) => prv && prv !== 0 ? ((cur - prv) / Math.abs(prv) * 100) : null;\n\nconst sgWow   = prev ? wowVal(totVal, prev.total_value) : null;\nconst peraWow = prev ? wowVal(peraTotVal, prev.pera_total_val) : null;\n\nconst rowsWithWow = rows.map(r => {\n  const prevRow = prev?.rows?.find(p => p.n === r.n);\n  return {\n    ...r,\n    prev_val: prevRow?.val || null,\n    wow_val:  prevRow ? wowVal(r.val, prevRow.val) : null,\n    wow_pct:  prevRow ? wowPct(r.val, prevRow.val) : null\n  };\n});\n\nconst peraRowsWithWow = peraRows.map(r => {\n  const prevRow = prev?.peraRows?.find(p => p.n === r.n);\n  return {\n    ...r,\n    prev_val: prevRow?.val || null,\n    wow_val:  prevRow ? wowVal(r.val, prevRow.val) : null,\n    wow_pct:  prevRow ? wowPct(r.val, prevRow.val) : null\n  };\n});\n\nconst allRows = [...rowsWithWow, ...peraRowsWithWow].filter(r => r.wow_val !== null);\nconst top3 = [...allRows].sort((a,b) => Math.abs(b.wow_val) - Math.abs(a.wow_val)).slice(0, 3);\n\n// ── Save current as new snapshot for next week ─────────────────\nworkflowStaticData.prevSnapshot = {\n  saved_at:       new Date().toISOString(),\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  rows:           rows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct })),\n  peraRows:       peraRows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct }))\n};\n\nreturn [{ json: {\n  rows: rowsWithWow,\n  peraRows: peraRowsWithWow,\n  top3,\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  sg_wow:         sgWow !== null ? Math.round(sgWow * 100) / 100 : null,\n  pera_wow:       peraWow !== null ? Math.round(peraWow * 100) / 100 : null,\n  usdsgd, phpsgd, eth_sgd: ethSGD,\n  prev_saved_at:  prev?.saved_at || null,\n  timestamp:      new Date().toISOString()\n}}];"
+      },
+      "name": "Calculate Weekly",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -2352,
+        -384
+      ],
+      "id": "f565bc75-fd42-4e76-8107-5344ca334e7d",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\n\n// ── Randomised weekly lens ────────────────────────────────────\nconst lenses = [\n  'Write from a risk management perspective — what threatened the portfolio this week and what needs protecting.',\n  'Write from an income investor perspective — focus on dividend health, yield changes, and cash flow this week.',\n  'Write from a growth perspective — which positions gained most and where is the upside heading into next week.',\n  'Write from a capital preservation perspective — what held up, what eroded, and what needs defending.',\n  'Write from a sector rotation perspective — where did money flow this week across SG REITs, PH stocks, US tech, and crypto.'\n];\n\n// ── Week number for lens rotation (changes every week) ────────\nconst weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));\nconst todayLens = lenses[weekNum % lenses.length];\n\n// ── WoW strings ───────────────────────────────────────────────\nconst wowStr = d.sg_wow !== null\n  ? (d.sg_wow >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(d.sg_wow)) + ' vs last Saturday'\n  : 'no prior snapshot';\nconst peraWowStr = d.pera_wow !== null\n  ? (d.pera_wow >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(d.pera_wow)) + ' vs last Saturday'\n  : 'no prior snapshot';\n\n// ── Top 3 movers summary ──────────────────────────────────────\nconst top3Str = d.top3 && d.top3.length\n  ? 'Top 3 movers this week: ' + d.top3.map(r =>\n      r.n + ' ' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val)\n    ).join(', ') + '. '\n  : '';\n\nconst divStr = d.dividends && d.dividends.length\n  ? '\\nDividends Calendar:\\n' + d.dividends.map(r =>\n      `${r.n}: Ex-Date ${r.exDate}, Amount ${r.currency === 'SGD' ? 'S$' : '₱'}${r.amount.toFixed(4)}, Pay-Date ${r.payDate}`\n    ).join('\\n')\n  : '';\n\nconst content = 'Return ONLY raw JSON, no markdown, no backticks. ' +\n  'This is a WEEKLY portfolio digest for Bobby as of ' + d.timestamp + '. ' +\n  'Weekly analysis lens: ' + todayLens + ' ' +\n  'MooMoo SG: S$' + d.total_value + ' (P/L S$' + d.total_pl + ', week change: ' + wowStr + '). ' +\n  'DragonFi PERA+: PHP' + d.pera_total_val + ' (P/L PHP' + d.pera_total_pl + ', week change: ' + peraWowStr + '). ' +\n  'USDSGD: ' + d.usdsgd + ' PHPSGD: ' + d.phpsgd + divStr + ' ETH: S$' + d.eth_sgd + '. ' +\n  top3Str +\n  'All SG positions this week: ' + d.rows.map(r =>\n    r.n + ' val S$' + Math.round(r.val) +\n    (r.wow_val !== null ? ' wow:' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val) : '') +\n    ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '%'\n  ).join(', ') + '. ' +\n  'All PERA+ positions this week: ' + d.peraRows.map(r =>\n    r.n + ' val PHP' + Math.round(r.val) +\n    (r.wow_val !== null ? ' wow:' + (r.wow_val >= 0 ? '+' : '') + 'PHP' + Math.round(r.wow_val) : '') +\n    ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '%'\n  ).join(', ') + '. ' +\n  'Context: Bobby is Singapore-based OFW investor. Income-first strategy. ' +\n  'MooMoo SG: AJBU (Keppel DC Reit), A17U (CapLand Ascendas industrial/DC REIT), BUOU (Frasers Logistics REIT), J69U (suburban retail REIT), JYEU (Lendlease commercial REIT), ME8U (Mapletree Industrial Trust), O5RU (AIMS APAC industrial REIT), NVDA (tech growth), TSLA (growth), ETH (crypto growth/non-yielding). ' +\n  'DragonFi PERA+: AREIT (Ayala Land REIT), CREIT (Citicore renewable energy), MBT (Metrobank), MREIT (Megaworld REIT), RCR (RL Commercial REIT). ' +\n  'Strategy Context: Portfolio has a bimodal strategy: REITs & Banks (A17U, AJBU, BUOU, J69U, JYEU, ME8U, O5RU, AREIT, CREIT, MREIT, RCR, MBT) are long-term yield assets held for compound distributions — focus on dividend health, gearing, and distribution stability, and do NOT recommend panic-selling them on short-term price drops. US Equities (NVDA, TSLA) and Crypto (ETH) are tactical growth assets — recommend active capital protection triggers (stop-losses) or exit strategies here. ' +\n  'Actionability constraint: Never give vague advice like \"reassess positions\". Always specify exact price-based actions or rebalancing ratios (e.g. \"If ETH drops below S$2000, rotate into AJBU\"). ' +\n  'Return this JSON: {' +\n  '\"weekly_summary\":\"2 sentences max. Apply the weekly lens above. One line on combined portfolio week-on-week change, one line on what drove it. Punchy and fresh — do not sound like last week.\",' +\n  '\"sg_commentary\":\"2 sentences. Apply the weekly lens. Top mover and biggest drag only. Skip flat positions.\",' +\n  '\"pera_commentary\":\"2 sentences. Apply the weekly lens. PSE week in one line, one position to watch next week.\",' +\n  '\"week_verdict\":\"one word: GOOD, MIXED, or TOUGH\",' +\n  '\"next_week_watch\":\"2 sentences max. Apply the weekly lens. Most important thing to act on or monitor next week across both portfolios.\"' +\n  '}';\n\nreturn [{ json: { ...d, claudeContent: content } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2176,
+        -384
+      ],
+      "id": "1809827f-c2ac-4e37-9a98-af5af2675cf9",
+      "name": "Build Weekly Claude Payload"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://bobbydionido.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Bobby Portfolio"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "anthropic/claude-sonnet-4-5"
+            },
+            {
+              "name": "max_tokens",
+              "value": "2000"
+            },
+            {
+              "name": "messages[0][role]",
+              "value": "user"
+            },
+            {
+              "name": "messages[0][content]",
+              "value": "={{ $json.claudeContent }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Claude AI Weekly",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -2000,
+        -384
+      ],
+      "id": "9fc5839f-34cd-4a05-9800-e85440f459c5",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $('Calculate Dividends').first().json;\nconst rawResp = $input.first().json;\n\nlet ai;\ntry {\n  const text  = rawResp.choices[0].message.content;\n  const clean = text.replace(/```json|```/g, '').trim();\n  ai = JSON.parse(clean);\n} catch(e) {\n  ai = {\n    weekly_summary:   'Weekly digest generated. AI analysis unavailable this run.',\n    sg_commentary:    '',\n    pera_commentary:  '',\n    week_verdict:     'MIXED',\n    next_week_watch:  ''\n  };\n}\n\nconst ts = new Date(d.timestamp).toLocaleString('en-SG', {\n  timeZone:'Asia/Singapore', weekday:'long', day:'2-digit', month:'short', year:'numeric'\n});\nconst prevTs = d.prev_saved_at ? new Date(d.prev_saved_at).toLocaleString('en-SG', {\n  timeZone:'Asia/Singapore', weekday:'long', day:'2-digit', month:'short', year:'numeric'\n}) : 'No prior snapshot';\n\nconst plColor  = v => v >= 0 ? '#00c896' : '#e74c3c';\nconst fmtSgd   = v => v == null ? 'N/A' : (v >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPhp   = v => v == null ? 'N/A' : (v >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPct   = v => v == null ? '' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';\n\nconst verdictColor = {'GOOD':'#00c896','MIXED':'#f5a623','TOUGH':'#e74c3c'}[ai.week_verdict] || '#3d9be9';\n\n// ── SG comparison rows ─────────────────────────────────────────\nconst sgRows = d.rows.map(r => {\n  const wowColor = r.wow_val === null ? '#6b8599' : r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">S$${Math.round(r.prev_val || 0).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#c8d8e8;padding:12px 8px\">S$${Math.round(r.val).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${wowColor};padding:12px 8px\">${r.wow_val !== null ? fmtSgd(r.wow_val) : '—'}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:11px;color:${wowColor};padding:12px 8px\">${r.wow_pct !== null ? fmtPct(r.wow_pct) : '—'}</td>\n  </tr>`;\n}).join('');\n\n// ── PERA+ comparison rows ──────────────────────────────────────\nconst peraRows = d.peraRows.map(r => {\n  const wowColor = r.wow_val === null ? '#6b8599' : r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">₱${Math.round(r.prev_val || 0).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#c8d8e8;padding:12px 8px\">₱${Math.round(r.val).toLocaleString()}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${wowColor};padding:12px 8px\">${r.wow_val !== null ? fmtPhp(r.wow_val) : '—'}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:11px;color:${wowColor};padding:12px 8px\">${r.wow_pct !== null ? fmtPct(r.wow_pct) : '—'}</td>\n  </tr>`;\n}).join('');\n\n// ── Dividends Section ──────────────────────────────────────────\nconst divRows = (d.dividends || []).map(r => {\n  const amtStr = r.currency === 'SGD' ? 'S$' + r.amount.toFixed(4) : '₱' + r.amount.toFixed(4);\n  const exD = new Date(r.exDate);\n  const payD = new Date(r.payDate);\n  const today = new Date();\n  \n  let status = 'Paid';\n  let color = '#6db8a0';\n  \n  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());\n  const exMidnight = new Date(exD.getFullYear(), exD.getMonth(), exD.getDate());\n  const payMidnight = new Date(payD.getFullYear(), payD.getMonth(), payD.getDate());\n  \n  if (todayMidnight < exMidnight) {\n    status = 'Upcoming';\n    color = '#3d9be9';\n  } else if (todayMidnight >= exMidnight && todayMidnight < payMidnight) {\n    status = 'Pending Pay';\n    color = '#f5a623';\n  }\n  \n  const statusHtml = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${status}</span>`;\n  \n  const fmtDate = dateObj => dateObj.toLocaleDateString('en-SG', {\n    day: '2-digit', month: 'short', year: 'numeric'\n  });\n  \n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:12px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">${fmtDate(exD)}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#00c896;padding:12px 8px\">${amtStr}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:12px 8px\">${fmtDate(payD)}</td>\n    <td style=\"padding:12px 8px\">${statusHtml}</td>\n  </tr>`;\n}).join('');\n\nconst divTableHtml = `\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">📅 Dividends Calendar (Declared / Recent)</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Asset</th><th>Ex-Date</th><th>Amount</th><th>Payment Date</th><th>Status</th>\n      </tr></thead>\n      <tbody>${divRows}</tbody>\n    </table>\n  </div>\n</div>\n`;\n\n// ── Top 3 movers ───────────────────────────────────────────────\nconst top3Html = d.top3.map(r => {\n  const isPhp  = d.peraRows.some(p => p.n === r.n);\n  const arrow  = r.wow_val >= 0 ? '▲' : '▼';\n  const color  = r.wow_val >= 0 ? '#00c896' : '#e74c3c';\n  const change = isPhp ? fmtPhp(r.wow_val) : fmtSgd(r.wow_val);\n  return `<div style=\"display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1a2636\">\n    <span style=\"font-family:'Space Mono',monospace;font-weight:700;color:#c8d8e8\">${r.n}</span>\n    <span style=\"font-family:'Space Mono',monospace;font-size:13px;color:${color}\">${arrow} ${change} (${fmtPct(r.wow_pct)})</span>\n  </div>`;\n}).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Bobby Portfolio — Weekly Digest</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#0a0e14;color:#c8d8e8;font-family:'DM Sans',sans-serif;min-height:100vh}\nbody::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0}\n.wrap{max-width:980px;margin:0 auto;padding:36px 20px;position:relative;z-index:1}\ntable{width:100%;border-collapse:collapse}\nthead th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid #1a2636}\ntbody tr{border-bottom:1px solid rgba(26,38,54,0.6);transition:background 0.15s}\ntbody tr:hover{background:#111c28}\n.label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#3d5a72;text-transform:uppercase;margin-bottom:12px}\na{color:#3d9be9;font-family:'Space Mono',monospace;font-size:11px;text-decoration:none}\na:hover{text-decoration:underline}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n\n<div style=\"display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #1a2636;padding-bottom:24px;margin-bottom:32px;flex-wrap:wrap;gap:12px\">\n  <div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#3d5a72;text-transform:uppercase;margin-bottom:8px\">&#128200; Weekly Portfolio Digest</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#c8d8e8\">Bobby Dionido &nbsp;<span style=\"font-size:14px;padding:3px 12px;border-radius:20px;background:${verdictColor}22;color:${verdictColor};border:1px solid ${verdictColor}44\">${ai.week_verdict}</span></div>\n  </div>\n  <div style=\"text-align:right\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72\">Week ending ${ts}</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;margin-top:4px\">vs ${prevTs}</div>\n    <div style=\"margin-top:8px\"><a href=\"/\">&#8592; Daily Dashboard</a></div>\n  </div>\n</div>\n\n<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px\">\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">MooMoo SG</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#3d9be9\">S$${Math.round(d.total_value).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(d.sg_wow)};margin-top:6px;font-family:'Space Mono',monospace\">${fmtSgd(d.sg_wow)} this week</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">DragonFi PERA+</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(d.pera_total_val).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(d.pera_wow)};margin-top:6px;font-family:'Space Mono',monospace\">${fmtPhp(d.pera_wow)} this week</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">Week Verdict</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:${verdictColor}\">${ai.week_verdict}</div>\n    <div style=\"font-size:11px;color:#3d5a72;margin-top:6px\">Combined portfolio week</div>\n  </div>\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:24px;margin-bottom:20px\">\n  <div class=\"label\">Weekly AI Summary</div>\n  <p style=\"font-size:14px;line-height:1.75;color:#c8d8e8\">${ai.weekly_summary}</p>\n  ${ai.sg_commentary ? `<p style=\"margin-top:14px;font-size:13px;line-height:1.8;color:#a0b8cc\">&#127480;&#127468; ${ai.sg_commentary}</p>` : ''}\n  ${ai.pera_commentary ? `<p style=\"margin-top:12px;font-size:13px;line-height:1.8;color:#a0b8cc\">&#127477;&#127469; ${ai.pera_commentary}</p>` : ''}\n  ${ai.next_week_watch ? `<p style=\"margin-top:16px;padding-top:16px;border-top:1px solid #1a2636;font-size:13px;color:#3d9be9;font-style:italic\">&#128161; ${ai.next_week_watch}</p>` : ''}\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden;margin-bottom:28px\">\n  <div style=\"padding:16px 16px 0;\"><div class=\"label\">Top 3 Movers This Week</div></div>\n  ${top3Html}\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">MooMoo SG — Week Comparison</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr><th>Symbol</th><th>Last Week</th><th>This Week</th><th>Change S$</th><th>Change %</th></tr></thead>\n      <tbody>${sgRows}</tbody>\n    </table>\n  </div>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"label\">DragonFi PERA+ — Week Comparison</div>\n  <div style=\"background:#111820;border:1px solid #0d2a1a;border-radius:8px;overflow:hidden;border-top:2px solid #3dcc9b44\">\n    <table>\n      <thead><tr><th>Symbol</th><th>Last Week</th><th>This Week</th><th>Change ₱</th><th>Change %</th></tr></thead>\n      <tbody>${peraRows}</tbody>\n    </table>\n  </div>\n</div>\n\n${divTableHtml}\n\n<div style=\"margin-top:40px;padding-top:20px;border-top:1px solid #1a2636;font-family:'Space Mono',monospace;font-size:10px;color:#2a3f52;text-align:center;letter-spacing:0.08em\">\n  Generated by n8n + Claude &nbsp;|&nbsp; bobbydionido.com &nbsp;|&nbsp; Yahoo Finance &middot; CoinGecko &middot; DragonFi PERA+\n</div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{ json: { html, generated_at: d.timestamp } }];"
+      },
+      "name": "Build Weekly HTML",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1824,
+        -384
+      ],
+      "id": "e7e4ba4f-79e9-42bf-9b2d-859ba9c9495f",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8099/update-weekly",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ $json.html }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1648,
+        -384
+      ],
+      "id": "1c1ed404-a0f1-47ca-8ca4-5183ade146c6",
+      "name": "HTTP Request — Save Weekly"
+    },
+    {
+      "parameters": {
+        "chatId": "5811640282",
+        "text": "==📅 Weekly Portfolio Digest\nhttps://portfolio.bobbydionido.com/weekly\n\nMooMoo SG: S${{ Math.round($('Calculate Weekly').first().json.total_value).toLocaleString() }} ({{ $('Calculate Weekly').first().json.sg_wow >= 0 ? '+S$' : '-S$' }}{{ Math.abs(Math.round($('Calculate Weekly').first().json.sg_wow)) }} this week)\nPERA+: ₱{{ Math.round($('Calculate Weekly').first().json.pera_total_val).toLocaleString() }} ({{ $('Calculate Weekly').first().json.pera_wow >= 0 ? '+₱' : '-₱' }}{{ Math.abs(Math.round($('Calculate Weekly').first().json.pera_wow)) }} this week)\n\n🏆 Top movers:\n{{ $('Calculate Weekly').first().json.top3.map(r => r.n + ' ' + (r.wow_val >= 0 ? '▲' : '▼') + ' ' + (r.wow_val >= 0 ? '+' : '') + 'S$' + Math.round(r.wow_val)).join('\\n') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Telegram — Weekly",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -1456,
+        -384
+      ],
+      "id": "e87d71a0-4f1a-45ee-b192-b388e05bac74",
+      "typeVersion": 1.2,
+      "webhookId": "109f7728-629a-4a47-8728-d94cf1c1c411",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Replace with your actual Telegram bot credentials and chat ID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://scanner.tradingview.com/philippines/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"in_range\",\n      \"right\": [\"AREIT\", \"CREIT\", \"MBT\", \"MREIT\", \"RCR\"]\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"sort\": {\"sortBy\": \"name\", \"sortOrder\": \"asc\"},\n  \"range\": [0, 10]\n}",
+        "options": {}
+      },
+      "id": "0cc9ba3d-5f49-4182-b701-046ac4b02b13",
+      "name": "TradingView PSE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2736,
+        -580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://scanner.tradingview.com/crypto/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"equal\",\n      \"right\": \"ETHSGD\"\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"range\": [0, 10]\n}",
+        "options": {}
+      },
+      "id": "e405bc21-2b24-4518-8d29-2422ff6b3538",
+      "name": "TradingView ETHSGD",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2736,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst fallbackDividends = [\n  { symbol: 'A17U.SI', n: 'A17U', exDate: '2026-03-31', amount: 0.0375, currency: 'SGD', payDate: '2026-04-30' },\n  { symbol: 'AJBU.SI', n: 'AJBU', exDate: '2026-02-06', amount: 0.05248, currency: 'SGD', payDate: '2026-03-19' },\n  { symbol: 'BUOU.SI', n: 'BUOU', exDate: '2026-05-14', amount: 0.0295, currency: 'SGD', payDate: '2026-06-22' },\n  { symbol: 'J69U.SI', n: 'J69U', exDate: '2026-05-04', amount: 0.06136, currency: 'SGD', payDate: '2026-05-29' },\n  { symbol: 'JYEU.SI', n: 'JYEU', exDate: '2026-02-24', amount: 0.005195, currency: 'SGD', payDate: '2026-03-30' },\n  { symbol: 'ME8U.SI', n: 'ME8U', exDate: '2026-05-06', amount: 0.0309, currency: 'SGD', payDate: '2026-06-12' },\n  { symbol: 'O5RU.SI', n: 'O5RU', exDate: '2026-05-15', amount: 0.026, currency: 'SGD', payDate: '2026-06-29' },\n  { symbol: 'AREIT',    n: 'AREIT', exDate: '2026-05-26', amount: 0.62, currency: 'PHP', payDate: '2026-06-11' },\n  { symbol: 'CREIT',    n: 'CREIT', exDate: '2026-06-10', amount: 0.049, currency: 'PHP', payDate: '2026-07-08' },\n  { symbol: 'MBT',      n: 'MBT',   exDate: '2026-03-06', amount: 3.50, currency: 'PHP', payDate: '2026-03-26' },\n  { symbol: 'MREIT',    n: 'MREIT', exDate: '2026-05-14', amount: 0.263, currency: 'PHP', payDate: '2026-05-29' },\n  { symbol: 'RCR',      n: 'RCR',   exDate: '2026-05-18', amount: 0.1115, currency: 'PHP', payDate: '2026-06-01' }\n];\n\nfunction fetchChart(symbol) {\n  return new Promise((resolve) => {\n    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=6mo&events=div`;\n    const options = {\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'\n      },\n      timeout: 5000\n    };\n    https.get(url, options, (res) => {\n      let data = '';\n      res.on('data', chunk => data += chunk);\n      res.on('end', () => {\n        try {\n          resolve(JSON.parse(data));\n        } catch(e) {\n          resolve(null);\n        }\n      });\n    }).on('error', () => resolve(null));\n  });\n}\n\nconst sleep = ms => new Promise(r => setTimeout(r, ms));\n\nconst liveDividends = [];\nconst sgxSymbols = ['A17U.SI', 'AJBU.SI', 'BUOU.SI', 'J69U.SI', 'JYEU.SI', 'ME8U.SI', 'O5RU.SI'];\n\nfor (const sym of sgxSymbols) {\n  try {\n    const data = await fetchChart(sym);\n    await sleep(200);\n    if (data && data.chart && data.chart.result && data.chart.result[0]) {\n      const result = data.chart.result[0];\n      const divEvents = result.events?.dividends;\n      if (divEvents) {\n        const timestamps = Object.keys(divEvents).map(Number).sort((a,b) => b - a);\n        if (timestamps.length > 0) {\n          const latestTs = timestamps[0];\n          const event = divEvents[latestTs];\n          const exDateObj = new Date(latestTs * 1000);\n          const exDateStr = exDateObj.toISOString().split('T')[0];\n          \n          // Estimate payment date as ex-date + 33 days\n          const payDateObj = new Date(exDateObj.getTime() + 33 * 24 * 60 * 60 * 1000);\n          const payDateStr = payDateObj.toISOString().split('T')[0];\n          \n          liveDividends.push({\n            symbol: sym,\n            n: sym.split('.')[0],\n            exDate: exDateStr,\n            amount: event.amount,\n            currency: 'SGD',\n            payDate: payDateStr\n          });\n        }\n      }\n    }\n  } catch(e) {\n    // Keep processing other tickers\n  }\n}\n\nconst finalDividends = [];\nfor (const fb of fallbackDividends) {\n  const live = liveDividends.find(l => l.n === fb.n);\n  if (live) {\n    finalDividends.push(live);\n  } else {\n    finalDividends.push(fb);\n  }\n}\n\n// Sort dividends by ex-date descending\nfinalDividends.sort((a, b) => b.exDate.localeCompare(a.exDate));\n\nconst d = $input.first().json;\nreturn [{ json: { ...d, dividends: finalDividends } }];"
+      },
+      "id": "8b62fda2-cc18-4c28-984d-384950293848",
+      "name": "Calculate Dividends",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2260,
+        -384
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-05T05:03:07.215Z",
+      "createdAt": "2026-04-05T05:03:07.215Z",
+      "role": "workflow:owner",
+      "workflowId": "BvXxSdiBeEZDvRHS",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Saturday 9PM SGT": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    },
+    "global": {
+      "prevSnapshot": {
+        "saved_at": "2026-07-04T13:00:01.500Z",
+        "total_value": 10739.18,
+        "total_pl": 531.73,
+        "pera_total_val": 156795,
+        "pera_total_pl": -3288.13,
+        "rows": [
+          {
+            "n": "A17U",
+            "val": 996.0000000000001,
+            "pl": -15.999999999999773,
+            "pct": -1.5810276679841675
+          },
+          {
+            "n": "BUOU",
+            "val": 1447.5,
+            "pl": -6.4500000000000455,
+            "pct": -0.4436191065717559
+          },
+          {
+            "n": "KepDC",
+            "val": 1125,
+            "pl": 146.89999999999998,
+            "pct": 15.018914221449748
+          },
+          {
+            "n": "CICT",
+            "val": 1200,
+            "pl": 207.89999999999998,
+            "pct": 20.95554883580284
+          },
+          {
+            "n": "FCT",
+            "val": 2250,
+            "pl": 77.70000000000027,
+            "pct": 3.576854025687073
+          },
+          {
+            "n": "JYEU",
+            "val": 517.5,
+            "pl": -21.50999999999999,
+            "pct": -3.9906495241275652
+          },
+          {
+            "n": "NVDA",
+            "val": 754.751937,
+            "pl": 80.732076,
+            "pct": 11.977699867808496
+          },
+          {
+            "n": "AIMS",
+            "val": 825,
+            "pl": 186.25,
+            "pct": 29.158512720156555
+          },
+          {
+            "n": "TSLA",
+            "val": 180.31119847649998,
+            "pl": 34.26439795778998,
+            "pct": 23.461245187223653
+          },
+          {
+            "n": "ETH",
+            "val": 1443.121102066,
+            "pl": -158.05885650167215,
+            "pct": -12.201098752479098
+          }
+        ],
+        "peraRows": [
+          {
+            "n": "AREIT",
+            "val": 46080,
+            "pl": -2693.4000000000015,
+            "pct": -5.522272386177715
+          },
+          {
+            "n": "CREIT",
+            "val": 28000,
+            "pl": 769.6000000000022,
+            "pct": 2.826253011340275
+          },
+          {
+            "n": "MBT",
+            "val": 27090,
+            "pl": -2008.5729999999967,
+            "pct": -6.902651205610656
+          },
+          {
+            "n": "MREIT",
+            "val": 26600,
+            "pl": 816.2400000000016,
+            "pct": 3.1657136119790192
+          },
+          {
+            "n": "RCR",
+            "val": 29025,
+            "pl": -172,
+            "pct": -0.5891016200294551
+          }
+        ]
+      }
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-07T11:24:07.000Z",
+  "versionId": "4699e596-ccab-4d2d-84aa-14f6aa3e32d1"
+}
