@@ -596,6 +596,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -781,6 +782,7 @@
     "templateCredsSetupCompleted": true
   },
   "name": "Stock Analyzer",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
