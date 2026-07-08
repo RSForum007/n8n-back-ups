@@ -1,0 +1,1134 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-07T11:23:54.805Z",
+    "createdAt": "2026-07-07T11:23:54.805Z",
+    "versionId": "69cc52db-63f1-42cb-acc6-380c1abefddd",
+    "workflowId": "IAfUazyMm6e4b82S",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 0 21 * * *"
+              }
+            ]
+          }
+        },
+        "name": "Schedule 9PM SGT",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          -832,
+          -384
+        ],
+        "id": "94a99d01-6d64-4631-9b0b-482965a2860d",
+        "typeVersion": 1.3,
+        "notes": "9PM SGT = 13:00 UTC"
+      },
+      {
+        "parameters": {
+          "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd",
+          "options": {}
+        },
+        "name": "CoinGecko ETH",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          -656,
+          -288
+        ],
+        "id": "fa2a7f37-942d-435e-a450-b08e2554ecde",
+        "typeVersion": 4.4
+      },
+      {
+        "parameters": {
+          "jsCode": "const allInputs = $input.all();\n\nconst yfInput = allInputs.find(i => \n  i.json.quoteResponse || \n  i.json.meta?.status === 200 ||\n  Array.isArray(i.json.body)\n) || allInputs[0];\n\nconst ethInput = allInputs.find(i => \n  i.json.body?.ethereum || \n  i.json.ethereum\n) || allInputs[1];\n\nconst yfRaw = yfInput.json;\nconst quotes = yfRaw.quoteResponse?.result\n             || yfRaw.body\n             || (Array.isArray(yfRaw) ? yfRaw : []);\nconst yf = {};\nquotes.forEach(q => {\n  const sym = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw ?? q.regularMarketPrice ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst phpsgd = yf['PHPSGD=X'] || 0.023;\nconst S = v => (v == null || isNaN(v) || !isFinite(v)) ? 0 : Number(v);\n\n// ── Read ETH & PSE Prices from TradingView nodes ────────────────\nlet ethSGD = 0;\nconst tvPsePrices = {};\n\ntry {\n  const tvEthData = $('TradingView ETHSGD').first().json;\n  ethSGD = S(tvEthData.data?.[0]?.d?.[1]);\n} catch (e) {\n  // Fallback to CoinGecko input if TradingView fails\n  const ethRaw = ethInput.json.body || ethInput.json;\n  ethSGD = Number(ethRaw?.ethereum?.sgd) || Number(ethInput.json?.ethereum?.sgd) || Number(ethInput.json?.body?.ethereum?.sgd) || 0;\n}\n\ntry {\n  const tvPseData = $('TradingView PSE').first().json;\n  (tvPseData.data || []).forEach(item => {\n    const name = item.d[0];\n    const close = item.d[1];\n    tvPsePrices[name] = S(close);\n  });\n} catch (e) {\n  // Handled via fallback values in the loop below\n}\n\n// ── SG + US Positions (C38U removed, names & costs matched to MooMoo console) ──\nconst pos = [\n  {sym:'A17U.SI', n:'A17U',  qty:400,    cost:2.53,    c:'SGD'},\n  {sym:'AJBU.SI', n:'AJBU',  qty:500,    cost:1.9562,  c:'SGD'}, // Name matched\n  {sym:'BUOU.SI', n:'BUOU',  qty:1500,   cost:0.9398,  c:'SGD'}, // Cost updated\n  {sym:'J69U.SI', n:'J69U',  qty:1000,   cost:2.1109,  c:'SGD'}, // Name matched, cost 2.1109\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.5898,  c:'SGD'},\n  {sym:'ME8U.SI', n:'ME8U',  qty:200,    cost:1.93,    c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.73,  c:'USD'}, // Cost updated\n  {sym:'O5RU.SI', n:'O5RU',  qty:500,    cost:1.2515,  c:'SGD'}, // Name matched, cost updated\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal = 0, totPL = 0;\nconst rows = [];\n\nfor (const p of pos) {\n  const rawP = S(yf[p.sym]);\n  const pr   = S(p.c === 'USD' ? rawP * usdsgd : rawP);\n  const co   = S(p.c === 'USD' ? p.cost * usdsgd : p.cost);\n  const val  = S(p.qty * pr);\n  const cst  = S(p.qty * co);\n  const pl   = S(val - cst);\n  const pct  = cst > 0 ? S(pl / cst * 100) : 0;\n  totVal += val; totPL += pl;\n  rows.push({ n:p.n, price:rawP, currency:p.c, qty:p.qty, cost:p.cost, val, pl, pct, noP:!rawP });\n}\n\n// ── ETH (Blended cost and qty updated, row push corrected) ──────\nconst ethQty = 0.6338458;\nconst ethBlendedCost = 2526.13484;\n\nconst eV = S(ethQty * ethSGD);\nconst ePL = S(eV - ethQty * ethBlendedCost);\nconst ePct = S((ethSGD - ethBlendedCost) / ethBlendedCost * 100);\n\ntotVal += eV;\ntotPL  += ePL;\n\nrows.push({ n:'ETH', price:ethSGD, currency:'SGD', qty:ethQty, cost:ethBlendedCost, val:eV, pl:ePL, pct:ePct, noP:false });\n\n// ── DragonFi PERA+ Positions (Dynamic TV Prices & Fallback) ───\nconst peraFallback = {\n  'AREIT': 38.40,\n  'CREIT': 3.50,\n  'MBT':   63.00,\n  'MREIT': 14.00,\n  'RCR':   6.75\n};\n\nconst peraPos = [\n  {n:'AREIT', qty:1200, cost:40.6445},\n  {n:'CREIT', qty:8000, cost:3.4038},\n  {n:'MBT',   qty:430,  cost:67.6711},\n  {n:'MREIT', qty:1900, cost:13.5704},\n  {n:'RCR',   qty:4300, cost:6.79}\n];\n\nlet peraTotVal = 0, peraTotPL = 0;\nconst peraRows = [];\n\nfor (const p of peraPos) {\n  const pricePhp = tvPsePrices[p.n] || peraFallback[p.n] || 0;\n  const val      = S(p.qty * pricePhp);\n  const cst      = S(p.qty * p.cost);\n  const pl       = S(val - cst);\n  const pct      = cst > 0 ? S(pl / cst * 100) : 0;\n  peraTotVal += val;\n  peraTotPL  += pl;\n  peraRows.push({ n:p.n, sym:p.n + '.PS', price:pricePhp, qty:p.qty, cost:p.cost, val, pl, pct, noP:false });\n}\n\n// ── Alerts ─────────────────────────────────────────────────────\nconst alerts = [];\nrows.forEach(r => {\n  if (r.pct <= -10 && !r.noP && !r.stable) alerts.push(r.n + ' ' + r.pct.toFixed(1) + '%');\n});\nperaRows.forEach(r => {\n  if (r.pct <= -10 && !r.noP) alerts.push('PERA+ ' + r.n + ' ' + r.pct.toFixed(1) + '%');\n});\n\nreturn [{ json: {\n  rows,\n  peraRows,\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  usdsgd,\n  phpsgd,\n  eth_sgd:        ethSGD,\n  alerts,\n  alert_count:    alerts.length,\n  timestamp:      new Date().toISOString()\n}}];"
+        },
+        "name": "Calculate P&L",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -288,
+          -368
+        ],
+        "id": "bf24e471-db54-4e33-831f-ea3d12a7a913",
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://openrouter.ai/api/v1/chat/completions",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+              },
+              {
+                "name": "HTTP-Referer",
+                "value": "https://bobbydionido.com"
+              },
+              {
+                "name": "X-Title",
+                "value": "Bobby Portfolio"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "model",
+                "value": "anthropic/claude-sonnet-4-5"
+              },
+              {
+                "name": "max_tokens",
+                "value": "2500"
+              },
+              {
+                "name": "messages[0][role]",
+                "value": "user"
+              },
+              {
+                "name": "messages[0][content]",
+                "value": "={{ $json.claudeContent }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "name": "Claude AI Analysis",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          208,
+          -368
+        ],
+        "id": "cf793098-7ae9-42fb-8e99-0be1f415865f",
+        "typeVersion": 4.4
+      },
+      {
+        "parameters": {
+          "jsCode": "const calcPL = $('Calculate Dividends').first().json;\nconst rawResp = $input.first().json;\n\n// ── Parse Claude response ──────────────────────────────────────\nlet ai;\ntry {\n  const text = rawResp.choices[0].message.content;\n  const clean = text.replace(/```json|```/g, '').trim();\n  ai = JSON.parse(clean);\n} catch(e) {\n  ai = {\n    overall_summary: 'Portfolio update complete. AI analysis unavailable this run.',\n    detailed_analysis: '',\n    watchlist: '',\n    portfolio_status: calcPL.total_pl >= 0 ? 'UP' : 'DOWN',\n    biggest_mover: { name: 'N/A', direction: 'UP', note: '' },\n    positions: calcPL.rows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    pera_positions: calcPL.peraRows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    alerts: calcPL.alerts.length ? [{ level: 'YELLOW', title: 'Alerts', body: calcPL.alerts.join(', ') }] : [],\n    recommendation: 'Review positions manually.',\n    market_context: ''\n  };\n}\n\n// ── Helpers ────────────────────────────────────────────────────\nconst ts = new Date(calcPL.timestamp).toLocaleString('en-SG', {\n  timeZone: 'Asia/Singapore', weekday:'long', day:'2-digit',\n  month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'\n});\nconst fmt    = v => (v >= 0 ? '+' : '') + 'S$' + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPhp = v => (v >= 0 ? '+' : '-') + '₱' + Math.abs(Math.round(v)).toLocaleString();\nconst f1  = v => Number(v).toFixed(1);\nconst plColor    = v => v >= 0 ? '#00c896' : '#e74c3c';\nconst statusColor = s => ({ STRONG:'#00c896', OK:'#6db8a0', WATCH:'#f5a623', ALERT:'#e74c3c' }[s] || '#6db8a0');\nconst alertBg    = l => ({ RED:'rgba(231,76,60,0.12)', YELLOW:'rgba(245,166,35,0.10)', GREEN:'rgba(0,200,150,0.10)' }[l] || 'rgba(255,255,255,0.04)');\nconst alertBorder = l => ({ RED:'#e74c3c', YELLOW:'#f5a623', GREEN:'#00c896' }[l] || '#444');\nconst alertIcon  = l => ({ RED:'&#9940;', YELLOW:'&#9888;', GREEN:'&#9989;' }[l] || '&#8226;');\n\n// ── MooMoo SG Position rows ────────────────────────────────────\nconst posRows = calcPL.rows.map(r => {\n  const aiPos  = (ai.positions || []).find(p => p.name === r.n) || {};\n  const status = r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = 'S$' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+S$<1' : '-S$<1')\n    : (r.pl >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plSGD  = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plSGD};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── DragonFi PERA+ rows ────────────────────────────────────────\nconst peraRows = calcPL.peraRows.map(r => {\n  const aiPos  = (ai.pera_positions || []).find(p => p.name === r.n) || {};\n  const status = r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = '₱' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+₱<1' : '-₱<1')\n    : (r.pl >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plColor2 = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plColor2};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── Alerts HTML ────────────────────────────────────────────────\nconst alertsHtml = (ai.alerts && ai.alerts.length > 0)\n  ? ai.alerts.map(al => `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;margin-bottom:10px;background:${alertBg(al.level)};border-left:3px solid ${alertBorder(al.level)};align-items:flex-start\">\n      <span style=\"font-size:15px;flex-shrink:0;margin-top:1px\">${alertIcon(al.level)}</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8;display:block;margin-bottom:4px\">${al.title}</strong><p style=\"font-size:12px;color:#6b8599;margin:0;line-height:1.5\">${al.body}</p></div>\n    </div>`).join('')\n  : `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;background:rgba(0,200,150,0.08);border-left:3px solid #00c896;align-items:center\">\n      <span style=\"font-size:15px\">&#9989;</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8\">All Clear</strong><p style=\"font-size:12px;color:#6b8599;margin:4px 0 0\">No threshold alerts today.</p></div>\n    </div>`;\n\n// ── Status pill ────────────────────────────────────────────────\nconst pillColor = ai.portfolio_status === 'UP' ? '#00c896' : ai.portfolio_status === 'DOWN' ? '#e74c3c' : '#3d9be9';\nconst pillLabel = ai.portfolio_status === 'UP' ? '&#9650; UP' : ai.portfolio_status === 'DOWN' ? '&#9660; DOWN' : '&#8212; FLAT';\nconst statusPill = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${pillColor}22;color:${pillColor};border:1px solid ${pillColor}44;margin-left:10px\">${pillLabel}</span>`;\n\nconst costBasis = calcPL.total_value - calcPL.total_pl;\nconst plPct     = costBasis > 0 ? (calcPL.total_pl / costBasis * 100).toFixed(1) : '0.0';\nconst peraPlPct = calcPL.pera_total_val > 0 ? ((calcPL.pera_total_pl / (calcPL.pera_total_val - calcPL.pera_total_pl)) * 100).toFixed(1) : '0.0';\n\n// ── Dividends Section ──────────────────────────────────────────\nconst divRows = (calcPL.dividends || []).map(r => {\n  const amtStr = r.currency === 'SGD' ? 'S$' + r.amount.toFixed(4) : '₱' + r.amount.toFixed(4);\n  const exD = new Date(r.exDate);\n  const payD = new Date(r.payDate);\n  const today = new Date();\n  \n  // Calculate status and color\n  let status = 'Paid';\n  let color = '#6db8a0'; // Muted green\n  \n  // Normalize dates to midnight for accurate comparison\n  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());\n  const exMidnight = new Date(exD.getFullYear(), exD.getMonth(), exD.getDate());\n  const payMidnight = new Date(payD.getFullYear(), payD.getMonth(), payD.getDate());\n  \n  if (todayMidnight < exMidnight) {\n    status = 'Upcoming';\n    color = '#3d9be9'; // Blue\n  } else if (todayMidnight >= exMidnight && todayMidnight < payMidnight) {\n    status = 'Pending Pay';\n    color = '#f5a623'; // Orange\n  }\n  \n  const statusHtml = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${status}</span>`;\n  \n  const fmtDate = dateObj => dateObj.toLocaleDateString('en-SG', {\n    day: '2-digit', month: 'short', year: 'numeric'\n  });\n  \n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:13px 8px\">${fmtDate(exD)}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#00c896;padding:13px 8px\">${amtStr}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:13px 8px\">${fmtDate(payD)}</td>\n    <td style=\"padding:13px 8px\">${statusHtml}</td>\n  </tr>`;\n}).join('');\n\nconst divTableHtml = `\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">📅 Dividends Calendar (Declared / Recent)</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Asset</th><th>Ex-Date</th><th>Amount</th><th>Payment Date</th><th>Status</th>\n      </tr></thead>\n      <tbody>${divRows}</tbody>\n    </table>\n  </div>\n</div>\n`;\n\n// ── Full HTML ──────────────────────────────────────────────────\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Bobby Portfolio &mdash; ${ts}</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#0a0e14;color:#c8d8e8;font-family:'DM Sans',sans-serif;min-height:100vh}\nbody::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0}\n.wrap{max-width:980px;margin:0 auto;padding:36px 20px;position:relative;z-index:1}\ntable{width:100%;border-collapse:collapse}\nthead th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid #1a2636}\ntbody tr{border-bottom:1px solid rgba(26,38,54,0.6);transition:background 0.15s}\ntbody tr:hover{background:#111c28}\n.section-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#3d5a72;text-transform:uppercase;margin-bottom:12px}\n@media(max-width:600px){.hide-mobile{display:none}.stat-grid{grid-template-columns:1fr 1fr!important}.stat-val{font-size:20px!important}}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n\n<div style=\"display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #1a2636;padding-bottom:24px;margin-bottom:32px;flex-wrap:wrap;gap:12px\">\n  <div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#3d5a72;text-transform:uppercase;margin-bottom:8px\">&#128200; Daily Portfolio Report</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#c8d8e8;letter-spacing:0.04em\">Bobby Dionido ${statusPill}</div>\n  </div>\n  <div style=\"text-align:right\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">Generated ${ts}</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;margin-top:5px\">USD/SGD ${calcPL.usdsgd} &nbsp;|&nbsp; PHP/SGD ${calcPL.phpsgd.toFixed(4)} &nbsp;|&nbsp; ETH S$${Math.round(calcPL.eth_sgd).toLocaleString()}</div>\n  </div>\n</div>\n\n<div class=\"stat-grid\" style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px\">\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">MooMoo SG Value</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3d9be9\">S$${Math.round(calcPL.total_value).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmt(calcPL.total_pl)} &nbsp;(${plPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">DragonFi PERA+</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.pera_total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmtPhp(calcPL.pera_total_pl)} &nbsp;(${peraPlPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">Biggest Mover</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:${ai.biggest_mover?.direction==='UP'?'#00c896':'#e74c3c'}\">${ai.biggest_mover?.name || 'N/A'}</div>\n    <div style=\"font-size:11px;color:#3d5a72;margin-top:5px\">${ai.biggest_mover?.note || ''}</div>\n  </div>\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:24px;margin-bottom:20px\">\n  <div class=\"section-label\">AI Analysis</div>\n  <p style=\"font-size:14px;line-height:1.75;color:#c8d8e8\">${ai.overall_summary}</p>\n  ${ai.detailed_analysis ? `<p style=\"margin-top:14px;font-size:13px;line-height:1.8;color:#a0b8cc\">${ai.detailed_analysis}</p>` : ''}\n  ${ai.market_context ? `<p style=\"margin-top:12px;font-size:12px;color:#4a7a9b\">&#128202; ${ai.market_context}</p>` : ''}\n  ${ai.watchlist ? `<div style=\"margin-top:16px;padding:14px 16px;border-radius:6px;background:rgba(61,155,233,0.07);border-left:3px solid #3d9be9\"><div style=\"font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d9be9;text-transform:uppercase;margin-bottom:8px\">&#128270; Watchlist — Potential Adds</div><p style=\"font-size:12px;color:#7a9ab5;line-height:1.7\">${ai.watchlist}</p></div>` : ''}\n  <p style=\"margin-top:16px;padding-top:16px;border-top:1px solid #1a2636;font-size:13px;color:#3d9be9;font-style:italic\">&#128161; ${ai.recommendation}</p>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">Alerts &mdash; What Changed</div>\n  ${alertsHtml}\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">MooMoo SG &mdash; Live Positions</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L S$</th><th>Status</th><th>Value</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${posRows}</tbody>\n    </table>\n  </div>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">DragonFi PERA+ &mdash; Philippine Positions</div>\n  <div style=\"background:#111820;border:1px solid #0d2a1a;border-radius:8px;overflow:hidden;border-top:2px solid #3dcc9b44\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L ₱</th><th>Status</th><th>Value ₱</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${peraRows}</tbody>\n    </table>\n    <div style=\"padding:12px 16px;border-top:1px solid #1a2636;display:flex;justify-content:space-between;align-items:center\">\n      <span style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">TOTAL PERA+</span>\n      <span style=\"font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()} &nbsp;<span style=\"color:${plColor(calcPL.pera_total_pl)}\">${fmtPhp(calcPL.pera_total_pl)}</span></span>\n    </div>\n  </div>\n</div>\n\n${divTableHtml}\n\n<div style=\"margin-top:40px;padding-top:20px;border-top:1px solid #1a2636;font-family:'Space Mono',monospace;font-size:10px;color:#2a3f52;text-align:center;letter-spacing:0.08em\">\n  Generated by n8n + Claude &nbsp;|&nbsp; bobbydionido.com &nbsp;|&nbsp; Yahoo Finance &middot; CoinGecko &middot; DragonFi PERA+\n</div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{ json: { html, generated_at: calcPL.timestamp } }];"
+        },
+        "name": "Parse Claude + Build HTML",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          384,
+          -368
+        ],
+        "id": "cc9d56e4-6408-42e1-b3e0-383226236f79",
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "chatId": "5811640282",
+          "text": "=📊 Portfolio updated\nhttps://portfolio.bobbydionido.com\n\nTotal: S${{ Math.round($('Calculate P&L').first().json.total_value).toLocaleString() }} | P/L: {{ $('Calculate P&L').first().json.total_pl >= 0 ? '+' : '' }}S${{ Math.round($('Calculate P&L').first().json.total_pl) }}\n{{ $('Calculate P&L').first().json.alerts.length > 0 ? '⚠️ ' + $('Calculate P&L').first().json.alerts.join(' | ') : '✅ All clear' }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "name": "Telegram — Send URL",
+        "type": "n8n-nodes-base.telegram",
+        "position": [
+          752,
+          -368
+        ],
+        "id": "a7db858d-d95c-457b-b301-c2e24d44ed5a",
+        "typeVersion": 1.2,
+        "webhookId": "109f7728-629a-4a47-8728-d94cf1c1c411",
+        "credentials": {
+          "telegramApi": {
+            "id": "32yQqC2qF6jaGldc",
+            "name": "Telegram account"
+          }
+        },
+        "notes": "Replace with your actual Telegram bot credentials and chat ID"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -448,
+          -368
+        ],
+        "id": "af289dba-9dba-4dba-a601-8d3ed48b1170",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $input.first().json;\n\n// ── Day-based focus rotation ──────────────────────────────────\nconst days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];\nconst dayName = days[new Date().getDay()];\nconst focusMap = {\n  'Monday':    'Focus angle: Week ahead outlook — what needs action or monitoring this week.',\n  'Tuesday':   'Focus angle: Individual position fundamentals — sector trends and holding quality.',\n  'Wednesday': 'Focus angle: Risk assessment — what could go wrong, what needs protecting.',\n  'Thursday':  'Focus angle: Dividend and income health — yield, payout dates, income sustainability.',\n  'Friday':    'Focus angle: Week recap — what moved, why, and what to watch next week.',\n  'Saturday':  'Focus angle: Portfolio rebalancing — anything to trim, add, or swap.',\n  'Sunday':    'Focus angle: Macro and market context — rates, USD, PSE sentiment, crypto outlook.'\n};\n\n// ── Randomised analysis lens ──────────────────────────────────\nconst lenses = [\n  'Write from a risk management perspective — highlight threats and downside scenarios.',\n  'Write from an income investor perspective — prioritise yield, dividends, and cash flow.',\n  'Write from a growth perspective — which positions have the most upside potential.',\n  'Write from a capital preservation perspective — what needs protecting and why.',\n  'Write from a sector rotation perspective — where is money flowing in SG and PH markets.'\n];\nconst todayLens = lenses[new Date().getDate() % lenses.length];\nconst todayFocus = focusMap[dayName] || '';\n\n// ── WoW strings ───────────────────────────────────────────────\nconst wowStr = d.sg_wow !== null\n  ? (d.sg_wow >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(d.sg_wow)) + ' vs last week'\n  : 'no prior snapshot';\nconst peraWowStr = d.pera_wow !== null\n  ? (d.pera_wow >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(d.pera_wow)) + ' vs last week'\n  : 'no prior snapshot';\n\nconst divStr = d.dividends && d.dividends.length\n  ? '\\nDividends Calendar:\\n' + d.dividends.map(r =>\n      `${r.n}: Ex-Date ${r.exDate}, Amount ${r.currency === 'SGD' ? 'S$' : '₱'}${r.amount.toFixed(4)}, Pay-Date ${r.payDate}`\n    ).join('\\n')\n  : '';\n\nconst content = 'Return ONLY raw JSON, no markdown, no backticks. ' +\n  'Portfolio as of ' + d.timestamp + '. ' +\n  'Today is ' + dayName + '. ' + todayFocus + ' ' +\n  'Analysis lens: ' + todayLens + ' ' +\n  'MooMoo SG Total: S$' + d.total_value + ' PL: S$' + d.total_pl + ' (' + wowStr + '). ' +\n  'DragonFi PERA+ Total: PHP ' + d.pera_total_val + ' PL: PHP ' + d.pera_total_pl + ' (' + peraWowStr + '). ' +\n  'USDSGD: ' + d.usdsgd + ' PHPSGD: ' + d.phpsgd + divStr + ' ETH: S$' + d.eth_sgd + '. ' +\n  'Alerts: ' + (d.alerts.length ? d.alerts.join(', ') : 'None') + '. ' +\n  'MooMoo SG Positions: ' + d.rows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% S$' + Math.round(r.val)).join(', ') + '. ' +\n  'DragonFi PERA+ Positions: ' + d.peraRows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% PHP' + Math.round(r.val)).join(', ') + '. ' +\n  'Context: Bobby is a Singapore-based OFW investor. ' +\n  'MooMoo SG: AJBU (Keppel DC Reit), A17U (CapLand Ascendas industrial/DC REIT), BUOU (Frasers Logistics REIT), J69U (suburban retail REIT), JYEU (Lendlease commercial REIT), ME8U (Mapletree Industrial Trust), O5RU (AIMS APAC industrial REIT), NVDA (tech growth), TSLA (growth), ETH (crypto growth/non-yielding). ' +\n  'DragonFi PERA+: AREIT (Ayala Land REIT), CREIT (Citicore renewable energy), MBT (Metrobank), MREIT (Megaworld REIT), RCR (RL Commercial REIT). ' +\n  'Strategy Context: Portfolio has a bimodal strategy: REITs & Banks (A17U, AJBU, BUOU, J69U, JYEU, ME8U, O5RU, AREIT, CREIT, MREIT, RCR, MBT) are long-term yield assets held for compound distributions — focus on dividend health, gearing, and distribution stability, and do NOT recommend panic-selling them on short-term price drops. US Equities (NVDA, TSLA) and Crypto (ETH) are tactical growth assets — recommend active capital protection triggers (stop-losses) or exit strategies here. ' +\n  'Actionability constraint: Never give vague advice like \"reassess positions\". Always specify exact price-based actions or rebalancing ratios (e.g. \"If ETH drops below S$2000, rotate into AJBU\"). ' +\n  'Return this JSON: {' +\n  '\"overall_summary\":\"2 to 3 sentences max. One line on SG portfolio health, one line on PERA+ health, one line on overall sentiment. Keep it punchy and fresh — do not repeat yesterday.\",' +\n  '\"detailed_analysis\":\"4 to 5 sentences. Apply the focus angle and analysis lens above. Cover only notable movers and positions needing attention. Skip flat or unchanged positions. Be direct and specific — vary the angle from a typical daily recap.\",' +\n  '\"watchlist\":\"2 sentences. One specific stock or REIT Bobby does not hold. Include ticker, exchange, and one reason why it fits today\\'s analysis lens.\",' +\n  '\"portfolio_status\":\"UP or DOWN or FLAT\",' +\n  '\"biggest_mover\":{\"name\":\"\",\"direction\":\"UP or DOWN\",\"note\":\"one line\"},' +\n  '\"positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 10 words\"}],' +\n  '\"pera_positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 10 words\"}],' +\n  '\"alerts\":[{\"level\":\"RED or YELLOW or GREEN\",\"title\":\"\",\"body\":\"1 sentence only\"}],' +\n  '\"recommendation\":\"2 to 3 sentences. Apply the focus angle above. Most urgent action first. Be direct — what to do today or this week.\",' +\n  '\"market_context\":\"1 sentence covering the most relevant macro factor right now aligned to today\\'s focus angle.\"}';\n\nreturn [{ json: { \n  ...d,\n  claudeContent: content,\n  claudeRole: 'user'\n} }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          32,
+          -368
+        ],
+        "id": "41615d49-2332-46a3-a260-2dbe47b872b2",
+        "name": "Build Claude Payload"
+      },
+      {
+        "parameters": {
+          "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "ticker",
+                "value": "BUOU.SI,A17U.SI,AJBU.SI,C38U.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,ME8U.SI,TSLA,USDSGD=X,PHPSGD=X,AREIT.PS,CREIT.PS,MBT.PS,MREIT.PS,RCR.PS"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "X-RapidAPI-Key",
+                "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+              },
+              {
+                "name": "X-RapidAPI-Host",
+                "value": "yahoo-finance15.p.rapidapi.com"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 15000
+          }
+        },
+        "id": "78c7aa06-59ba-4e02-8900-c2135c055318",
+        "name": "Yahoo Finance1",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -656,
+          -432
+        ],
+        "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://localhost:8099/update",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "html",
+                "value": "={{ $json.html }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          560,
+          -368
+        ],
+        "id": "03dbe90c-74b6-452c-8e7f-915f5975d145",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $input.first().json;\n\nconst workflowStaticData = $getWorkflowStaticData('global');\n\nworkflowStaticData.latestSnapshot = {\n  saved_at:       new Date().toISOString(),\n  total_value:    d.total_value,\n  total_pl:       d.total_pl,\n  pera_total_val: d.pera_total_val,\n  pera_total_pl:  d.pera_total_pl,\n  usdsgd:         d.usdsgd,\n  phpsgd:         d.phpsgd,\n  eth_sgd:        d.eth_sgd,\n  rows:           d.rows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct })),\n  peraRows:       d.peraRows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct }))\n};\n\nreturn [{ json: d }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -128,
+          -368
+        ],
+        "id": "deeb078b-a0fb-435e-8477-cd5de074ce7e",
+        "name": "Save Snapshot"
+      },
+      {
+        "parameters": {
+          "content": "Daily Portfolio Generator",
+          "height": 576,
+          "width": 1936,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -896,
+          -672
+        ],
+        "typeVersion": 1,
+        "id": "5e425b0a-535a-4335-adf0-d2397679c3e9",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://scanner.tradingview.com/philippines/scan",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json",
+          "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"in_range\",\n      \"right\": [\"AREIT\", \"CREIT\", \"MBT\", \"MREIT\", \"RCR\"]\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"sort\": {\"sortBy\": \"name\", \"sortOrder\": \"asc\"},\n  \"range\": [0, 10]\n}",
+          "options": {}
+        },
+        "id": "b3a9d39f-0a36-4e8d-b867-34dd7dd9f766",
+        "name": "TradingView PSE",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -656,
+          -480
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://scanner.tradingview.com/crypto/scan",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json",
+          "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"equal\",\n      \"right\": \"ETHSGD\"\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"range\": [0, 10]\n}",
+          "options": {}
+        },
+        "id": "67385236-37b3-4488-8cfd-a758b56e1ccc",
+        "name": "TradingView ETHSGD",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -656,
+          -180
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const https = require('https');\n\nconst fallbackDividends = [\n  { symbol: 'A17U.SI', n: 'A17U', exDate: '2026-03-31', amount: 0.0375, currency: 'SGD', payDate: '2026-04-30' },\n  { symbol: 'AJBU.SI', n: 'AJBU', exDate: '2026-02-06', amount: 0.05248, currency: 'SGD', payDate: '2026-03-19' },\n  { symbol: 'BUOU.SI', n: 'BUOU', exDate: '2026-05-14', amount: 0.0295, currency: 'SGD', payDate: '2026-06-22' },\n  { symbol: 'J69U.SI', n: 'J69U', exDate: '2026-05-04', amount: 0.06136, currency: 'SGD', payDate: '2026-05-29' },\n  { symbol: 'JYEU.SI', n: 'JYEU', exDate: '2026-02-24', amount: 0.005195, currency: 'SGD', payDate: '2026-03-30' },\n  { symbol: 'ME8U.SI', n: 'ME8U', exDate: '2026-05-06', amount: 0.0309, currency: 'SGD', payDate: '2026-06-12' },\n  { symbol: 'O5RU.SI', n: 'O5RU', exDate: '2026-05-15', amount: 0.026, currency: 'SGD', payDate: '2026-06-29' },\n  { symbol: 'AREIT',    n: 'AREIT', exDate: '2026-05-26', amount: 0.62, currency: 'PHP', payDate: '2026-06-11' },\n  { symbol: 'CREIT',    n: 'CREIT', exDate: '2026-06-10', amount: 0.049, currency: 'PHP', payDate: '2026-07-08' },\n  { symbol: 'MBT',      n: 'MBT',   exDate: '2026-03-06', amount: 3.50, currency: 'PHP', payDate: '2026-03-26' },\n  { symbol: 'MREIT',    n: 'MREIT', exDate: '2026-05-14', amount: 0.263, currency: 'PHP', payDate: '2026-05-29' },\n  { symbol: 'RCR',      n: 'RCR',   exDate: '2026-05-18', amount: 0.1115, currency: 'PHP', payDate: '2026-06-01' }\n];\n\nfunction fetchChart(symbol) {\n  return new Promise((resolve) => {\n    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=6mo&events=div`;\n    const options = {\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'\n      },\n      timeout: 5000\n    };\n    https.get(url, options, (res) => {\n      let data = '';\n      res.on('data', chunk => data += chunk);\n      res.on('end', () => {\n        try {\n          resolve(JSON.parse(data));\n        } catch(e) {\n          resolve(null);\n        }\n      });\n    }).on('error', () => resolve(null));\n  });\n}\n\nconst sleep = ms => new Promise(r => setTimeout(r, ms));\n\nconst liveDividends = [];\nconst sgxSymbols = ['A17U.SI', 'AJBU.SI', 'BUOU.SI', 'J69U.SI', 'JYEU.SI', 'ME8U.SI', 'O5RU.SI'];\n\nfor (const sym of sgxSymbols) {\n  try {\n    const data = await fetchChart(sym);\n    await sleep(200);\n    if (data && data.chart && data.chart.result && data.chart.result[0]) {\n      const result = data.chart.result[0];\n      const divEvents = result.events?.dividends;\n      if (divEvents) {\n        const timestamps = Object.keys(divEvents).map(Number).sort((a,b) => b - a);\n        if (timestamps.length > 0) {\n          const latestTs = timestamps[0];\n          const event = divEvents[latestTs];\n          const exDateObj = new Date(latestTs * 1000);\n          const exDateStr = exDateObj.toISOString().split('T')[0];\n          \n          // Estimate payment date as ex-date + 33 days\n          const payDateObj = new Date(exDateObj.getTime() + 33 * 24 * 60 * 60 * 1000);\n          const payDateStr = payDateObj.toISOString().split('T')[0];\n          \n          liveDividends.push({\n            symbol: sym,\n            n: sym.split('.')[0],\n            exDate: exDateStr,\n            amount: event.amount,\n            currency: 'SGD',\n            payDate: payDateStr\n          });\n        }\n      }\n    }\n  } catch(e) {\n    // Keep processing other tickers\n  }\n}\n\nconst finalDividends = [];\nfor (const fb of fallbackDividends) {\n  const live = liveDividends.find(l => l.n === fb.n);\n  if (live) {\n    finalDividends.push(live);\n  } else {\n    finalDividends.push(fb);\n  }\n}\n\n// Sort dividends by ex-date descending\nfinalDividends.sort((a, b) => b.exDate.localeCompare(a.exDate));\n\nconst d = $input.first().json;\nreturn [{ json: { ...d, dividends: finalDividends } }];"
+        },
+        "id": "5e62fba2-dc18-4c28-984d-384950293849",
+        "name": "Calculate Dividends",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          -368
+        ]
+      }
+    ],
+    "connections": {
+      "Schedule 9PM SGT": {
+        "main": [
+          [
+            {
+              "node": "CoinGecko ETH",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Yahoo Finance1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "TradingView PSE",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "TradingView ETHSGD",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CoinGecko ETH": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Calculate P&L": {
+        "main": [
+          [
+            {
+              "node": "Save Snapshot",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude AI Analysis": {
+        "main": [
+          [
+            {
+              "node": "Parse Claude + Build HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Claude + Build HTML": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Calculate P&L",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Claude Payload": {
+        "main": [
+          [
+            {
+              "node": "Claude AI Analysis",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Yahoo Finance1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Telegram — Send URL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Save Snapshot": {
+        "main": [
+          [
+            {
+              "node": "Calculate Dividends",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculate Dividends": {
+        "main": [
+          [
+            {
+              "node": "Build Claude Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "import",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "69cc52db-63f1-42cb-acc6-380c1abefddd",
+  "connections": {
+    "Schedule 9PM SGT": {
+      "main": [
+        [
+          {
+            "node": "CoinGecko ETH",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Yahoo Finance1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TradingView PSE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TradingView ETHSGD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CoinGecko ETH": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calculate P&L": {
+      "main": [
+        [
+          {
+            "node": "Save Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude AI Analysis": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude + Build HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude + Build HTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Calculate P&L",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Claude Payload": {
+      "main": [
+        [
+          {
+            "node": "Claude AI Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yahoo Finance1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Telegram — Send URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Calculate Dividends",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Dividends": {
+      "main": [
+        [
+          {
+            "node": "Build Claude Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-03T15:34:24.716Z",
+  "id": "IAfUazyMm6e4b82S",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b80342c70dedc1cf0d4ca6a5c47c1feeb826f38e808340ee402f5974d7efc5cf"
+  },
+  "name": "Bobby Portfolio — Dashboard Generator",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 21 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule 9PM SGT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -832,
+        -384
+      ],
+      "id": "94a99d01-6d64-4631-9b0b-482965a2860d",
+      "typeVersion": 1.3,
+      "notes": "9PM SGT = 13:00 UTC"
+    },
+    {
+      "parameters": {
+        "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd",
+        "options": {}
+      },
+      "name": "CoinGecko ETH",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -656,
+        -320
+      ],
+      "id": "fa2a7f37-942d-435e-a450-b08e2554ecde",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const allInputs = $input.all();\n\nconst yfInput = allInputs.find(i => \n  i.json.quoteResponse || \n  i.json.meta?.status === 200 ||\n  Array.isArray(i.json.body)\n) || allInputs[0];\n\nconst ethInput = allInputs.find(i => \n  i.json.body?.ethereum || \n  i.json.ethereum\n) || allInputs[1];\n\nconst yfRaw = yfInput.json;\nconst quotes = yfRaw.quoteResponse?.result\n             || yfRaw.body\n             || (Array.isArray(yfRaw) ? yfRaw : []);\nconst yf = {};\nquotes.forEach(q => {\n  const sym = q.symbol || q.ticker || '';\n  const price = q.regularMarketPrice?.raw ?? q.regularMarketPrice ?? 0;\n  if (sym) yf[sym] = Number(price) || 0;\n});\n\nconst usdsgd = yf['USDSGD=X'] || 1.35;\nconst phpsgd = yf['PHPSGD=X'] || 0.023;\nconst S = v => (v == null || isNaN(v) || !isFinite(v)) ? 0 : Number(v);\n\n// ── Read ETH & PSE Prices from TradingView nodes ────────────────\nlet ethSGD = 0;\nconst tvPsePrices = {};\n\ntry {\n  const tvEthData = $('TradingView ETHSGD').first().json;\n  ethSGD = S(tvEthData.data?.[0]?.d?.[1]);\n} catch (e) {\n  // Fallback to CoinGecko input if TradingView fails\n  const ethRaw = ethInput.json.body || ethInput.json;\n  ethSGD = Number(ethRaw?.ethereum?.sgd) || Number(ethInput.json?.ethereum?.sgd) || Number(ethInput.json?.body?.ethereum?.sgd) || 0;\n}\n\ntry {\n  const tvPseData = $('TradingView PSE').first().json;\n  (tvPseData.data || []).forEach(item => {\n    const name = item.d[0];\n    const close = item.d[1];\n    tvPsePrices[name] = S(close);\n  });\n} catch (e) {\n  // Handled via fallback values in the loop below\n}\n\n// ── SG + US Positions (C38U removed, names & costs matched to MooMoo console) ──\nconst pos = [\n  {sym:'A17U.SI', n:'A17U',  qty:400,    cost:2.53,    c:'SGD'},\n  {sym:'AJBU.SI', n:'AJBU',  qty:500,    cost:1.9562,  c:'SGD'}, // Name matched\n  {sym:'BUOU.SI', n:'BUOU',  qty:1500,   cost:0.9398,  c:'SGD'}, // Cost updated\n  {sym:'J69U.SI', n:'J69U',  qty:1000,   cost:2.1109,  c:'SGD'}, // Name matched, cost 2.1109\n  {sym:'JYEU.SI', n:'JYEU',  qty:900,    cost:0.5898,  c:'SGD'},\n  {sym:'ME8U.SI', n:'ME8U',  qty:200,    cost:1.93,    c:'SGD'},\n  {sym:'NVDA',    n:'NVDA',  qty:3,      cost:173.73,  c:'USD'}, // Cost updated\n  {sym:'O5RU.SI', n:'O5RU',  qty:500,    cost:1.2515,  c:'SGD'}, // Name matched, cost updated\n  {sym:'TSLA',    n:'TSLA',  qty:0.3549, cost:318.683, c:'USD'}\n];\n\nlet totVal = 0, totPL = 0;\nconst rows = [];\n\nfor (const p of pos) {\n  const rawP = S(yf[p.sym]);\n  const pr   = S(p.c === 'USD' ? rawP * usdsgd : rawP);\n  const co   = S(p.c === 'USD' ? p.cost * usdsgd : p.cost);\n  const val  = S(p.qty * pr);\n  const cst  = S(p.qty * co);\n  const pl   = S(val - cst);\n  const pct  = cst > 0 ? S(pl / cst * 100) : 0;\n  totVal += val; totPL += pl;\n  rows.push({ n:p.n, price:rawP, currency:p.c, qty:p.qty, cost:p.cost, val, pl, pct, noP:!rawP });\n}\n\n// ── ETH (Blended cost and qty updated, row push corrected) ──────\nconst ethQty = 0.6338458;\nconst ethBlendedCost = 2526.13484;\n\nconst eV = S(ethQty * ethSGD);\nconst ePL = S(eV - ethQty * ethBlendedCost);\nconst ePct = S((ethSGD - ethBlendedCost) / ethBlendedCost * 100);\n\ntotVal += eV;\ntotPL  += ePL;\n\nrows.push({ n:'ETH', price:ethSGD, currency:'SGD', qty:ethQty, cost:ethBlendedCost, val:eV, pl:ePL, pct:ePct, noP:false });\n\n// ── DragonFi PERA+ Positions (Dynamic TV Prices & Fallback) ───\nconst peraFallback = {\n  'AREIT': 38.40,\n  'CREIT': 3.50,\n  'MBT':   63.00,\n  'MREIT': 14.00,\n  'RCR':   6.75\n};\n\nconst peraPos = [\n  {n:'AREIT', qty:1200, cost:40.6445},\n  {n:'CREIT', qty:8000, cost:3.4038},\n  {n:'MBT',   qty:430,  cost:67.6711},\n  {n:'MREIT', qty:1900, cost:13.5704},\n  {n:'RCR',   qty:4300, cost:6.79}\n];\n\nlet peraTotVal = 0, peraTotPL = 0;\nconst peraRows = [];\n\nfor (const p of peraPos) {\n  const pricePhp = tvPsePrices[p.n] || peraFallback[p.n] || 0;\n  const val      = S(p.qty * pricePhp);\n  const cst      = S(p.qty * p.cost);\n  const pl       = S(val - cst);\n  const pct      = cst > 0 ? S(pl / cst * 100) : 0;\n  peraTotVal += val;\n  peraTotPL  += pl;\n  peraRows.push({ n:p.n, sym:p.n + '.PS', price:pricePhp, qty:p.qty, cost:p.cost, val, pl, pct, noP:false });\n}\n\n// ── Alerts ─────────────────────────────────────────────────────\nconst alerts = [];\nrows.forEach(r => {\n  if (r.pct <= -10 && !r.noP && !r.stable) alerts.push(r.n + ' ' + r.pct.toFixed(1) + '%');\n});\nperaRows.forEach(r => {\n  if (r.pct <= -10 && !r.noP) alerts.push('PERA+ ' + r.n + ' ' + r.pct.toFixed(1) + '%');\n});\n\nreturn [{ json: {\n  rows,\n  peraRows,\n  total_value:    Math.round(totVal * 100) / 100,\n  total_pl:       Math.round(totPL * 100) / 100,\n  pera_total_val: Math.round(peraTotVal * 100) / 100,\n  pera_total_pl:  Math.round(peraTotPL * 100) / 100,\n  usdsgd,\n  phpsgd,\n  eth_sgd:        ethSGD,\n  alerts,\n  alert_count:    alerts.length,\n  timestamp:      new Date().toISOString()\n}}];"
+      },
+      "name": "Calculate P&L",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -320,
+        -368
+      ],
+      "id": "bf24e471-db54-4e33-831f-ea3d12a7a913",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://bobbydionido.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Bobby Portfolio"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "anthropic/claude-sonnet-4-5"
+            },
+            {
+              "name": "max_tokens",
+              "value": "2500"
+            },
+            {
+              "name": "messages[0][role]",
+              "value": "user"
+            },
+            {
+              "name": "messages[0][content]",
+              "value": "={{ $json.claudeContent }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Claude AI Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        320,
+        -368
+      ],
+      "id": "cf793098-7ae9-42fb-8e99-0be1f415865f",
+      "typeVersion": 4.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const calcPL = $('Calculate Dividends').first().json;\nconst rawResp = $input.first().json;\n\n// ── Parse Claude response ──────────────────────────────────────\nlet ai;\ntry {\n  const text = rawResp.choices[0].message.content;\n  const clean = text.replace(/```json|```/g, '').trim();\n  ai = JSON.parse(clean);\n} catch(e) {\n  ai = {\n    overall_summary: 'Portfolio update complete. AI analysis unavailable this run.',\n    detailed_analysis: '',\n    watchlist: '',\n    portfolio_status: calcPL.total_pl >= 0 ? 'UP' : 'DOWN',\n    biggest_mover: { name: 'N/A', direction: 'UP', note: '' },\n    positions: calcPL.rows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    pera_positions: calcPL.peraRows.map(r => ({\n      name: r.n, pct: r.pct,\n      status: r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT',\n      commentary: ''\n    })),\n    alerts: calcPL.alerts.length ? [{ level: 'YELLOW', title: 'Alerts', body: calcPL.alerts.join(', ') }] : [],\n    recommendation: 'Review positions manually.',\n    market_context: ''\n  };\n}\n\n// ── Helpers ────────────────────────────────────────────────────\nconst ts = new Date(calcPL.timestamp).toLocaleString('en-SG', {\n  timeZone: 'Asia/Singapore', weekday:'long', day:'2-digit',\n  month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'\n});\nconst fmt    = v => (v >= 0 ? '+' : '') + 'S$' + Math.abs(Math.round(v)).toLocaleString();\nconst fmtPhp = v => (v >= 0 ? '+' : '-') + '₱' + Math.abs(Math.round(v)).toLocaleString();\nconst f1  = v => Number(v).toFixed(1);\nconst plColor    = v => v >= 0 ? '#00c896' : '#e74c3c';\nconst statusColor = s => ({ STRONG:'#00c896', OK:'#6db8a0', WATCH:'#f5a623', ALERT:'#e74c3c' }[s] || '#6db8a0');\nconst alertBg    = l => ({ RED:'rgba(231,76,60,0.12)', YELLOW:'rgba(245,166,35,0.10)', GREEN:'rgba(0,200,150,0.10)' }[l] || 'rgba(255,255,255,0.04)');\nconst alertBorder = l => ({ RED:'#e74c3c', YELLOW:'#f5a623', GREEN:'#00c896' }[l] || '#444');\nconst alertIcon  = l => ({ RED:'&#9940;', YELLOW:'&#9888;', GREEN:'&#9989;' }[l] || '&#8226;');\n\n// ── MooMoo SG Position rows ────────────────────────────────────\nconst posRows = calcPL.rows.map(r => {\n  const aiPos  = (ai.positions || []).find(p => p.name === r.n) || {};\n  const status = r.stable ? 'OK' : r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = 'S$' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+S$<1' : '-S$<1')\n    : (r.pl >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plSGD  = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plSGD};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── DragonFi PERA+ rows ────────────────────────────────────────\nconst peraRows = calcPL.peraRows.map(r => {\n  const aiPos  = (ai.pera_positions || []).find(p => p.name === r.n) || {};\n  const status = r.pct >= 5 ? 'STRONG' : r.pct >= 0 ? 'OK' : r.pct >= -10 ? 'WATCH' : 'ALERT';\n  const color  = statusColor(aiPos.status || status);\n  const sign   = r.pct >= 0 ? '+' : '';\n  const valStr = '₱' + Math.round(r.val).toLocaleString();\n  const plStr  = Math.abs(r.pl) < 1\n    ? (r.pl >= 0 ? '+₱<1' : '-₱<1')\n    : (r.pl >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(r.pl)).toLocaleString();\n  const plColor2 = r.pl >= 0 ? '#00c896' : '#e74c3c';\n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:${color};padding:13px 8px\">${sign}${r.pct.toFixed(1)}%</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:${plColor2};padding:13px 8px\">${plStr}</td>\n    <td style=\"padding:13px 8px\"><span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${aiPos.status || status}</span></td>\n    <td style=\"font-size:11px;color:#6b8599;padding:13px 8px\">${valStr}</td>\n    <td style=\"font-size:12px;color:#7a9ab5;padding:13px 12px\">${aiPos.commentary || ''}</td>\n  </tr>`;\n}).join('');\n\n// ── Alerts HTML ────────────────────────────────────────────────\nconst alertsHtml = (ai.alerts && ai.alerts.length > 0)\n  ? ai.alerts.map(al => `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;margin-bottom:10px;background:${alertBg(al.level)};border-left:3px solid ${alertBorder(al.level)};align-items:flex-start\">\n      <span style=\"font-size:15px;flex-shrink:0;margin-top:1px\">${alertIcon(al.level)}</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8;display:block;margin-bottom:4px\">${al.title}</strong><p style=\"font-size:12px;color:#6b8599;margin:0;line-height:1.5\">${al.body}</p></div>\n    </div>`).join('')\n  : `<div style=\"display:flex;gap:14px;padding:15px 18px;border-radius:6px;background:rgba(0,200,150,0.08);border-left:3px solid #00c896;align-items:center\">\n      <span style=\"font-size:15px\">&#9989;</span>\n      <div><strong style=\"font-size:13px;color:#c8d8e8\">All Clear</strong><p style=\"font-size:12px;color:#6b8599;margin:4px 0 0\">No threshold alerts today.</p></div>\n    </div>`;\n\n// ── Status pill ────────────────────────────────────────────────\nconst pillColor = ai.portfolio_status === 'UP' ? '#00c896' : ai.portfolio_status === 'DOWN' ? '#e74c3c' : '#3d9be9';\nconst pillLabel = ai.portfolio_status === 'UP' ? '&#9650; UP' : ai.portfolio_status === 'DOWN' ? '&#9660; DOWN' : '&#8212; FLAT';\nconst statusPill = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${pillColor}22;color:${pillColor};border:1px solid ${pillColor}44;margin-left:10px\">${pillLabel}</span>`;\n\nconst costBasis = calcPL.total_value - calcPL.total_pl;\nconst plPct     = costBasis > 0 ? (calcPL.total_pl / costBasis * 100).toFixed(1) : '0.0';\nconst peraPlPct = calcPL.pera_total_val > 0 ? ((calcPL.pera_total_pl / (calcPL.pera_total_val - calcPL.pera_total_pl)) * 100).toFixed(1) : '0.0';\n\n// ── Dividends Section ──────────────────────────────────────────\nconst divRows = (calcPL.dividends || []).map(r => {\n  const amtStr = r.currency === 'SGD' ? 'S$' + r.amount.toFixed(4) : '₱' + r.amount.toFixed(4);\n  const exD = new Date(r.exDate);\n  const payD = new Date(r.payDate);\n  const today = new Date();\n  \n  // Calculate status and color\n  let status = 'Paid';\n  let color = '#6db8a0'; // Muted green\n  \n  // Normalize dates to midnight for accurate comparison\n  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());\n  const exMidnight = new Date(exD.getFullYear(), exD.getMonth(), exD.getDate());\n  const payMidnight = new Date(payD.getFullYear(), payD.getMonth(), payD.getDate());\n  \n  if (todayMidnight < exMidnight) {\n    status = 'Upcoming';\n    color = '#3d9be9'; // Blue\n  } else if (todayMidnight >= exMidnight && todayMidnight < payMidnight) {\n    status = 'Pending Pay';\n    color = '#f5a623'; // Orange\n  }\n  \n  const statusHtml = `<span style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 9px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44\">${status}</span>`;\n  \n  const fmtDate = dateObj => dateObj.toLocaleDateString('en-SG', {\n    day: '2-digit', month: 'short', year: 'numeric'\n  });\n  \n  return `<tr>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:#c8d8e8;padding:13px 12px\">${r.n}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:13px 8px\">${fmtDate(exD)}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-weight:700;font-size:12px;color:#00c896;padding:13px 8px\">${amtStr}</td>\n    <td style=\"font-family:'Space Mono',monospace;font-size:12px;color:#6b8599;padding:13px 8px\">${fmtDate(payD)}</td>\n    <td style=\"padding:13px 8px\">${statusHtml}</td>\n  </tr>`;\n}).join('');\n\nconst divTableHtml = `\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">📅 Dividends Calendar (Declared / Recent)</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Asset</th><th>Ex-Date</th><th>Amount</th><th>Payment Date</th><th>Status</th>\n      </tr></thead>\n      <tbody>${divRows}</tbody>\n    </table>\n  </div>\n</div>\n`;\n\n// ── Full HTML ──────────────────────────────────────────────────\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Bobby Portfolio &mdash; ${ts}</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#0a0e14;color:#c8d8e8;font-family:'DM Sans',sans-serif;min-height:100vh}\nbody::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:0}\n.wrap{max-width:980px;margin:0 auto;padding:36px 20px;position:relative;z-index:1}\ntable{width:100%;border-collapse:collapse}\nthead th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;padding:9px 12px;text-align:left;border-bottom:1px solid #1a2636}\ntbody tr{border-bottom:1px solid rgba(26,38,54,0.6);transition:background 0.15s}\ntbody tr:hover{background:#111c28}\n.section-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#3d5a72;text-transform:uppercase;margin-bottom:12px}\n@media(max-width:600px){.hide-mobile{display:none}.stat-grid{grid-template-columns:1fr 1fr!important}.stat-val{font-size:20px!important}}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n\n<div style=\"display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #1a2636;padding-bottom:24px;margin-bottom:32px;flex-wrap:wrap;gap:12px\">\n  <div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#3d5a72;text-transform:uppercase;margin-bottom:8px\">&#128200; Daily Portfolio Report</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#c8d8e8;letter-spacing:0.04em\">Bobby Dionido ${statusPill}</div>\n  </div>\n  <div style=\"text-align:right\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">Generated ${ts}</div>\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;margin-top:5px\">USD/SGD ${calcPL.usdsgd} &nbsp;|&nbsp; PHP/SGD ${calcPL.phpsgd.toFixed(4)} &nbsp;|&nbsp; ETH S$${Math.round(calcPL.eth_sgd).toLocaleString()}</div>\n  </div>\n</div>\n\n<div class=\"stat-grid\" style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px\">\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">MooMoo SG Value</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3d9be9\">S$${Math.round(calcPL.total_value).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmt(calcPL.total_pl)} &nbsp;(${plPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">DragonFi PERA+</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()}</div>\n    <div style=\"font-size:11px;color:${plColor(calcPL.pera_total_pl)};margin-top:5px;font-family:'Space Mono',monospace\">${fmtPhp(calcPL.pera_total_pl)} &nbsp;(${peraPlPct}%)</div>\n  </div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:22px\">\n    <div style=\"font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.13em;color:#3d5a72;text-transform:uppercase;margin-bottom:10px\">Biggest Mover</div>\n    <div class=\"stat-val\" style=\"font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:${ai.biggest_mover?.direction==='UP'?'#00c896':'#e74c3c'}\">${ai.biggest_mover?.name || 'N/A'}</div>\n    <div style=\"font-size:11px;color:#3d5a72;margin-top:5px\">${ai.biggest_mover?.note || ''}</div>\n  </div>\n</div>\n\n<div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;padding:24px;margin-bottom:20px\">\n  <div class=\"section-label\">AI Analysis</div>\n  <p style=\"font-size:14px;line-height:1.75;color:#c8d8e8\">${ai.overall_summary}</p>\n  ${ai.detailed_analysis ? `<p style=\"margin-top:14px;font-size:13px;line-height:1.8;color:#a0b8cc\">${ai.detailed_analysis}</p>` : ''}\n  ${ai.market_context ? `<p style=\"margin-top:12px;font-size:12px;color:#4a7a9b\">&#128202; ${ai.market_context}</p>` : ''}\n  ${ai.watchlist ? `<div style=\"margin-top:16px;padding:14px 16px;border-radius:6px;background:rgba(61,155,233,0.07);border-left:3px solid #3d9be9\"><div style=\"font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.13em;color:#3d9be9;text-transform:uppercase;margin-bottom:8px\">&#128270; Watchlist — Potential Adds</div><p style=\"font-size:12px;color:#7a9ab5;line-height:1.7\">${ai.watchlist}</p></div>` : ''}\n  <p style=\"margin-top:16px;padding-top:16px;border-top:1px solid #1a2636;font-size:13px;color:#3d9be9;font-style:italic\">&#128161; ${ai.recommendation}</p>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">Alerts &mdash; What Changed</div>\n  ${alertsHtml}\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">MooMoo SG &mdash; Live Positions</div>\n  <div style=\"background:#111820;border:1px solid #1a2636;border-radius:8px;overflow:hidden\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L S$</th><th>Status</th><th>Value</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${posRows}</tbody>\n    </table>\n  </div>\n</div>\n\n<div style=\"margin-bottom:28px\">\n  <div class=\"section-label\">DragonFi PERA+ &mdash; Philippine Positions</div>\n  <div style=\"background:#111820;border:1px solid #0d2a1a;border-radius:8px;overflow:hidden;border-top:2px solid #3dcc9b44\">\n    <table>\n      <thead><tr>\n        <th>Symbol</th><th>P/L %</th><th>P/L ₱</th><th>Status</th><th>Value ₱</th><th class=\"hide-mobile\">Commentary</th>\n      </tr></thead>\n      <tbody>${peraRows}</tbody>\n    </table>\n    <div style=\"padding:12px 16px;border-top:1px solid #1a2636;display:flex;justify-content:space-between;align-items:center\">\n      <span style=\"font-family:'Space Mono',monospace;font-size:10px;color:#3d5a72;letter-spacing:0.1em\">TOTAL PERA+</span>\n      <span style=\"font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#3dcc9b\">&#8369;${Math.round(calcPL.pera_total_val).toLocaleString()} &nbsp;<span style=\"color:${plColor(calcPL.pera_total_pl)}\">${fmtPhp(calcPL.pera_total_pl)}</span></span>\n    </div>\n  </div>\n</div>\n\n${divTableHtml}\n\n<div style=\"margin-top:40px;padding-top:20px;border-top:1px solid #1a2636;font-family:'Space Mono',monospace;font-size:10px;color:#2a3f52;text-align:center;letter-spacing:0.08em\">\n  Generated by n8n + Claude &nbsp;|&nbsp; bobbydionido.com &nbsp;|&nbsp; Yahoo Finance &middot; CoinGecko &middot; DragonFi PERA+\n</div>\n\n</div>\n</body>\n</html>`;\n\nreturn [{ json: { html, generated_at: calcPL.timestamp } }];"
+      },
+      "name": "Parse Claude + Build HTML",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        496,
+        -368
+      ],
+      "id": "cc9d56e4-6408-42e1-b3e0-383226236f79",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "chatId": "5811640282",
+        "text": "=📊 Portfolio updated\nhttps://portfolio.bobbydionido.com\n\nTotal: S${{ Math.round($('Calculate P&L').first().json.total_value).toLocaleString() }} | P/L: {{ $('Calculate P&L').first().json.total_pl >= 0 ? '+' : '' }}S${{ Math.round($('Calculate P&L').first().json.total_pl) }}\n{{ $('Calculate P&L').first().json.alerts.length > 0 ? '⚠️ ' + $('Calculate P&L').first().json.alerts.join(' | ') : '✅ All clear' }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "name": "Telegram — Send URL",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        896,
+        -368
+      ],
+      "id": "a7db858d-d95c-457b-b301-c2e24d44ed5a",
+      "typeVersion": 1.2,
+      "webhookId": "109f7728-629a-4a47-8728-d94cf1c1c411",
+      "credentials": {
+        "telegramApi": {
+          "id": "32yQqC2qF6jaGldc",
+          "name": "Telegram account"
+        }
+      },
+      "notes": "Replace with your actual Telegram bot credentials and chat ID"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -464,
+        -368
+      ],
+      "id": "af289dba-9dba-4dba-a601-8d3ed48b1170",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\n\n// ── Day-based focus rotation ──────────────────────────────────\nconst days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];\nconst dayName = days[new Date().getDay()];\nconst focusMap = {\n  'Monday':    'Focus angle: Week ahead outlook — what needs action or monitoring this week.',\n  'Tuesday':   'Focus angle: Individual position fundamentals — sector trends and holding quality.',\n  'Wednesday': 'Focus angle: Risk assessment — what could go wrong, what needs protecting.',\n  'Thursday':  'Focus angle: Dividend and income health — yield, payout dates, income sustainability.',\n  'Friday':    'Focus angle: Week recap — what moved, why, and what to watch next week.',\n  'Saturday':  'Focus angle: Portfolio rebalancing — anything to trim, add, or swap.',\n  'Sunday':    'Focus angle: Macro and market context — rates, USD, PSE sentiment, crypto outlook.'\n};\n\n// ── Randomised analysis lens ──────────────────────────────────\nconst lenses = [\n  'Write from a risk management perspective — highlight threats and downside scenarios.',\n  'Write from an income investor perspective — prioritise yield, dividends, and cash flow.',\n  'Write from a growth perspective — which positions have the most upside potential.',\n  'Write from a capital preservation perspective — what needs protecting and why.',\n  'Write from a sector rotation perspective — where is money flowing in SG and PH markets.'\n];\nconst todayLens = lenses[new Date().getDate() % lenses.length];\nconst todayFocus = focusMap[dayName] || '';\n\n// ── WoW strings ───────────────────────────────────────────────\nconst wowStr = d.sg_wow !== null\n  ? (d.sg_wow >= 0 ? '+S$' : '-S$') + Math.abs(Math.round(d.sg_wow)) + ' vs last week'\n  : 'no prior snapshot';\nconst peraWowStr = d.pera_wow !== null\n  ? (d.pera_wow >= 0 ? '+₱' : '-₱') + Math.abs(Math.round(d.pera_wow)) + ' vs last week'\n  : 'no prior snapshot';\n\nconst divStr = d.dividends && d.dividends.length\n  ? '\\nDividends Calendar:\\n' + d.dividends.map(r =>\n      `${r.n}: Ex-Date ${r.exDate}, Amount ${r.currency === 'SGD' ? 'S$' : '₱'}${r.amount.toFixed(4)}, Pay-Date ${r.payDate}`\n    ).join('\\n')\n  : '';\n\nconst content = 'Return ONLY raw JSON, no markdown, no backticks. ' +\n  'Portfolio as of ' + d.timestamp + '. ' +\n  'Today is ' + dayName + '. ' + todayFocus + ' ' +\n  'Analysis lens: ' + todayLens + ' ' +\n  'MooMoo SG Total: S$' + d.total_value + ' PL: S$' + d.total_pl + ' (' + wowStr + '). ' +\n  'DragonFi PERA+ Total: PHP ' + d.pera_total_val + ' PL: PHP ' + d.pera_total_pl + ' (' + peraWowStr + '). ' +\n  'USDSGD: ' + d.usdsgd + ' PHPSGD: ' + d.phpsgd + divStr + ' ETH: S$' + d.eth_sgd + '. ' +\n  'Alerts: ' + (d.alerts.length ? d.alerts.join(', ') : 'None') + '. ' +\n  'MooMoo SG Positions: ' + d.rows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% S$' + Math.round(r.val)).join(', ') + '. ' +\n  'DragonFi PERA+ Positions: ' + d.peraRows.map(r => r.n + ' ' + (r.pct >= 0 ? '+' : '') + r.pct.toFixed(1) + '% PHP' + Math.round(r.val)).join(', ') + '. ' +\n  'Context: Bobby is a Singapore-based OFW investor. ' +\n  'MooMoo SG: AJBU (Keppel DC Reit), A17U (CapLand Ascendas industrial/DC REIT), BUOU (Frasers Logistics REIT), J69U (suburban retail REIT), JYEU (Lendlease commercial REIT), ME8U (Mapletree Industrial Trust), O5RU (AIMS APAC industrial REIT), NVDA (tech growth), TSLA (growth), ETH (crypto growth/non-yielding). ' +\n  'DragonFi PERA+: AREIT (Ayala Land REIT), CREIT (Citicore renewable energy), MBT (Metrobank), MREIT (Megaworld REIT), RCR (RL Commercial REIT). ' +\n  'Strategy Context: Portfolio has a bimodal strategy: REITs & Banks (A17U, AJBU, BUOU, J69U, JYEU, ME8U, O5RU, AREIT, CREIT, MREIT, RCR, MBT) are long-term yield assets held for compound distributions — focus on dividend health, gearing, and distribution stability, and do NOT recommend panic-selling them on short-term price drops. US Equities (NVDA, TSLA) and Crypto (ETH) are tactical growth assets — recommend active capital protection triggers (stop-losses) or exit strategies here. ' +\n  'Actionability constraint: Never give vague advice like \"reassess positions\". Always specify exact price-based actions or rebalancing ratios (e.g. \"If ETH drops below S$2000, rotate into AJBU\"). ' +\n  'Return this JSON: {' +\n  '\"overall_summary\":\"2 to 3 sentences max. One line on SG portfolio health, one line on PERA+ health, one line on overall sentiment. Keep it punchy and fresh — do not repeat yesterday.\",' +\n  '\"detailed_analysis\":\"4 to 5 sentences. Apply the focus angle and analysis lens above. Cover only notable movers and positions needing attention. Skip flat or unchanged positions. Be direct and specific — vary the angle from a typical daily recap.\",' +\n  '\"watchlist\":\"2 sentences. One specific stock or REIT Bobby does not hold. Include ticker, exchange, and one reason why it fits today\\'s analysis lens.\",' +\n  '\"portfolio_status\":\"UP or DOWN or FLAT\",' +\n  '\"biggest_mover\":{\"name\":\"\",\"direction\":\"UP or DOWN\",\"note\":\"one line\"},' +\n  '\"positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 10 words\"}],' +\n  '\"pera_positions\":[{\"name\":\"\",\"pct\":0.0,\"status\":\"STRONG or OK or WATCH or ALERT\",\"commentary\":\"max 10 words\"}],' +\n  '\"alerts\":[{\"level\":\"RED or YELLOW or GREEN\",\"title\":\"\",\"body\":\"1 sentence only\"}],' +\n  '\"recommendation\":\"2 to 3 sentences. Apply the focus angle above. Most urgent action first. Be direct — what to do today or this week.\",' +\n  '\"market_context\":\"1 sentence covering the most relevant macro factor right now aligned to today\\'s focus angle.\"}';\n\nreturn [{ json: { \n  ...d,\n  claudeContent: content,\n  claudeRole: 'user'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -368
+      ],
+      "id": "41615d49-2332-46a3-a260-2dbe47b872b2",
+      "name": "Build Claude Payload"
+    },
+    {
+      "parameters": {
+        "url": "https://yahoo-finance15.p.rapidapi.com/api/v1/markets/stock/quotes",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ticker",
+              "value": "BUOU.SI,A17U.SI,AJBU.SI,C38U.SI,J69U.SI,JYEU.SI,NVDA,O5RU.SI,ME8U.SI,TSLA,USDSGD=X,PHPSGD=X,AREIT.PS,CREIT.PS,MBT.PS,MREIT.PS,RCR.PS"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "[REDACTED_RAPIDAPI_KEY]p1badacjsnf0f8c97caf79"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "yahoo-finance15.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "78c7aa06-59ba-4e02-8900-c2135c055318",
+      "name": "Yahoo Finance1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        -480
+      ],
+      "notes": "RapidAPI Yahoo Finance — same key from your original workflow"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8099/update",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ $json.html }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        688,
+        -368
+      ],
+      "id": "03dbe90c-74b6-452c-8e7f-915f5975d145",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\n\nconst workflowStaticData = $getWorkflowStaticData('global');\n\nworkflowStaticData.latestSnapshot = {\n  saved_at:       new Date().toISOString(),\n  total_value:    d.total_value,\n  total_pl:       d.total_pl,\n  pera_total_val: d.pera_total_val,\n  pera_total_pl:  d.pera_total_pl,\n  usdsgd:         d.usdsgd,\n  phpsgd:         d.phpsgd,\n  eth_sgd:        d.eth_sgd,\n  rows:           d.rows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct })),\n  peraRows:       d.peraRows.map(r => ({ n:r.n, val:r.val, pl:r.pl, pct:r.pct }))\n};\n\nreturn [{ json: d }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -368
+      ],
+      "id": "deeb078b-a0fb-435e-8477-cd5de074ce7e",
+      "name": "Save Snapshot"
+    },
+    {
+      "parameters": {
+        "content": "Daily Portfolio Generator",
+        "height": 672,
+        "width": 1936,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -896,
+        -672
+      ],
+      "typeVersion": 1,
+      "id": "5e425b0a-535a-4335-adf0-d2397679c3e9",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://scanner.tradingview.com/philippines/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"in_range\",\n      \"right\": [\"AREIT\", \"CREIT\", \"MBT\", \"MREIT\", \"RCR\"]\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"sort\": {\"sortBy\": \"name\", \"sortOrder\": \"asc\"},\n  \"range\": [0, 10]\n}",
+        "options": {}
+      },
+      "id": "b3a9d39f-0a36-4e8d-b867-34dd7dd9f766",
+      "name": "TradingView PSE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        -640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://scanner.tradingview.com/crypto/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\n  \"filter\": [\n    {\n      \"left\": \"name\",\n      \"operation\": \"equal\",\n      \"right\": \"ETHSGD\"\n    }\n  ],\n  \"options\": {\"lang\": \"en\"},\n  \"columns\": [\"name\", \"close\"],\n  \"range\": [0, 10]\n}",
+        "options": {}
+      },
+      "id": "67385236-37b3-4488-8cfd-a758b56e1ccc",
+      "name": "TradingView ETHSGD",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const https = require('https');\n\nconst fallbackDividends = [\n  { symbol: 'A17U.SI', n: 'A17U', exDate: '2026-03-31', amount: 0.0375, currency: 'SGD', payDate: '2026-04-30' },\n  { symbol: 'AJBU.SI', n: 'AJBU', exDate: '2026-02-06', amount: 0.05248, currency: 'SGD', payDate: '2026-03-19' },\n  { symbol: 'BUOU.SI', n: 'BUOU', exDate: '2026-05-14', amount: 0.0295, currency: 'SGD', payDate: '2026-06-22' },\n  { symbol: 'J69U.SI', n: 'J69U', exDate: '2026-05-04', amount: 0.06136, currency: 'SGD', payDate: '2026-05-29' },\n  { symbol: 'JYEU.SI', n: 'JYEU', exDate: '2026-02-24', amount: 0.005195, currency: 'SGD', payDate: '2026-03-30' },\n  { symbol: 'ME8U.SI', n: 'ME8U', exDate: '2026-05-06', amount: 0.0309, currency: 'SGD', payDate: '2026-06-12' },\n  { symbol: 'O5RU.SI', n: 'O5RU', exDate: '2026-05-15', amount: 0.026, currency: 'SGD', payDate: '2026-06-29' },\n  { symbol: 'AREIT',    n: 'AREIT', exDate: '2026-05-26', amount: 0.62, currency: 'PHP', payDate: '2026-06-11' },\n  { symbol: 'CREIT',    n: 'CREIT', exDate: '2026-06-10', amount: 0.049, currency: 'PHP', payDate: '2026-07-08' },\n  { symbol: 'MBT',      n: 'MBT',   exDate: '2026-03-06', amount: 3.50, currency: 'PHP', payDate: '2026-03-26' },\n  { symbol: 'MREIT',    n: 'MREIT', exDate: '2026-05-14', amount: 0.263, currency: 'PHP', payDate: '2026-05-29' },\n  { symbol: 'RCR',      n: 'RCR',   exDate: '2026-05-18', amount: 0.1115, currency: 'PHP', payDate: '2026-06-01' }\n];\n\nfunction fetchChart(symbol) {\n  return new Promise((resolve) => {\n    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=6mo&events=div`;\n    const options = {\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'\n      },\n      timeout: 5000\n    };\n    https.get(url, options, (res) => {\n      let data = '';\n      res.on('data', chunk => data += chunk);\n      res.on('end', () => {\n        try {\n          resolve(JSON.parse(data));\n        } catch(e) {\n          resolve(null);\n        }\n      });\n    }).on('error', () => resolve(null));\n  });\n}\n\nconst sleep = ms => new Promise(r => setTimeout(r, ms));\n\nconst liveDividends = [];\nconst sgxSymbols = ['A17U.SI', 'AJBU.SI', 'BUOU.SI', 'J69U.SI', 'JYEU.SI', 'ME8U.SI', 'O5RU.SI'];\n\nfor (const sym of sgxSymbols) {\n  try {\n    const data = await fetchChart(sym);\n    await sleep(200);\n    if (data && data.chart && data.chart.result && data.chart.result[0]) {\n      const result = data.chart.result[0];\n      const divEvents = result.events?.dividends;\n      if (divEvents) {\n        const timestamps = Object.keys(divEvents).map(Number).sort((a,b) => b - a);\n        if (timestamps.length > 0) {\n          const latestTs = timestamps[0];\n          const event = divEvents[latestTs];\n          const exDateObj = new Date(latestTs * 1000);\n          const exDateStr = exDateObj.toISOString().split('T')[0];\n          \n          // Estimate payment date as ex-date + 33 days\n          const payDateObj = new Date(exDateObj.getTime() + 33 * 24 * 60 * 60 * 1000);\n          const payDateStr = payDateObj.toISOString().split('T')[0];\n          \n          liveDividends.push({\n            symbol: sym,\n            n: sym.split('.')[0],\n            exDate: exDateStr,\n            amount: event.amount,\n            currency: 'SGD',\n            payDate: payDateStr\n          });\n        }\n      }\n    }\n  } catch(e) {\n    // Keep processing other tickers\n  }\n}\n\nconst finalDividends = [];\nfor (const fb of fallbackDividends) {\n  const live = liveDividends.find(l => l.n === fb.n);\n  if (live) {\n    finalDividends.push(live);\n  } else {\n    finalDividends.push(fb);\n  }\n}\n\n// Sort dividends by ex-date descending\nfinalDividends.sort((a, b) => b.exDate.localeCompare(a.exDate));\n\nconst d = $input.first().json;\nreturn [{ json: { ...d, dividends: finalDividends } }];"
+      },
+      "id": "5e62fba2-dc18-4c28-984d-384950293849",
+      "name": "Calculate Dividends",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -368
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-03T15:34:24.725Z",
+      "createdAt": "2026-04-03T15:34:24.725Z",
+      "role": "workflow:owner",
+      "workflowId": "IAfUazyMm6e4b82S",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": {
+    "node:Schedule 9PM SGT": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    },
+    "global": {
+      "latestSnapshot": {
+        "saved_at": "2026-07-08T13:00:02.606Z",
+        "total_value": 9882.24,
+        "total_pl": 406.87,
+        "pera_total_val": 159021,
+        "pera_total_pl": -1062.13,
+        "usdsgd": 1.29424,
+        "phpsgd": 0.0205,
+        "eth_sgd": 2248.27,
+        "rows": [
+          {
+            "n": "A17U",
+            "val": 996.0000000000001,
+            "pl": -15.999999999999773,
+            "pct": -1.5810276679841675
+          },
+          {
+            "n": "AJBU",
+            "val": 1105,
+            "pl": 126.89999999999998,
+            "pct": 12.974133524179528
+          },
+          {
+            "n": "BUOU",
+            "val": 1455,
+            "pl": 45.299999999999955,
+            "pct": 3.2134496701425803
+          },
+          {
+            "n": "J69U",
+            "val": 2230,
+            "pl": 119.09999999999991,
+            "pct": 5.642143161684585
+          },
+          {
+            "n": "JYEU",
+            "val": 517.5,
+            "pl": -13.319999999999936,
+            "pct": -2.5093251949813378
+          },
+          {
+            "n": "ME8U",
+            "val": 384,
+            "pl": -2,
+            "pct": -0.5181347150259068
+          },
+          {
+            "n": "NVDA",
+            "val": 764.6240496,
+            "pl": 90.07910400000003,
+            "pct": 13.354055143038051
+          },
+          {
+            "n": "O5RU",
+            "val": 820,
+            "pl": 194.25,
+            "pct": 31.042748701558132
+          },
+          {
+            "n": "TSLA",
+            "val": 185.0623551504,
+            "pl": 38.68303887739202,
+            "pct": 26.42657437014213
+          },
+          {
+            "n": "ETH",
+            "val": 1425.056496766,
+            "pl": -176.1234618016722,
+            "pct": -10.999604439167632
+          }
+        ],
+        "peraRows": [
+          {
+            "n": "AREIT",
+            "val": 44640,
+            "pl": -4133.4000000000015,
+            "pct": -8.47470137410966
+          },
+          {
+            "n": "CREIT",
+            "val": 27920,
+            "pl": 689.6000000000022,
+            "pct": 2.5324637170221598
+          },
+          {
+            "n": "MBT",
+            "val": 28595,
+            "pl": -503.5729999999967,
+            "pct": -1.730576272589026
+          },
+          {
+            "n": "MREIT",
+            "val": 26562,
+            "pl": 778.2400000000016,
+            "pct": 3.0183340211047636
+          },
+          {
+            "n": "RCR",
+            "val": 31304,
+            "pl": 2107,
+            "pct": 7.216494845360824
+          }
+        ]
+      }
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-08T12:20:42.955Z",
+  "versionId": "9373cc00-1c78-4581-a79c-96fda0a73315"
+}
