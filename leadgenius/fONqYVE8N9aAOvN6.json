@@ -8,6 +8,7 @@
   "isArchived": false,
   "meta": null,
   "name": "My workflow",
+  "nodeGroups": [],
   "nodes": [],
   "pinData": null,
   "settings": {},
