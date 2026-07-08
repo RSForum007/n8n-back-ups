@@ -566,6 +566,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "system migration",
     "name": null,
     "description": null,
@@ -732,6 +733,7 @@
   "isArchived": false,
   "meta": null,
   "name": "Backup workflow to github",
+  "nodeGroups": [],
   "nodes": [
     {
       "parameters": {
