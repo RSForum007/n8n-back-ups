@@ -726,8 +726,7 @@
         "rule": {
           "interval": [
             {
-              "field": "hours",
-              "hoursInterval": 6
+              "field": "weeks"
             }
           ]
         }
@@ -1129,7 +1128,7 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        18
+        0
       ],
       "recurrenceRuleSignatures": [
         "hours:6"
@@ -1138,6 +1137,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-07-08T14:34:06.722Z",
-  "versionId": "308c2916-7842-438f-a8ff-1bb1da382230"
+  "updatedAt": "2026-07-26T17:09:47.898Z",
+  "versionId": "383bef79-a6f6-449d-b110-f0244973552a"
 }
