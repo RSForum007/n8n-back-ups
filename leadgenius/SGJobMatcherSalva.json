@@ -1,0 +1,479 @@
+{
+  "active": true,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Daily Schedule 8AM SGT": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Run": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init Queries & Profile": {
+      "main": [
+        [
+          {
+            "node": "Search LinkedIn Guest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search LinkedIn Guest API": {
+      "main": [
+        [
+          {
+            "node": "Parse & Deduplicate SG Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Deduplicate SG Jobs": {
+      "main": [
+        [
+          {
+            "node": "Batch Loop Over Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Loop Over Jobs": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fetch Job Posting Detail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Job Posting Detail": {
+      "main": [
+        [
+          {
+            "node": "Prep AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "OpenRouter AI Resume Matcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter AI Resume Matcher": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Output & Format Hyperlink",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Output & Format Hyperlink": {
+      "main": [
+        [
+          {
+            "node": "Filter Qualified Matches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Qualified Matches": {
+      "main": [
+        [
+          {
+            "node": "Write Match to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Write Match to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Batch Loop Over Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-26T15:33:19.000Z",
+  "id": "SGJobMatcherSalva",
+  "isArchived": false,
+  "meta": null,
+  "name": "LinkedIn Job Finder & Resume Matcher ??? Meliton Salva (Singapore)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 0 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        240
+      ],
+      "id": "trigger-schedule",
+      "name": "Daily Schedule 8AM SGT"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        390
+      ],
+      "id": "trigger-manual",
+      "name": "Manual Run"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "trigger-job-matcher",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        540
+      ],
+      "id": "trigger-webhook",
+      "name": "Webhook Trigger",
+      "webhookId": "trigger-job-matcher"
+    },
+    {
+      "parameters": {
+        "jsCode": "const queries = [\n  'IBM ACE',\n  'IBM Integration Bus',\n  'Middleware Systems Analyst',\n  'IBM MQ',\n  'ESQL Integration',\n  'Systems Analyst Middleware'\n];\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery, Macro Programming\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Monitoring & Tools: MQ Explorer, IBM Integration Explorer, Postman\n- OS: Windows Server, Linux (Red Hat, Ubuntu)\n- Core Role: Gathering business requirements, impact analysis, technical spec translation, middleware app design/development, SIT/UAT/PROD support, MQ & web service integration.\n`;\n\nreturn queries.map(q => ({ json: { query: q, resumeProfile } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        390
+      ],
+      "id": "node-init",
+      "name": "Init Queries & Profile"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={{ encodeURIComponent($json.query) }}&location=Singapore&geoId=102454443&start=0",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        390
+      ],
+      "id": "node-search-linkedin",
+      "name": "Search LinkedIn Guest API"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst allJobs = [];\nconst seenIds = new Set();\n\nfor (const item of items) {\n  const htmlContent = item.json.data || item.json.body || item.json;\n  if (typeof htmlContent !== 'string') continue;\n  \n  const cardRegex = /data-entity-urn=\"urn:li:jobPosting:(\\d+)\"[\\s\\S]*?<h3 class=\"base-search-card__title\">\\s*([\\s\\S]*?)\\s*<\\/h3>[\\s\\S]*?<h4 class=\"base-search-card__subtitle\">\\s*<a[^>]*>\\s*([\\s\\S]*?)\\s*<\\/a>[\\s\\S]*?<span class=\"job-search-card__location\">\\s*([\\s\\S]*?)\\s*<\\/span>/g;\n  \n  let match;\n  while ((match = cardRegex.exec(htmlContent)) !== null) {\n    const jobId = match[1];\n    let title = match[2].replace(/<[^>]+>/g, '').trim();\n    let company = match[3].replace(/<[^>]+>/g, '').trim();\n    let location = match[4].replace(/<[^>]+>/g, '').trim();\n    \n    if (location.toLowerCase().includes('singapore') && !seenIds.has(jobId)) {\n      seenIds.add(jobId);\n      allJobs.push({\n        jobId,\n        title,\n        company,\n        location,\n        jobUrl: `https://sg.linkedin.com/jobs/view/${jobId}`,\n        query: item.json.query || 'Middleware'\n      });\n    }\n  }\n}\n\nreturn allJobs.map(j => ({ json: j }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        390
+      ],
+      "id": "node-parse-jobs",
+      "name": "Parse & Deduplicate SG Jobs"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1160,
+        390
+      ],
+      "id": "node-batch-jobs",
+      "name": "Batch Loop Over Jobs"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{{ $json.jobId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "continueOnFail": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1400,
+        390
+      ],
+      "id": "node-fetch-detail",
+      "name": "Fetch Job Posting Detail"
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Batch Loop Over Jobs').item.json;\nconst htmlDetail = $input.first().json.data || $input.first().json.body || '';\n\nconst cleanDesc = (typeof htmlDetail === 'string' ? htmlDetail : '')\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim()\n  .slice(0, 3500);\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Stakeholder Management, Systems Analysis, SIT/UAT/PROD support.\n`;\n\nconst aiPrompt = `\nYou are an expert IT/Banking Technical Recruiter. Evaluate if the following job posting in Singapore fits the candidate profile.\n\n[CANDIDATE PROFILE]\n${resumeProfile}\n\n[JOB POSTING]\nTitle: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\nDescription:\n${cleanDesc}\n\n[EVALUATION RULES]\n1. Return ONLY valid raw JSON with keys: \"isMatch\" (boolean), \"matchScore\" (integer 0-100), \"matchRationale\" (string, 1-2 concise sentences summarizing skill match), \"keyMatchedSkills\" (array of strings).\n2. Set isMatch=true if matchScore >= 60. High match for IBM ACE/IIB, WebSphere MQ, ESQL, Middleware, Systems Analysis, Banking IT, Java/SQL integration.\n3. Set isMatch=false if unrelated field or zero skill overlap.\n`;\n\nreturn [{ json: { ...job, jobDescription: cleanDesc, aiPrompt } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        390
+      ],
+      "id": "node-prep-ai",
+      "name": "Prep AI Prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://bobbydionido.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Bobby Portfolio"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.5-flash-lite"
+            },
+            {
+              "name": "messages[0][role]",
+              "value": "system"
+            },
+            {
+              "name": "messages[0][content]",
+              "value": "You are a technical HR recruiter. Output only raw JSON."
+            },
+            {
+              "name": "messages[1][role]",
+              "value": "user"
+            },
+            {
+              "name": "messages[1][content]",
+              "value": "={{ $json.aiPrompt }}"
+            }
+          ]
+        },
+        "options": {
+          "continueOnFail": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1880,
+        390
+      ],
+      "id": "node-ai-eval",
+      "name": "OpenRouter AI Resume Matcher"
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Prep AI Prompt').item.json;\nconst aiRaw = $input.first().json;\n\nlet evalRes = { isMatch: false, matchScore: 0, matchRationale: '', keyMatchedSkills: [] };\ntry {\n  const content = aiRaw.choices[0].message.content.replace(/```json|```/g, '').trim();\n  evalRes = JSON.parse(content);\n} catch(e) {\n  evalRes = { isMatch: false, matchScore: 0, matchRationale: 'Parsing error', keyMatchedSkills: [] };\n}\n\nconst titleLinked = `=HYPERLINK(\"${job.jobUrl}\", \"${job.title.replace(/\"/g, '\"\"')}\")`;\nconst todayStr = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    ...job,\n    isMatch: evalRes.isMatch || evalRes.matchScore >= 60,\n    matchScore: evalRes.matchScore || 0,\n    matchRationale: evalRes.matchRationale || '',\n    matchedSkills: (evalRes.keyMatchedSkills || []).join(', '),\n    titleLinked,\n    dateFound: todayStr\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2120,
+        390
+      ],
+      "id": "node-parse-ai",
+      "name": "Parse AI Output & Format Hyperlink"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-match",
+              "leftValue": "={{ $json.isMatch }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            },
+            {
+              "id": "cond-score",
+              "leftValue": "={{ $json.matchScore }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2360,
+        390
+      ],
+      "id": "node-filter-match",
+      "name": "Filter Qualified Matches"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LkrdxGpIuN1wLGNm96WQ1Bd-2AaLoae4Ka7qQ9psnRw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Job Title": "={{ $json.titleLinked }}",
+            "Job Link": "={{ $json.jobUrl }}",
+            "Company": "={{ $json.company }}",
+            "Location": "Singapore",
+            "Match Score": "={{ $json.matchScore }}%",
+            "Match Rationale": "={{ $json.matchRationale }}",
+            "Date Found": "={{ $json.dateFound }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2600,
+        390
+      ],
+      "id": "node-gsheet-append",
+      "name": "Write Match to Google Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": null,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-07-26T15:34:09.000Z",
+  "versionId": "529b7a8b-6747-4b68-b916-6eae3958996c"
+}
