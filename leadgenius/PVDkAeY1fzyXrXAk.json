@@ -1,0 +1,516 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Prepare Keywords",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Channels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Keywords": {
+      "main": [
+        [
+          {
+            "node": "Search YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search YouTube": {
+      "main": [
+        [
+          {
+            "node": "Extract Search Video IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Search Video IDs": {
+      "main": [
+        [
+          {
+            "node": "Merge Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Channels": {
+      "main": [
+        [
+          {
+            "node": "Get RSS Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "Extract RSS Video IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract RSS Video IDs": {
+      "main": [
+        [
+          {
+            "node": "Merge Lists",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Lists": {
+      "main": [
+        [
+          {
+            "node": "Chunk Video IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk Video IDs": {
+      "main": [
+        [
+          {
+            "node": "Get Video Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Video Details": {
+      "main": [
+        [
+          {
+            "node": "Process Video Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Video Details": {
+      "main": [
+        [
+          {
+            "node": "Get Channel Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Channel Details": {
+      "main": [
+        [
+          {
+            "node": "Match & Filter Outliers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match & Filter Outliers": {
+      "main": [
+        [
+          {
+            "node": "Format Discord Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Discord Message": {
+      "main": [
+        [
+          {
+            "node": "Send Discord Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-11T13:44:27.630Z",
+  "id": "PVDkAeY1fzyXrXAk",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "YouTube Outlier Scraper",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "fb21a092-be2c-48cf-8b44-007b597d5775",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        400,
+        32
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "37e641d9-0ae7-4a49-ad4f-266085fad7e4",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "youtubeApiKey",
+              "value": "TEST_YOUTUBE_KEY"
+            },
+            {
+              "name": "keywords",
+              "value": "n8n automation, low code saas, build in public"
+            },
+            {
+              "name": "monitoredChannels",
+              "value": "UCmYndqV2V7ZBc3fGg431kKw, UC8butISFwT-Wl7y0hQN6RYg"
+            },
+            {
+              "name": "googleSheetId",
+              "value": "YOUR_GOOGLE_SHEET_ID_HERE"
+            },
+            {
+              "name": "discordWebhookUrl",
+              "value": "YOUR_DISCORD_WEBHOOK_URL_HERE"
+            }
+          ],
+          "number": [
+            {
+              "name": "minViews",
+              "value": 1000
+            },
+            {
+              "name": "maxSubscribers",
+              "value": 150000
+            },
+            {
+              "name": "outlierRatioThreshold",
+              "value": 2
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1ee4bec2-5e0a-45ac-838d-eb25a04718a6",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $input.first().json;\nif (!config.keywords) return [];\nreturn config.keywords.split(',').map(k => ({ json: { keyword: k.trim(), apiKey: config.youtubeApiKey } })).filter(k => k.json.keyword);"
+      },
+      "id": "ed4f7677-acf9-4b53-bbc6-4c04f580af01",
+      "name": "Prepare Keywords",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/search",
+        "options": {}
+      },
+      "id": "85daaca6-394c-409d-b742-2110de0181fc",
+      "name": "Search YouTube",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1024,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const videos = [];\nfor (const item of $input.all()) {\n  if (item.json.items) {\n    for (const vid of item.json.items) {\n      if (vid.id && vid.id.videoId) {\n        videos.push({\n          json: {\n            videoId: vid.id.videoId,\n            channelId: vid.snippet.channelId,\n            title: vid.snippet.title,\n            channelTitle: vid.snippet.channelTitle,\n            publishedAt: vid.snippet.publishedAt\n          }\n        });\n      }\n    }\n  }\n}\nreturn videos;"
+      },
+      "id": "84f003d7-8440-4e6f-97ba-f07f24c009bd",
+      "name": "Extract Search Video IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $input.first().json;\nif (!config.monitoredChannels) return [];\nreturn config.monitoredChannels.split(',').map(c => ({ json: { channelId: c.trim() } })).filter(c => c.json.channelId);"
+      },
+      "id": "ad988e42-fe8e-4af5-8845-4fe5cfc2f8d4",
+      "name": "Prepare Channels",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.youtube.com/feeds/videos.xml?channel_id={{ $json.channelId }}",
+        "options": {}
+      },
+      "id": "c5a65ca1-ed0c-4b5e-a418-6b2931901f08",
+      "name": "Get RSS Feed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1024,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const videos = [];\nfor (const item of $input.all()) {\n  const feed = item.json.feed;\n  if (feed && feed.entry) {\n    const entries = Array.isArray(feed.entry) ? feed.entry : [feed.entry];\n    for (const entry of entries) {\n      videos.push({\n        json: {\n          videoId: entry['yt:videoId'],\n          channelId: entry['yt:channelId'],\n          title: entry.title,\n          channelTitle: feed.title,\n          publishedAt: entry.published\n        }\n      });\n    }\n  }\n}\nreturn videos;"
+      },
+      "id": "20eb25a9-a68a-4dcd-88f3-80a4134b7866",
+      "name": "Extract RSS Video IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        32
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c2f00c75-df28-4e34-a119-731f281b0ed3",
+      "name": "Merge Lists",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        1424,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const uniqueVideos = {};\nfor (const item of $input.all()) {\n  if (item.json.videoId) {\n    uniqueVideos[item.json.videoId] = item.json;\n  }\n}\n\nconst videoList = Object.values(uniqueVideos);\nconst chunks = [];\nfor (let i = 0; i < videoList.length; i += 50) {\n  const batch = videoList.slice(i, i + 50);\n  chunks.push({\n    json: {\n      videoIds: batch.map(v => v.videoId).join(','),\n      videos: batch\n    }\n  });\n}\nreturn chunks;"
+      },
+      "id": "978f9612-0d8c-4b71-a556-6f6536b06118",
+      "name": "Chunk Video IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/videos",
+        "options": {}
+      },
+      "id": "b90cd48b-38ce-4579-ad21-550cf1bfc7fa",
+      "name": "Get Video Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1792,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const videos = [];\nconst channelIds = new Set();\n\nfor (const item of $input.all()) {\n  if (item.json.items) {\n    for (const vid of item.json.items) {\n      const stats = vid.statistics || {};\n      videos.push({\n        videoId: vid.id,\n        channelId: vid.snippet.channelId,\n        title: vid.snippet.title,\n        channelTitle: vid.snippet.channelTitle,\n        publishedAt: vid.snippet.publishedAt,\n        views: parseInt(stats.viewCount || '0', 10),\n        likes: parseInt(stats.likeCount || '0', 10),\n        comments: parseInt(stats.commentCount || '0', 10),\n        duration: vid.contentDetails.duration\n      });\n      channelIds.add(vid.snippet.channelId);\n    }\n  }\n}\n\nconst channelList = Array.from(channelIds);\nconst channelChunks = [];\nfor (let i = 0; i < channelList.length; i += 50) {\n  channelChunks.push({\n    json: {\n      channelIds: channelList.slice(i, i + 50).join(','),\n      videos: videos\n    }\n  });\n}\nreturn channelChunks;"
+      },
+      "id": "cbb2a8de-e1b9-493f-856b-11c872aa529e",
+      "name": "Process Video Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "options": {}
+      },
+      "id": "b2712db9-4c0d-429f-808b-177c289326b9",
+      "name": "Get Channel Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2192,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $('Config').item.json;\nconst minViews = config.minViews || 1000;\nconst maxSubscribers = config.maxSubscribers || 150000;\nconst outlierRatioThreshold = config.outlierRatioThreshold || 2;\n\nconst channelsMap = {};\nfor (const item of $input.all()) {\n  if (item.json.items) {\n    for (const chan of item.json.items) {\n      channelsMap[chan.id] = {\n        subscribers: parseInt(chan.statistics.subscriberCount || '0', 10)\n      };\n    }\n  }\n}\n\nconst videos = [];\nconst videoDetailsNode = $('Process Video Details').all();\nfor (const item of videoDetailsNode) {\n  if (item.json.videos) {\n    videos.push(...item.json.videos);\n  }\n}\n\nconst outliers = [];\nconst seenVideoIds = new Set();\n\nfor (const vid of videos) {\n  if (seenVideoIds.has(vid.videoId)) continue;\n  seenVideoIds.add(vid.videoId);\n  \n  const channelInfo = channelsMap[vid.channelId] || { subscribers: 0 };\n  const subs = channelInfo.subscribers;\n  \n  if (subs === 0) continue;\n  if (subs > maxSubscribers) continue;\n  if (vid.views < minViews) continue;\n  \n  const ratio = parseFloat((vid.views / subs).toFixed(2));\n  \n  if (ratio >= outlierRatioThreshold) {\n    outliers.push({\n      json: {\n        videoId: vid.videoId,\n        videoUrl: `https://www.youtube.com/watch?v=${vid.videoId}`,\n        title: vid.title,\n        channelId: vid.channelId,\n        channelTitle: vid.channelTitle,\n        views: vid.views,\n        subscribers: subs,\n        outlierRatio: ratio,\n        publishedAt: vid.publishedAt,\n        likes: vid.likes,\n        comments: vid.comments\n      }\n    });\n  }\n}\n\noutliers.sort((a, b) => b.json.outlierRatio - a.json.outlierRatio);\nreturn outliers;"
+      },
+      "id": "a9b71984-7a1d-40f9-84b4-caba9d0201ff",
+      "name": "Match & Filter Outliers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) {\n  return [{ json: { text: \"No YouTube outliers found today.\" } }];\n}\n\nlet text = `🚀 **YouTube Outliers Found!** (${items.length} videos)\\n\\n`;\nfor (const item of items) {\n  const v = item.json;\n  text += `📺 **[${v.title}](${v.videoUrl})**\\n`;\n  text += `👤 Channel: ${v.channelTitle} (${v.subscribers.toLocaleString()} subs)\\n`;\n  text += `📊 Views: ${v.views.toLocaleString()} (**${v.outlierRatio}x** sub ratio)\\n`;\n  text += `📅 Published: ${new Date(v.publishedAt).toLocaleDateString()}\\n\\n`;\n}\n\nreturn [{ json: { text } }];"
+      },
+      "id": "b6dc694a-b4f1-4adc-8f69-494745ad4f5e",
+      "name": "Format Discord Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2592,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').item.json.discordWebhookUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{ $json.text }}\"\n}",
+        "options": {}
+      },
+      "id": "21694226-0275-4452-bf70-1c089a86f70a",
+      "name": "Send Discord Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2784,
+        -128
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Config').item.json.googleSheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "8fdb808a-fb46-47a0-8341-c02c0ac70f03",
+      "name": "Write to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2688,
+        32
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-11T13:44:27.637Z",
+      "createdAt": "2026-07-11T13:44:27.637Z",
+      "role": "workflow:owner",
+      "workflowId": "PVDkAeY1fzyXrXAk",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-07-11T14:21:29.865Z",
+  "versionId": "2b737d25-caad-4860-b1a8-16c09115f549"
+}
