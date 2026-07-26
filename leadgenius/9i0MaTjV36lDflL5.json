@@ -1,0 +1,1164 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-26T17:44:15.000Z",
+    "createdAt": "2026-07-26T17:35:25.858Z",
+    "versionId": "2f11d0a4-cca7-4889-84ac-776e05eeea77",
+    "workflowId": "9i0MaTjV36lDflL5",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 0 2 * * *"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          4768,
+          -448
+        ],
+        "id": "b5fb55d9-09ec-4e9a-929a-163a7f6076ac",
+        "name": "Daily Schedule 10AM SGT"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          4768,
+          -304
+        ],
+        "id": "4686b4e7-624a-473d-a3ed-b3cda1c215d6",
+        "name": "Manual Run"
+      },
+      {
+        "parameters": {
+          "path": "trigger-job-matcher",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          4768,
+          -144
+        ],
+        "id": "a776254c-47be-49db-b4ae-a395d0fab3a4",
+        "name": "Webhook Trigger",
+        "webhookId": "trigger-job-matcher"
+      },
+      {
+        "parameters": {
+          "jsCode": "const queries = [\n  'IBM ACE',\n  'IBM Integration Bus',\n  'Middleware Systems Analyst',\n  'IBM MQ',\n  'ESQL Integration',\n  'Systems Analyst Middleware'\n];\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery, Macro Programming\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Monitoring & Tools: MQ Explorer, IBM Integration Explorer, Postman\n- OS: Windows Server, Linux (Red Hat, Ubuntu)\n- Core Role: Gathering business requirements, impact analysis, technical spec translation, middleware app design/development, SIT/UAT/PROD support, MQ & web service integration.\n`;\n\nreturn queries.map(q => ({ json: { query: q, resumeProfile } }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5008,
+          -304
+        ],
+        "id": "cc68ee47-d5d6-471e-ad4e-be470e3e644d",
+        "name": "Init Queries & Profile"
+      },
+      {
+        "parameters": {
+          "url": "=https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={{ encodeURIComponent($json.query) }}&location=Singapore&geoId=102454443&start=0",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          5216,
+          -304
+        ],
+        "id": "96e7b5f0-13a2-48e2-83ae-2f9b03b5499f",
+        "name": "Search LinkedIn Guest API",
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "url": "=https://api.mycareersfuture.gov.sg/v2/jobs?search={{ encodeURIComponent($json.query) }}&limit=20",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          5408,
+          -304
+        ],
+        "id": "9fd29cfd-5921-4508-a2af-5dad5fc0aa7f",
+        "name": "Search MyCareersFuture API",
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1LkrdxGpIuN1wLGNm96WQ1Bd-2AaLoae4Ka7qQ9psnRw",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "Sheet1",
+            "mode": "name"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          5616,
+          -304
+        ],
+        "id": "077b1e6d-08c2-497d-8ce0-8ed09fb89eff",
+        "name": "Read Existing Google Sheet",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "VnYUNWu00t6X0Qvr",
+            "name": "Google Sheets account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "let linkedinRaw = [];\ntry { linkedinRaw = $('Search LinkedIn Guest API').all(); } catch(e) {}\n\nlet mcfRaw = [];\ntry { mcfRaw = $('Search MyCareersFuture API').all(); } catch(e) {}\n\nconst allJobs = [];\nconst seenIds = new Set();\n\n// Read existing sheet rows for deduplication\nconst existingLinks = new Set();\nconst existingTitles = new Set();\n\ntry {\n  const gsheetRows = $('Read Existing Google Sheet').all();\n  for (const r of gsheetRows) {\n    const json = r.json || {};\n    const link = json['Job Link'] || json['jobUrl'] || '';\n    const title = json['Job Title'] || json['title'] || '';\n    if (link) existingLinks.add(String(link).trim());\n    if (title) existingTitles.add(String(title).replace(/<[^>]+>/g, '').trim().toLowerCase());\n  }\n} catch(e) {}\n\n// 1. Process LinkedIn Scraped HTML\nfor (const item of linkedinRaw) {\n  const htmlContent = item.json.data || item.json.body || item.json;\n  if (typeof htmlContent !== 'string') continue;\n  const cardRegex = /data-entity-urn=\"urn:li:jobPosting:(\\d+)\"[\\s\\S]*?<h3 class=\"base-search-card__title\">\\s*([\\s\\S]*?)\\s*<\\/h3>[\\s\\S]*?<h4 class=\"base-search-card__subtitle\">\\s*<a[^>]*>\\s*([\\s\\S]*?)\\s*<\\/a>[\\s\\S]*?<span class=\"job-search-card__location\">\\s*([\\s\\S]*?)\\s*<\\/span>/g;\n  let match;\n  while ((match = cardRegex.exec(htmlContent)) !== null) {\n    const jobId = `li-${match[1]}`;\n    let title = match[2].replace(/<[^>]+>/g, '').trim();\n    let company = match[3].replace(/<[^>]+>/g, '').trim();\n    let location = match[4].replace(/<[^>]+>/g, '').trim();\n    const jobUrl = `https://sg.linkedin.com/jobs/view/${match[1]}`;\n    if (location.toLowerCase().includes('singapore') && !seenIds.has(jobId)) {\n      if (existingLinks.has(jobUrl) || existingTitles.has(title.toLowerCase())) continue;\n      seenIds.add(jobId);\n      allJobs.push({ jobId, title, company, location, jobUrl, source: 'LinkedIn', rawId: match[1] });\n    }\n  }\n}\n\n// 2. Process MyCareersFuture Clean API Results\nfor (const item of mcfRaw) {\n  const results = item.json.results || [];\n  for (const j of results) {\n    const jobId = `mcf-${j.uuid}`;\n    const title = j.title || '';\n    const company = j.postedCompany?.name || 'Enterprise SG';\n    const jobUrl = `https://www.mycareersfuture.gov.sg/job/${j.uuid}`;\n    const cleanDesc = (j.description || '').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim().slice(0, 3500);\n    \n    if (!seenIds.has(jobId)) {\n      if (existingLinks.has(jobUrl) || existingTitles.has(title.toLowerCase())) continue;\n      seenIds.add(jobId);\n      allJobs.push({ jobId, title, company, location: 'Singapore', jobUrl, source: 'MyCareersFuture', preLoadedDesc: cleanDesc });\n    }\n  }\n}\n\nreturn allJobs.map(j => ({ json: j }));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5808,
+          -304
+        ],
+        "id": "82e152b8-b41c-4f21-8c28-aab4379456c1",
+        "name": "Parse & Deduplicate SG Jobs"
+      },
+      {
+        "parameters": {
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          6016,
+          -304
+        ],
+        "id": "f28d6eeb-e4ba-46ee-9868-60f496f18635",
+        "name": "Batch Loop Over Jobs"
+      },
+      {
+        "parameters": {
+          "url": "=https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{{ $json.rawId || $json.jobId }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+              }
+            ]
+          },
+          "options": {
+            "batching": {
+              "batch": {
+                "batchSize": 1,
+                "batchInterval": 15000
+              }
+            },
+            "timeout": 30000
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          6208,
+          -304
+        ],
+        "id": "1b6bf481-de14-4037-800c-7d077f26bffc",
+        "name": "Fetch Job Posting Detail",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 10000,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "const job = $('Batch Loop Over Jobs').item.json;\nlet cleanDesc = job.preLoadedDesc || '';\n\nif (!cleanDesc) {\n  const rawInput = $input.first()?.json || {};\n  const htmlDetail = rawInput.data || rawInput.body || rawInput || '';\n  cleanDesc = (typeof htmlDetail === 'string' ? htmlDetail : '')\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .slice(0, 3500);\n}\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Stakeholder Management, Systems Analysis, SIT/UAT/PROD support.\n`;\n\nconst aiPrompt = `\nYou are an expert IT/Banking Technical Recruiter. Evaluate if the following job posting in Singapore fits the candidate profile.\n\n[CANDIDATE PROFILE]\n${resumeProfile}\n\n[JOB POSTING]\nTitle: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\nDescription:\n${cleanDesc || 'Middleware / Integration Engineer'}\n\n[EVALUATION RULES]\n1. Return ONLY valid raw JSON with keys: \"isMatch\" (boolean), \"matchScore\" (integer 0-100), \"matchRationale\" (string, 1-2 concise sentences summarizing skill match), \"keyMatchedSkills\" (array of strings).\n2. Set isMatch=true if matchScore >= 60. High match for IBM ACE/IIB, WebSphere MQ, ESQL, Middleware, Systems Analysis, Banking IT, Java/SQL integration.\n3. Set isMatch=false if unrelated field or zero skill overlap.\n`;\n\nreturn [{ json: { ...job, jobDescription: cleanDesc, aiPrompt } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6416,
+          -304
+        ],
+        "id": "9c659cab-9a00-4fb6-884e-1daccb5299f9",
+        "name": "Prep AI Prompt"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://openrouter.ai/api/v1/chat/completions",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "HTTP-Referer",
+                "value": "https://bobbydionido.com"
+              },
+              {
+                "name": "X-Title",
+                "value": "Bobby Portfolio"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "model",
+                "value": "google/gemini-2.5-flash-lite"
+              },
+              {
+                "name": "messages[0][role]",
+                "value": "system"
+              },
+              {
+                "name": "messages[0][content]",
+                "value": "You are a technical HR recruiter. Output only raw JSON."
+              },
+              {
+                "name": "messages[1][role]",
+                "value": "user"
+              },
+              {
+                "name": "messages[1][content]",
+                "value": "={{ $json.aiPrompt }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          6608,
+          -304
+        ],
+        "id": "9b79a358-7ca6-4b97-aa85-2de640bdba72",
+        "name": "OpenRouter AI Resume Matcher",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "jsCode": "const job = $('Prep AI Prompt').item.json;\nconst aiRaw = $input.first().json;\n\nlet evalRes = { isMatch: false, matchScore: 0, matchRationale: '', keyMatchedSkills: [] };\ntry {\n  const content = aiRaw.choices[0].message.content.replace(/```json|```/g, '').trim();\n  evalRes = JSON.parse(content);\n} catch(e) {\n  evalRes = { isMatch: false, matchScore: 0, matchRationale: 'Parsing error', keyMatchedSkills: [] };\n}\n\nconst titleLinked = `=HYPERLINK(\"${job.jobUrl}\", \"${job.title.replace(/\"/g, '\"\"')}\")`;\nconst todayStr = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    \"Job Title\": titleLinked,\n    \"Job Link\": job.jobUrl,\n    \"Company\": job.company,\n    \"Location\": \"Singapore\",\n    \"Match Score\": `${evalRes.matchScore || 0}%`,\n    \"Match Rationale\": evalRes.matchRationale || '',\n    \"Date Found\": todayStr,\n    isMatch: evalRes.isMatch || evalRes.matchScore >= 60,\n    matchScore: evalRes.matchScore || 0\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6816,
+          -304
+        ],
+        "id": "fe12a2fb-6bc5-43fe-a50a-fde9faa58369",
+        "name": "Parse AI Output & Format Hyperlink"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "cond-match",
+                "leftValue": "={{ $json.isMatch }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              },
+              {
+                "id": "cond-score",
+                "leftValue": "={{ $json.matchScore }}",
+                "rightValue": 60,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          7008,
+          -304
+        ],
+        "id": "3d75a03e-2b4b-4d1b-9815-8b264409b253",
+        "name": "Filter Qualified Matches"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1LkrdxGpIuN1wLGNm96WQ1Bd-2AaLoae4Ka7qQ9psnRw",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "Sheet1",
+            "mode": "name"
+          },
+          "columns": {
+            "mappingMode": "autoMapInputData",
+            "value": {}
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          7216,
+          -304
+        ],
+        "id": "ce018fd0-53ad-4a70-8284-9c00d947d3b7",
+        "name": "Write Match to Google Sheet",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "VnYUNWu00t6X0Qvr",
+            "name": "Google Sheets account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Daily Schedule 10AM SGT": {
+        "main": [
+          [
+            {
+              "node": "Init Queries & Profile",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Manual Run": {
+        "main": [
+          [
+            {
+              "node": "Init Queries & Profile",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Init Queries & Profile",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Init Queries & Profile": {
+        "main": [
+          [
+            {
+              "node": "Search LinkedIn Guest API",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search LinkedIn Guest API": {
+        "main": [
+          [
+            {
+              "node": "Search MyCareersFuture API",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search MyCareersFuture API": {
+        "main": [
+          [
+            {
+              "node": "Read Existing Google Sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Read Existing Google Sheet": {
+        "main": [
+          [
+            {
+              "node": "Parse & Deduplicate SG Jobs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse & Deduplicate SG Jobs": {
+        "main": [
+          [
+            {
+              "node": "Batch Loop Over Jobs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Batch Loop Over Jobs": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Fetch Job Posting Detail",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Job Posting Detail": {
+        "main": [
+          [
+            {
+              "node": "Prep AI Prompt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep AI Prompt": {
+        "main": [
+          [
+            {
+              "node": "OpenRouter AI Resume Matcher",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter AI Resume Matcher": {
+        "main": [
+          [
+            {
+              "node": "Parse AI Output & Format Hyperlink",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse AI Output & Format Hyperlink": {
+        "main": [
+          [
+            {
+              "node": "Filter Qualified Matches",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Qualified Matches": {
+        "main": [
+          [
+            {
+              "node": "Write Match to Google Sheet",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Batch Loop Over Jobs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Write Match to Google Sheet": {
+        "main": [
+          [
+            {
+              "node": "Batch Loop Over Jobs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Bobby Dionido",
+    "name": "Version 2f11d0a4",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "2f11d0a4-cca7-4889-84ac-776e05eeea77",
+  "connections": {
+    "Daily Schedule 10AM SGT": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Run": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Init Queries & Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init Queries & Profile": {
+      "main": [
+        [
+          {
+            "node": "Search LinkedIn Guest API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search LinkedIn Guest API": {
+      "main": [
+        [
+          {
+            "node": "Search MyCareersFuture API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search MyCareersFuture API": {
+      "main": [
+        [
+          {
+            "node": "Read Existing Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Existing Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Parse & Deduplicate SG Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Deduplicate SG Jobs": {
+      "main": [
+        [
+          {
+            "node": "Batch Loop Over Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Loop Over Jobs": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fetch Job Posting Detail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Job Posting Detail": {
+      "main": [
+        [
+          {
+            "node": "Prep AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "OpenRouter AI Resume Matcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter AI Resume Matcher": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Output & Format Hyperlink",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Output & Format Hyperlink": {
+      "main": [
+        [
+          {
+            "node": "Filter Qualified Matches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Qualified Matches": {
+      "main": [
+        [
+          {
+            "node": "Write Match to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Batch Loop Over Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Match to Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Batch Loop Over Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-26T17:11:46.294Z",
+  "id": "9i0MaTjV36lDflL5",
+  "isArchived": false,
+  "meta": null,
+  "name": "LinkedIn & MyCareersFuture Job Matcher — Meliton Salva (Singapore)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 2 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        4768,
+        -448
+      ],
+      "id": "b5fb55d9-09ec-4e9a-929a-163a7f6076ac",
+      "name": "Daily Schedule 10AM SGT"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        4768,
+        -304
+      ],
+      "id": "4686b4e7-624a-473d-a3ed-b3cda1c215d6",
+      "name": "Manual Run"
+    },
+    {
+      "parameters": {
+        "path": "trigger-job-matcher",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        4768,
+        -144
+      ],
+      "id": "a776254c-47be-49db-b4ae-a395d0fab3a4",
+      "name": "Webhook Trigger",
+      "webhookId": "trigger-job-matcher"
+    },
+    {
+      "parameters": {
+        "jsCode": "const queries = [\n  'IBM ACE',\n  'IBM Integration Bus',\n  'Middleware Systems Analyst',\n  'IBM MQ',\n  'ESQL Integration',\n  'Systems Analyst Middleware'\n];\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery, Macro Programming\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Monitoring & Tools: MQ Explorer, IBM Integration Explorer, Postman\n- OS: Windows Server, Linux (Red Hat, Ubuntu)\n- Core Role: Gathering business requirements, impact analysis, technical spec translation, middleware app design/development, SIT/UAT/PROD support, MQ & web service integration.\n`;\n\nreturn queries.map(q => ({ json: { query: q, resumeProfile } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5008,
+        -304
+      ],
+      "id": "cc68ee47-d5d6-471e-ad4e-be470e3e644d",
+      "name": "Init Queries & Profile"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords={{ encodeURIComponent($json.query) }}&location=Singapore&geoId=102454443&start=0",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5216,
+        -304
+      ],
+      "id": "96e7b5f0-13a2-48e2-83ae-2f9b03b5499f",
+      "name": "Search LinkedIn Guest API",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "=https://api.mycareersfuture.gov.sg/v2/jobs?search={{ encodeURIComponent($json.query) }}&limit=20",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5408,
+        -304
+      ],
+      "id": "9fd29cfd-5921-4508-a2af-5dad5fc0aa7f",
+      "name": "Search MyCareersFuture API",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1LkrdxGpIuN1wLGNm96WQ1Bd-2AaLoae4Ka7qQ9psnRw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        5616,
+        -304
+      ],
+      "id": "077b1e6d-08c2-497d-8ce0-8ed09fb89eff",
+      "name": "Read Existing Google Sheet",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "let linkedinRaw = [];\ntry { linkedinRaw = $('Search LinkedIn Guest API').all(); } catch(e) {}\n\nlet mcfRaw = [];\ntry { mcfRaw = $('Search MyCareersFuture API').all(); } catch(e) {}\n\nconst allJobs = [];\nconst seenIds = new Set();\n\n// Read existing sheet rows for deduplication\nconst existingLinks = new Set();\nconst existingTitles = new Set();\n\ntry {\n  const gsheetRows = $('Read Existing Google Sheet').all();\n  for (const r of gsheetRows) {\n    const json = r.json || {};\n    const link = json['Job Link'] || json['jobUrl'] || '';\n    const title = json['Job Title'] || json['title'] || '';\n    if (link) existingLinks.add(String(link).trim());\n    if (title) existingTitles.add(String(title).replace(/<[^>]+>/g, '').trim().toLowerCase());\n  }\n} catch(e) {}\n\n// 1. Process LinkedIn Scraped HTML\nfor (const item of linkedinRaw) {\n  const htmlContent = item.json.data || item.json.body || item.json;\n  if (typeof htmlContent !== 'string') continue;\n  const cardRegex = /data-entity-urn=\"urn:li:jobPosting:(\\d+)\"[\\s\\S]*?<h3 class=\"base-search-card__title\">\\s*([\\s\\S]*?)\\s*<\\/h3>[\\s\\S]*?<h4 class=\"base-search-card__subtitle\">\\s*<a[^>]*>\\s*([\\s\\S]*?)\\s*<\\/a>[\\s\\S]*?<span class=\"job-search-card__location\">\\s*([\\s\\S]*?)\\s*<\\/span>/g;\n  let match;\n  while ((match = cardRegex.exec(htmlContent)) !== null) {\n    const jobId = `li-${match[1]}`;\n    let title = match[2].replace(/<[^>]+>/g, '').trim();\n    let company = match[3].replace(/<[^>]+>/g, '').trim();\n    let location = match[4].replace(/<[^>]+>/g, '').trim();\n    const jobUrl = `https://sg.linkedin.com/jobs/view/${match[1]}`;\n    if (location.toLowerCase().includes('singapore') && !seenIds.has(jobId)) {\n      if (existingLinks.has(jobUrl) || existingTitles.has(title.toLowerCase())) continue;\n      seenIds.add(jobId);\n      allJobs.push({ jobId, title, company, location, jobUrl, source: 'LinkedIn', rawId: match[1] });\n    }\n  }\n}\n\n// 2. Process MyCareersFuture Clean API Results\nfor (const item of mcfRaw) {\n  const results = item.json.results || [];\n  for (const j of results) {\n    const jobId = `mcf-${j.uuid}`;\n    const title = j.title || '';\n    const company = j.postedCompany?.name || 'Enterprise SG';\n    const jobUrl = `https://www.mycareersfuture.gov.sg/job/${j.uuid}`;\n    const cleanDesc = (j.description || '').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim().slice(0, 3500);\n    \n    if (!seenIds.has(jobId)) {\n      if (existingLinks.has(jobUrl) || existingTitles.has(title.toLowerCase())) continue;\n      seenIds.add(jobId);\n      allJobs.push({ jobId, title, company, location: 'Singapore', jobUrl, source: 'MyCareersFuture', preLoadedDesc: cleanDesc });\n    }\n  }\n}\n\nreturn allJobs.map(j => ({ json: j }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5808,
+        -304
+      ],
+      "id": "82e152b8-b41c-4f21-8c28-aab4379456c1",
+      "name": "Parse & Deduplicate SG Jobs"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        6016,
+        -304
+      ],
+      "id": "f28d6eeb-e4ba-46ee-9868-60f496f18635",
+      "name": "Batch Loop Over Jobs"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{{ $json.rawId || $json.jobId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 15000
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6208,
+        -304
+      ],
+      "id": "1b6bf481-de14-4037-800c-7d077f26bffc",
+      "name": "Fetch Job Posting Detail",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 10000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Batch Loop Over Jobs').item.json;\nlet cleanDesc = job.preLoadedDesc || '';\n\nif (!cleanDesc) {\n  const rawInput = $input.first()?.json || {};\n  const htmlDetail = rawInput.data || rawInput.body || rawInput || '';\n  cleanDesc = (typeof htmlDetail === 'string' ? htmlDetail : '')\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .slice(0, 3500);\n}\n\nconst resumeProfile = `\nName: Meliton Mark P. Salva III\nTitle: Systems Analyst / Software Engineer / Middleware Developer\nExperience: 19+ years in Systems Analysis, Middleware Integration, Banking/Enterprise Systems (MUFG Bank, HDB).\nCore Skills:\n- Integration Platforms: IBM App Connect Enterprise (ACE) Toolkit, IBM Integration Bus (IIB) Toolkit, IBM WebSphere MQ, Message Broker\n- Programming & Scripting: ESQL, Shell Scripting, Lotus Formula, Lotus Script, VB Scripting, VB.Net, Java, XML, JavaScript, JQuery\n- Databases: Oracle, DB2, SQL Server\n- Messaging & Queuing: IBM MQ\n- Stakeholder Management, Systems Analysis, SIT/UAT/PROD support.\n`;\n\nconst aiPrompt = `\nYou are an expert IT/Banking Technical Recruiter. Evaluate if the following job posting in Singapore fits the candidate profile.\n\n[CANDIDATE PROFILE]\n${resumeProfile}\n\n[JOB POSTING]\nTitle: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}\nDescription:\n${cleanDesc || 'Middleware / Integration Engineer'}\n\n[EVALUATION RULES]\n1. Return ONLY valid raw JSON with keys: \"isMatch\" (boolean), \"matchScore\" (integer 0-100), \"matchRationale\" (string, 1-2 concise sentences summarizing skill match), \"keyMatchedSkills\" (array of strings).\n2. Set isMatch=true if matchScore >= 60. High match for IBM ACE/IIB, WebSphere MQ, ESQL, Middleware, Systems Analysis, Banking IT, Java/SQL integration.\n3. Set isMatch=false if unrelated field or zero skill overlap.\n`;\n\nreturn [{ json: { ...job, jobDescription: cleanDesc, aiPrompt } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6416,
+        -304
+      ],
+      "id": "9c659cab-9a00-4fb6-884e-1daccb5299f9",
+      "name": "Prep AI Prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer [REDACTED_OPENROUTER_KEY]"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "HTTP-Referer",
+              "value": "https://bobbydionido.com"
+            },
+            {
+              "name": "X-Title",
+              "value": "Bobby Portfolio"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "google/gemini-2.5-flash-lite"
+            },
+            {
+              "name": "messages[0][role]",
+              "value": "system"
+            },
+            {
+              "name": "messages[0][content]",
+              "value": "You are a technical HR recruiter. Output only raw JSON."
+            },
+            {
+              "name": "messages[1][role]",
+              "value": "user"
+            },
+            {
+              "name": "messages[1][content]",
+              "value": "={{ $json.aiPrompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6608,
+        -304
+      ],
+      "id": "9b79a358-7ca6-4b97-aa85-2de640bdba72",
+      "name": "OpenRouter AI Resume Matcher",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Prep AI Prompt').item.json;\nconst aiRaw = $input.first().json;\n\nlet evalRes = { isMatch: false, matchScore: 0, matchRationale: '', keyMatchedSkills: [] };\ntry {\n  const content = aiRaw.choices[0].message.content.replace(/```json|```/g, '').trim();\n  evalRes = JSON.parse(content);\n} catch(e) {\n  evalRes = { isMatch: false, matchScore: 0, matchRationale: 'Parsing error', keyMatchedSkills: [] };\n}\n\nconst titleLinked = `=HYPERLINK(\"${job.jobUrl}\", \"${job.title.replace(/\"/g, '\"\"')}\")`;\nconst todayStr = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    \"Job Title\": titleLinked,\n    \"Job Link\": job.jobUrl,\n    \"Company\": job.company,\n    \"Location\": \"Singapore\",\n    \"Match Score\": `${evalRes.matchScore || 0}%`,\n    \"Match Rationale\": evalRes.matchRationale || '',\n    \"Date Found\": todayStr,\n    isMatch: evalRes.isMatch || evalRes.matchScore >= 60,\n    matchScore: evalRes.matchScore || 0\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6816,
+        -304
+      ],
+      "id": "fe12a2fb-6bc5-43fe-a50a-fde9faa58369",
+      "name": "Parse AI Output & Format Hyperlink"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-match",
+              "leftValue": "={{ $json.isMatch }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            },
+            {
+              "id": "cond-score",
+              "leftValue": "={{ $json.matchScore }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        7008,
+        -304
+      ],
+      "id": "3d75a03e-2b4b-4d1b-9815-8b264409b253",
+      "name": "Filter Qualified Matches"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LkrdxGpIuN1wLGNm96WQ1Bd-2AaLoae4Ka7qQ9psnRw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        7216,
+        -304
+      ],
+      "id": "ce018fd0-53ad-4a70-8284-9c00d947d3b7",
+      "name": "Write Match to Google Sheet",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VnYUNWu00t6X0Qvr",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-26T17:11:46.299Z",
+      "createdAt": "2026-07-26T17:11:46.299Z",
+      "role": "workflow:owner",
+      "workflowId": "9i0MaTjV36lDflL5",
+      "projectId": "v7HF504DXHWlRi0I"
+    }
+  ],
+  "staticData": {
+    "node:Daily Schedule 10AM SGT": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 2,
+  "updatedAt": "2026-07-26T17:35:25.856Z",
+  "versionId": "2f11d0a4-cca7-4889-84ac-776e05eeea77"
+}
