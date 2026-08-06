@@ -1109,7 +1109,11 @@
         },
         "columns": {
           "mappingMode": "autoMapInputData",
-          "value": {}
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
@@ -1159,6 +1163,6 @@
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2026-07-26T17:35:25.856Z",
-  "versionId": "2f11d0a4-cca7-4889-84ac-776e05eeea77"
+  "updatedAt": "2026-08-06T12:51:17.479Z",
+  "versionId": "a9defffe-e2f1-4315-903b-6c82329e87f3"
 }
